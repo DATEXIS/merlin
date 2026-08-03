@@ -49,8 +49,7 @@
 # "v1.4" -> "v1-4" (no dots -- job_name is the k8s Job's metadata.name).
 #
 # Hardware/hyperparams for the 5 existing size/mode combos are carried over
-# unchanged from scripts/run_plan.yaml (proven configs, see merlin.md's
-# gotchas section). ft-qwen3-06b-lora-r128-merlin-v1-4 is NEW -- no prior run
+# unchanged from scripts/run_plan.yaml (proven configs, see the design notes: # gotchas section). ft-qwen3-06b-lora-r128-merlin-v1-4 is NEW -- no prior run
 # at this size/mode combo. Picked lora_r=128 (the standard rank used
 # everywhere except 32B's r256) and single-GPU h200 (LoRA freezes the base
 # weights, so the 0.6B full-FT NaN/gradient-offload issue tied to its tied
@@ -232,7 +231,7 @@ runs:
   # 2-4) despite mild/non-collapsing F1 -- confirmed NOT a GPU-count
   # artifact (the original run was single-GPU) and NOT reproduced by any
   # other LoRA run (0.6b, 14b, 32b -- all 97-100% JSON valid) or by 8b
-  # full-FT on the same dataset. Rank left at 128 per Jan's call (2026-07-19)
+  # full-FT on the same dataset. Rank left at 128 per our call (2026-07-19)
   # -- trying LR before capacity. 2xB200 (not the untested 4-GPU config
   # above); proven single-GPU recipe was bs8/ga8 -> eff 64, so ga4 at 2 GPUs
   # holds the same effective batch.
@@ -247,7 +246,7 @@ runs:
     grad_accum: 4                  # eff 8*4*2 = 64 (matches the r128 recipe above)
 
   # 8c. Added 2026-07-21 -- rank variant of the same 8B LoRA / thrfull_icd2x
-  # JSON-validity collapse (see paper/EACL_2026_revision_notes.md for the
+  # JSON-validity collapse (see the revision notes for the
   # full writeup). LR is ruled out (5e5 retry above scored worse, not
   # better), and literal data contamination is ruled out (grepped the
   # training parquet for the gibberish seen in eval output -- no hits), so
@@ -370,7 +369,7 @@ runs:
   # 16-17. Added 2026-07-29 -- seed ablation for the reasoning-trace
   # comparison (traces vs. no-traces), "no-traces" arm: two more training
   # seeds (43, 44) of ft-8b-full-mimic-2icd-v1-4 (mimic-v1.4/
-  # mimic_fixed_icd_2x -- no `Thinking` column, see merlin.md section 3),
+  # mimic_fixed_icd_2x -- no `Thinking` column, see the design notes),
   # same recipe/dataset/hyperparams as the seed-42 run. The "with-traces" arm
   # already has its seed-43/44 pair (runs 14-15 above,
   # ft-8b-full-thrfull2icd-seed{43,44}-v1-4) -- this completes the pair for
@@ -378,13 +377,13 @@ runs:
   #
   # Unlike runs 14-15, this does NOT trim to `epochs: 3`: the seed-42
   # dev-selected best epoch for mimic-2icd is e4 -- the LAST epoch (see
-  # scripts/eval_checkpoints_config_test_8b_mimic_icd2.yaml: dev ICD F1
+  # the mimic-icd2 test-split config: dev ICD F1
   # Macro 12.51 @ e4 vs 12.25 @ e3), so there's no early-stop epoch to skip,
   # and the best epoch could shift at a new seed anyway. Trains the full 4
   # epochs (defaults.epochs) and gets a real per-epoch watcher instead of
-  # watch_sft_and_eval.py's fixed-single-epoch-after-completion pattern --
-  # see scripts/watch_and_eval_epochs.py + scripts/watch_epochs_mimic2icd_
-  # seed{43,44}.yaml, run in parallel with the training jobs below.
+  # the fixed-single-epoch-after-completion watcher pattern: a watcher polls
+  # the manifest and evals each new checkpoint on DEV as it lands, running in
+  # parallel with the training jobs below.
   #
   # Same hardware/recipe as ft-8b-full-mimic-2icd-v1-4 (2xH200, bs4/ga32).
   - job_name: "ft-8b-full-mimic-2icd-seed43-v1-4"

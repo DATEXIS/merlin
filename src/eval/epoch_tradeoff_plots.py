@@ -26,8 +26,7 @@ from src.eval.epoch_tradeoff_config import (
 
 REPO = Path(__file__).resolve().parents[2]
 IN_CSV = REPO / "data" / "eval_metrics_merlin-eval-1.4.csv"
-OUT_DIRS = [REPO / "paper" / "figures" / "main",
-            REPO / "paper" / "EACL_2026_v2" / "figures"]
+OUT_DIRS = [REPO / "figures" / "main"]
 
 
 def load_sweeps(in_csv: Path = IN_CSV) -> dict:

@@ -19,7 +19,7 @@ ablation_plot_config.py; edit that file, not this one.
 
 Note the `replace` variant's dev-selected best epoch is e1: epochs 2-4 of
 that run collapse to near-zero (a known training instability, see
-paper/EACL_2026_revision_notes.md). It is plotted as-is, consistent with
+the revision notes). It is plotted as-is, consistent with
 checkpoint_best_epochs.csv, and flagged in the paper caption.
 """
 from pathlib import Path
@@ -34,7 +34,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS_DIR = REPO_ROOT / "data" / "results" / "evaluation"
 DEV_CSV = RESULTS_DIR / "results_dev.csv"
 BEST_EPOCHS_CSV = RESULTS_DIR / "checkpoint_best_epochs.csv"
-OUT_DIR = REPO_ROOT / "paper" / "figures" / "dataset_analyses"
+OUT_DIR = REPO_ROOT / "figures" / "dataset_analyses"
 
 
 def _load() -> tuple[dict, float | dict]:

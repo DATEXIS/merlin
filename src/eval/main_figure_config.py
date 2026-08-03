@@ -2,7 +2,7 @@
 (src/eval/main_figure_plots.py). Same knob-file convention as
 robustness_plot_config.py / ablation_plot_config.py.
 
-Three panels (per Jan, 2026-07-27, upgraded from the earlier two-panel cut):
+Three panels ( 2026-07-27, upgraded from the earlier two-panel cut):
 ICD macro-F1 is the paper's primary metric -- it is the rare/long-tail
 diagnosis read, which is what a "don't overlook the rare diagnosis" tool is
 actually judged on -- with ICD micro-F1 beside it for the frequent-code view,
@@ -32,7 +32,7 @@ PANEL_YLABELS = {
 
 # Reference line for the strongest untuned external competitor, matched as a
 # substring against the `collection` column of checkpoint_metrics.csv. Set to
-# None (Jan, 2026-07-24): in a figure whose one job is base-vs-fine-tuned
+# None (2026-07-24): in a figure whose one job is base-vs-fine-tuned
 # across scale, a third horizontal line for a model that is on neither axis
 # reads as clutter -- the competitor comparison lives in the main table and
 # is made in the text.

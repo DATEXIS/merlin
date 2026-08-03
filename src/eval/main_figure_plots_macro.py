@@ -4,12 +4,11 @@
     python -m src.eval.main_figure_plots_macro
 
 This is the figure the paper's \\S1 actually includes
-(paper/figures/main/main_icd_by_size_macro.pdf) -- the same base-vs-MERLIN
+(figures/main/main_icd_by_size_macro.pdf) -- the same base-vs-MERLIN
 bars per model size as the 3x1 headline figure, but restricted to the
 primary metric so it fits a single column.
 
-Panel title deliberately does NOT carry a "(long-tail)" qualifier (Jan,
-2026-08-03): macro-F1 is defined in the text, and the parenthetical
+Panel title deliberately does NOT carry a "(long-tail)" qualifier (2026-08-03): macro-F1 is defined in the text, and the parenthetical
 pre-announces an interpretation the figure itself does not show. Frequency
 strata live in the head/body/tail figure instead.
 
@@ -27,7 +26,7 @@ from src.eval.paper_plots import _agg_seeds_by_size, _bar_mean_err, _size_sort_k
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TEST_CSV = REPO_ROOT / "data" / "results" / "evaluation" / "checkpoint_metrics.csv"
-OUT_DIR = REPO_ROOT / "paper" / "figures" / "main"
+OUT_DIR = REPO_ROOT / "figures" / "main"
 
 METRIC = "ICD F1 Macro"
 PANEL_TITLE = "ICD codes: macro-F1"

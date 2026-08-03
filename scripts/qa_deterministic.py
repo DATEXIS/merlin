@@ -20,7 +20,7 @@ Classes computed here:
   hallucinated_fp       predicts a category absent from gold (any false positive)
   recall/precision/f1_{history,medication,chronic}   see note below
 
-Note on direction (2026-07-27, Jan): the missed_* rates above are framed so
+Note on direction (2026-07-27): the missed_* rates above are framed so
 LOWER is better, which sits awkwardly next to a table where every other
 column (Recall, Prec., F1, head/body/tail) has HIGHER is better -- a reader
 scanning the table has to remember which columns invert. For history/

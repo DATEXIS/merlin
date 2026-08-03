@@ -47,7 +47,7 @@ Outputs land under Analysis.output_dir (default data/):
     eval_metrics_{project}.csv          flat per-collection metrics
     results/evaluation/                 reshaped CSV + best-epoch summary table
     (all figures -- quick-look and publication -- go to
-    Analysis.paper_figures_dir instead, default paper/figures/, not data/)
+    Analysis.paper_figures_dir instead, default figures/, not data/)
 
 All the logic lives in src/eval/ (eval_results, checkpoint_metrics,
 checkpoint_plots, paper_plots); this is just the CLI.
@@ -85,7 +85,7 @@ DEFAULTS = {
     "primary_metric": "ICD F1 Macro",
     "metrics": None,          # None -> DEFAULT_METRIC_SELECTION
     "plots": "both",
-    "paper_figures_dir": "paper/figures",
+    "paper_figures_dir": "figures",
     "filter": None,
     "limit": None,
     "isolate": True,
@@ -128,7 +128,7 @@ def main():
     if not out_root.is_absolute():
         out_root = REPO_ROOT / out_root
     metrics_csv = eval_results.default_metrics_csv(cfg["project"], out_root)
-    # Moved from out_root/"checkpoint_analysis" on 2026-07-24 -- Jan
+    # Moved from out_root/"checkpoint_analysis" on 2026-07-24
     # relocated the reshaped CSV + best-epoch table (and encoder_results/)
     # under data/results/ alongside the raw eval-artifact cache; that old
     # directory no longer exists.

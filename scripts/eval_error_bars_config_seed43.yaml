@@ -3,9 +3,11 @@
 # trained checkpoints + base models at a different Client_Job.seed, so the
 # generator-verifier pipeline's sampling varies but nothing is retrained.
 # NO NEW SFT -- this only reruns eval_base_models.py / eval_checkpoints.py.
-# Companion file scripts/eval_error_bars_config_seed43_8b.yaml covers 8B
-# (client_gpu differs -- see below); this file covers 0.6b/14b/32b.
-# Seed-44 counterparts: eval_error_bars_config_seed44[.yaml|_8b.yaml].
+# This file is the one retained example of a seed-repeat eval config: it
+# covers 0.6b/14b/32b at seed 43. The full set (an 8B variant, whose
+# client_gpu differs, plus the seed-44 counterparts and the MIMIC/external
+# arms) follows the same schema with only short_name/job_name, seed and
+# GPU fields changed; those variants are omitted from this release.
 #
 # This is deliberately different from the existing 8b seed-robustness figure
 # (src/eval/robustness_plots.py, run_plan.yaml runs 14-15): that one retrained
@@ -14,11 +16,11 @@
 # base models, not just 8b-full.
 #
 # Checkpoints pinned to the same epoch already selected for the seed-42 main
-# figure (see git show bf0396c~1:scripts/eval_checkpoints_config_test.yaml
+# figure (see the pinned test-split config
 # and data/results/evaluation/results_test.csv): 06b-full e4, 14b-full e3,
 # 32b-full e3.
 #
-# GPU allocation per Jan's 2026-07-23 plan:
+# GPU allocation per the 2026-07-23 plan:
 #   0.6b -> server a100, client p100
 #   14b, 32b -> server b200, client p100
 #

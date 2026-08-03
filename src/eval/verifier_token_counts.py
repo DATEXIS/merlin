@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Diagnostic: per-verifier-stage token counts across the MeRLIn instruction
-datasets, to check whether the V2 (diagnose) vs V4 (ICD) tradeoff Jan flagged
+datasets, to check whether the V2 (diagnose) vs V4 (ICD) tradeoff we flagged
 could be explained (even partly) by token-count imbalance between verifier
 stages during SFT rather than by task difficulty or label quality alone.
 

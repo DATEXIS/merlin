@@ -21,7 +21,7 @@ from src.eval import longtail_strata_plot_config as cfg
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 IN_CSV = REPO_ROOT / "data" / "results" / "evaluation" / "longtail_strata.csv"
-OUT_DIR = REPO_ROOT / "paper" / "figures" / "qa"
+OUT_DIR = REPO_ROOT / "figures" / "qa"
 
 
 def plot(out_dir: Path = OUT_DIR, in_csv: Path = IN_CSV):

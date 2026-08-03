@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Diagnostic: how much of the TEST-split score is lost to invalid JSON.
 
-Jan flagged two odd main results:
+We flagged two odd main results:
   1. 8B LoRA (test-8b-r128-e3) scores badly -- worse than even the untuned
      8B base model on ICD F1.
   2. V2 (differential diagnosis) MRR degrades on the bigger full-FT models
@@ -45,7 +45,7 @@ or, since this has no other `from src...` imports:
 
 Writes:
     data/results/evaluation/json_validity_impact.csv
-    paper/figures/diagnostics/json_validity_impact_3x1.{png,pdf}
+    figures/diagnostics/json_validity_impact_3x1.{png,pdf}
 """
 import ast
 from collections import defaultdict
@@ -59,7 +59,7 @@ from matplotlib.patches import Patch
 REPO = Path(__file__).resolve().parents[2] if "__file__" in dir() else Path.cwd()
 EVAL_DIR = REPO / "data" / "results" / "evaluation" / "1_4"
 OUT_CSV = REPO / "data" / "results" / "evaluation" / "json_validity_impact.csv"
-OUT_DIR = REPO / "paper" / "figures" / "diagnostics"
+OUT_DIR = REPO / "figures" / "diagnostics"
 
 # (size, mode) -> collection name, same TEST-split grid as
 # checkpoint_metrics.py's TEST_FAMILY_INFO / TEST_BASE_RE, hardcoded here

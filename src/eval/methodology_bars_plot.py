@@ -26,7 +26,7 @@ from src.eval.checkpoint_plots import BASE_COLOR, LORA_COLOR, FULL_COLOR
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 IN_CSV = REPO_ROOT / "data" / "eval_metrics_merlin-eval-1.4.csv"
-OUT_DIR = REPO_ROOT / "paper" / "figures" / "main"
+OUT_DIR = REPO_ROOT / "figures" / "main"
 
 METRIC = "ICD F1 Macro"
 
@@ -39,7 +39,7 @@ ROWS = {
 
 # Reuse the paper's one true base/lora/full palette (src/eval/checkpoint_plots.py,
 # also used by main_figure_plots.py / robustness_plot_config.py) instead of the
-# separate blue/orange pairing ablation_plot_config.py uses -- Jan wants a single
+# separate blue/orange pairing ablation_plot_config.py uses -- we want a single
 # consistent scheme across figures. "no trace" takes the LORA slot color since
 # it's the secondary/baseline condition here, "with trace" takes FULL_COLOR
 # since it's the headline MERLIN recipe, same as everywhere else full-FT wins.

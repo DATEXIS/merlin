@@ -5,7 +5,7 @@ qa_deterministic.py (no LLM judge), comparing codes at two granularities:
   full      code       exact match, e.g. 'K5660'
 
 (An earlier version of this script also had a 'chapter' (2-char) level; it
-was cut -- 2026-07-27, Jan -- to keep the comparison to the two granularities
+was cut (2026-07-27) to keep the comparison to the two granularities
 that matter: what the paper already reports (category) and the new thing
 (full code). Re-add via LEVELS below if it's needed again; the truncation
 machinery doesn't care how many levels there are.)

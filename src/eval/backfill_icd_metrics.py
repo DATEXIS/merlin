@@ -31,7 +31,7 @@ Run:
     python -m src.eval.backfill_icd_metrics --csv data/results/evaluation/results_dev.csv
 
 If a collection shows up under CONFLICT and you've confirmed the CSV row (not
-the cached artifact) is the stale one -- e.g. Jan confirmed 2026-07-22 that
+the cached artifact) is the stale one -- e.g. We confirmed 2026-07-22 that
 8b-r128-thrfull-icd2-e2/e3/e4 in results_dev.csv were old numbers from before
 a re-eval fixed a request-failure bug, while results_test.csv had already been
 refreshed -- re-run with --force-collections to overwrite ICD F1 Micro/Macro

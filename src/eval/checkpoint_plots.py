@@ -8,7 +8,7 @@ where a per-dataset comparison is actually meaningful (see FAMILY_INFO in
 checkpoint_metrics.py). Untuned base models have no epoch, so instead of a
 bar they're drawn as a horizontal dashed reference line on the chart.
 
-(Cleaned up 2026-07-24, per Jan: the per-size best-epoch bar charts for
+(Cleaned up 2026-07-24,: the per-size best-epoch bar charts for
 0.6b/14b/32b weren't useful -- each of those sizes only trains 1-2 datasets,
 so the bars didn't show a real ablation, just noise -- removed, only 8b's
 stays. The epoch-lines charts (one connected line per dataset/mode across
@@ -46,9 +46,9 @@ across all of that size's datasets/epochs). Everything here is DEV-split
 These are still the "quick look" analysis plots -- less polished than the
 sibling src/eval/paper_plots.py figures, which imports several helpers/
 constants from this module -- but as of 2026-07-24 they're written straight
-to paper/figures/ (dataset_analyses/, main/) rather than data/, alongside
+to figures/ (dataset_analyses/, main/) rather than data/, alongside
 those publication figures: plots belong in the paper section, not under
-data/, per Jan. Only non-plot data (checkpoint_best_epochs.csv, the reshaped
+data/,. Only non-plot data (checkpoint_best_epochs.csv, the reshaped
 checkpoint_metrics.csv) stays under data/results/evaluation/ (moved there
 from data/checkpoint_analysis/ on 2026-07-24, alongside encoder_results/ ->
 data/results/encoder_results/ -- that whole directory no longer exists).
@@ -74,11 +74,11 @@ REPO = Path(__file__).resolve().parents[2]
 OUT_DIR = REPO / "data" / "results" / "evaluation"  # non-plot data only (checkpoint_best_epochs.csv); IN_CSV lives here too
 IN_CSV = OUT_DIR / "checkpoint_metrics.csv"
 
-# Plots go under paper/figures/ (not data/) alongside the polished
+# Plots go under figures/ (not data/) alongside the polished
 # paper_plots.py figures -- same subfolder names/purpose as that module's
 # MAIN_DIR/DATASET_ANALYSES_DIR, kept as separate constants here (rather than
 # imported) since paper_plots.py imports FROM this module, not the reverse.
-FIGURES_ROOT = REPO / "paper" / "figures"
+FIGURES_ROOT = REPO / "figures"
 MAIN_DIR = FIGURES_ROOT / "main"
 DATASET_ANALYSES_DIR = FIGURES_ROOT / "dataset_analyses"
 
@@ -185,7 +185,7 @@ def plot_dataset_ablation(size: str, size_df: pd.DataFrame, base: pd.DataFrame, 
     per-dataset comparison means anything; see module docstring). One
     checkpoint per dataset, chosen by primary_metric; every panel shows that
     same checkpoint's value for its own metric. DEV-split only (see run()).
-    Saved to paper/figures/dataset_analyses/, not data/."""
+    Saved to figures/dataset_analyses/, not data/."""
     metrics = metrics if metrics is not None else METRICS
     datasets = [d for d in COLORS if (size_df["dataset"] == d).any()]
 
@@ -330,7 +330,7 @@ def run(primary_metric: str = DEFAULT_PRIMARY_METRIC, metric_names: list = None,
     """Programmatic entry point (used by scripts/eval_analysis.py).
     `out_dir`/`in_csv` override the module-level defaults for this run --
     the plot functions read the module globals, so we rebind them here.
-    `figures_root` overrides where plots land (default paper/figures/,
+    `figures_root` overrides where plots land (default figures/,
     matching paper_plots.py's OUT_ROOT) -- kept separate from `out_dir`,
     which now only controls the non-plot CSV outputs under
     data/results/evaluation/."""
@@ -350,7 +350,7 @@ def run(primary_metric: str = DEFAULT_PRIMARY_METRIC, metric_names: list = None,
         return
     df = pd.read_csv(IN_CSV)
 
-    # is_test rows (scripts/eval_checkpoints_config_test.yaml's held-out
+    # is_test rows (scripts/the test-split config's held-out
     # TEST-split sweep) are excluded here, not just is_base -- they share the
     # same (model_size, dataset, mode) keys as the dev sweep, so leaving them
     # in would let a test-split score win the per-size "best epoch" selection

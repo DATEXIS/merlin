@@ -43,7 +43,7 @@ METRICS = build_metrics(METRICS_TO_PLOT)  # [(name, ylabel), ...]
 # Panel titles override the raw metric names, so the figure speaks the
 # paper's clinical vocabulary (symptoms / diagnoses / ICD codes) instead of
 # the pipeline's internal V1..V4 stage names.
-# (Jan, 2026-08-03) No "(long-tail)" / "(frequent diagnoses)" qualifiers:
+# (2026-08-03) No "(long-tail)" / "(frequent diagnoses)" qualifiers:
 # they pre-announce an interpretation the panels themselves don't show, and
 # the macro-vs-micro contrast is made in the caption. Titles now match the
 # headline figure (main_figure_plots_macro.py).

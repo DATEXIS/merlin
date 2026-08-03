@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""EXPLORATORY variant of main_figure_plots.py (Jan, 2026-07-30).
+"""EXPLORATORY variant of main_figure_plots.py (2026-07-30).
 
 Same 3x1 headline figure, but with the 8B "no trace" leg of the trace
 ablation squeezed in as a third bar -- 8B only, so that column has three
@@ -30,7 +30,7 @@ from src.eval.paper_plots import _agg_seeds_by_size, _bar_mean_err, _size_sort_k
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TEST_CSV = REPO_ROOT / "data" / "results" / "evaluation" / "checkpoint_metrics.csv"
 RAW_CSV = REPO_ROOT / "data" / "eval_metrics_merlin-eval-1.4.csv"
-OUT_DIR = REPO_ROOT / "paper" / "figures" / "main"
+OUT_DIR = REPO_ROOT / "figures" / "main"
 
 # --- the extra leg -------------------------------------------------------
 NOTRACE_SIZE = "8b"

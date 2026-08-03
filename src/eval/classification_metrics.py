@@ -112,7 +112,7 @@ def calculate_disease_metrics(y_pred: list[list[str]], y_true: list[str], device
     # there's a single relevant item per query. calculate_accuracy_at_k is
     # that same hit-or-miss fraction, just under an older name. V2 Accuracy@1
     # is kept for backward compat with existing wandb history/paper tables;
-    # V2 Recall@1 is the identical number under the name Jan asked for
+    # V2 Recall@1 is the identical number under the name we asked for
     # (2026-07-24), added alongside @3/@5/@10 -- v2 prompts ask the model for
     # a ranked top-10 (src/pipeline/verifier_args.py num_choices=10), so @10
     # isn't trivially 100%. Purpose: check whether V2's accuracy drop-off on

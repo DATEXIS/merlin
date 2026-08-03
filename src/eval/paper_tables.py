@@ -3,7 +3,7 @@
 
     python -m src.eval.paper_tables
 
-Writes into paper/EACL_2026_v2/:
+Writes into tables/:
     table_main.tex      held-out test split, mean +- std over eval seeds
     table_ablation.tex  8B data-construction ablation (dev split)
     table_qa.tex        deterministic ICD error decomposition (test split)
@@ -43,7 +43,7 @@ EVAL_CSV = REPO_ROOT / "data" / "eval_metrics_merlin-eval-1.4.csv"
 DEV_CSV = REPO_ROOT / "data" / "results" / "evaluation" / "results_dev.csv"
 BEST_EPOCHS_CSV = REPO_ROOT / "data" / "results" / "evaluation" / "checkpoint_best_epochs.csv"
 QA_CSV = REPO_ROOT / "data" / "qa" / "deterministic_rates.csv"
-OUT_DIR = REPO_ROOT / "paper" / "EACL_2026_v3"
+OUT_DIR = REPO_ROOT / "tables"
 
 SEED_SUFFIX = re.compile(r"-seed4[34]")
 
@@ -62,7 +62,7 @@ def _load_eval() -> pd.DataFrame:
 
 # Placeholder printed in the +- slot of a row that still has only one eval
 # seed, so a pending rerun is visible in the typeset table rather than
-# silently absent (per Jan, 2026-07-24: "placeholders for pending externals").
+# silently absent (2026-07-24: "placeholders for pending externals").
 PENDING_STD = "{\\scriptsize\\textcolor{gray}{$\\pm$--}}"
 
 
@@ -94,12 +94,12 @@ def _fmt(v: float, digits: int = 1, bold: bool = False) -> str:
 # --------------------------------------------------------------------------
 # Table 1 -- main results
 # --------------------------------------------------------------------------
-# Diagnoses Recall@1 RESTORED to the main table (Jan, 2026-07-28), reversing
+# Diagnoses Recall@1 RESTORED to the main table (2026-07-28), reversing
 # the 2026-07-24 decision to drop it. It is the pipeline's curation gate, so
 # hiding it looks like hiding the 32B rank-1 regression; the paper now reports
 # it and discusses the regression directly in "Diagnosis Ranking".
 #
-# JSON Valid dropped, ICD Recall/Precision Macro added (Jan, 2026-07-27):
+# JSON Valid dropped, ICD Recall/Precision Macro added (2026-07-27):
 # decomposes the existing F1 Macro column into its components, mirroring how
 # F1 Micro already sits next to F1 Macro -- deliberately macro, not micro,
 # Recall/Precision, since macro is the paper's stated primary metric
@@ -127,7 +127,7 @@ MAIN_METRICS = [
 
 # (latex row label, collection group, kind)
 #
-# Encoder row promoted into the main table (Jan, 2026-07-29). BioClinical
+# Encoder row promoted into the main table (2026-07-29). BioClinical
 # ModernBERT's macro-F1 moved 4.3 -> 8.2 on the reseeded run, which makes it a
 # real baseline rather than the collapsed one the appendix used to describe --
 # and encoder classifiers are the incumbent method for this task (we align the
@@ -144,7 +144,7 @@ MAIN_METRICS = [
 #
 # RESOLVED (2026-07-29): the encoder predictions used to sit on a DIFFERENT
 # test split -- 2,350 admissions, only 441 shared with the 2,184-case MERLIN
-# test split, and 1,639 of them were MERLIN *train* admissions. Jan supplied a
+# test split, and 1,639 of them were MERLIN *train* admissions. We supplied a
 # corrected export (data/results/encoder_results_29_07, hadm_ids verified 1:1
 # against data/results/test_dataset.pq's test split) and
 # data/results/encoder_results/ + results_test.csv were regenerated from it
@@ -315,7 +315,7 @@ def table_ablation() -> str:
 
 # --------------------------------------------------------------------------
 # Table 3 -- deterministic ICD error decomposition, merged with the
-# head/body/tail frequency-stratum F1 (Jan, 2026-07-24: put the long-tail
+# head/body/tail frequency-stratum F1 (2026-07-24: put the long-tail
 # numbers in the same table as the error decomposition rather than a
 # separate one -- both are "where the ICD gain comes from" cuts of the same
 # base-vs-full comparison, at the same four sizes, so they share a row
@@ -323,7 +323,7 @@ def table_ablation() -> str:
 # into longtail_strata.csv via LONGTAIL_SIZE.
 # --------------------------------------------------------------------------
 QA_ROWS = [("0.6B", "06b"), ("8B", "8b"), ("14B", "14b"), ("32B", "32b")]
-# Redesigned 2026-07-27 (Jan, analyses-table-redesign): JSON is out everywhere
+# Redesigned 2026-07-27 (analyses-table redesign): JSON is out everywhere
 # and the old missed_X% columns (lower-is-better, sitting next to everything
 # else higher-is-better) are replaced by real class-conditional F1 for
 # history/medication/chronic (scripts/qa_deterministic.py::score_model) and a
@@ -415,7 +415,7 @@ LORA_ROWS = [
 ]
 
 
-# ICD Recall/Precision Macro added 2026-07-28 (Jan) so this appendix table
+# ICD Recall/Precision Macro added 2026-07-28 so this appendix table
 # carries the same ICD block as the main table. Seed-42 values for these two
 # columns came from src/eval/backfill_eval_metrics_pr.py.
 LORA_METRICS = ("DotProduct", "V2 Recall@1", "V2 Recall@3",

@@ -152,7 +152,7 @@ def eval_job_name(manifest: dict, ckpt: dict, short_name: str = None) -> str:
     -- see eval_config.yaml), use `{short_name}-e{epoch}` instead:
     no "eval-" prefix, no step. Safe when every eval in the config shares the same
     fixed params (so epoch alone disambiguates within a run) -- that's the case
-    for a whole config file's worth of v1.4 evals, per merlin.md convention."""
+    for a whole config file's worth of v1.4 evals, per the design notes convention."""
     if short_name:
         return _fit_k8s_name(sanitize(f"{short_name}-e{round(ckpt['epoch'])}"))
     run = sanitize(manifest["job_name"])
@@ -340,7 +340,7 @@ def main():
         # manifest's checkpoints; string or list, same semantics as the global)
         # and `epochs` (overrides the global `epochs` filter for just this
         # manifest -- used by the test-set config to pin each run to its single
-        # dev-selected epoch; see eval_checkpoints_config_test.yaml).
+        # dev-selected epoch; see the test-split config).
         manifest_path = entry["path"] if isinstance(entry, dict) else entry
         short_name = entry.get("short_name") if isinstance(entry, dict) else None
         server_gpu = entry.get("server_gpu") if isinstance(entry, dict) else None

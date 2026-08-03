@@ -31,7 +31,14 @@ MIMIC-IV admissions across 7 chief complaints and 20 clinical specialties.
 | `data/medical_schemes/` | WikiDoc-derived symptom and diagnosis schemas per chief complaint (not MIMIC-derived). |
 | `data/results/` | **Aggregate** metric tables only — `eval_metrics_*.csv`, QA rate tables, encoder baseline summary. |
 | `figures/` | Every figure in the paper and appendix, as emitted by `src/eval/`. |
-| `notebooks/` | Diagram notebook used for the pipeline schematic. |
+
+`scripts/` has been reduced to one entry point per pipeline stage. The full
+working tree carried ~20 additional per-sweep config variants (one per seed ×
+model-size × dataset arm) and several watcher wrappers; they differ from the
+retained files only in `job_name` / `short_name`, `seed` and GPU fields, so one
+representative of each kind is kept instead: `eval_base_models_config_test.yaml`
+for a test-split baseline sweep and `eval_error_bars_config_seed43.yaml` for a
+seed-repeat eval.
 
 **Deliberately excluded**
 
@@ -93,14 +100,12 @@ Settings live in YAML, one file per concern; flags only select stages.
 
 | Config | Drives | Contents |
 | :--- | :--- | :--- |
-| `scripts/pipeline_config.yaml` | `pipeline_start` / `pipeline_stop` / `pipeline_restart_client` | Generation: model selection, verifier thresholds, deployment settings. |
-| `scripts/run_plan.yaml` | `launch_all` | Every SFT run (LoRA and full-FT, incl. FSDP) as one plan: shared `defaults` plus per-run overrides. |
-| `scripts/eval_config.yaml` | `eval_checkpoints`, `eval_base_models`, `eval_analysis` | Checkpoint sweep manifests, base-model list, shared serving/client params, and the `Analysis:` block for local post-processing. |
-| `scripts/qa_config.yaml` | `qa_analysis`, `qa_deterministic`, `qa_full_code` | Error-taxonomy and ICD-granularity analyses. |
-
-The `eval_*_config_*.yaml` and `watch_epochs_*.yaml` files are the concrete
-manifests behind individual reported sweeps (seeds 43/44, the 8B LoRA reruns,
-base-model and external-model baselines).
+| `pipeline_config.yaml` | `pipeline_start` / `pipeline_stop` | Generation: model selection, verifier thresholds, deployment settings. |
+| `run_plan.yaml` | `launch_all` | Every SFT run (LoRA and full-FT, incl. FSDP) as one plan: shared `defaults` plus per-run overrides. |
+| `eval_config.yaml` | `eval_checkpoints`, `eval_base_models`, `eval_analysis` | Checkpoint sweep manifests, base-model list, shared serving/client params, and the `Analysis:` block for local post-processing. |
+| `eval_base_models_config_test.yaml` | `eval_base_models` | Test-split eval of the raw base models — the baseline rows in the main table. |
+| `eval_error_bars_config_seed43.yaml` | `eval_base_models`, `eval_checkpoints` | Re-evaluates fixed checkpoints at a different client sampling seed; source of the error bars in Figure 1. |
+| `qa_config.yaml` · `qa_config_cluster.yaml` | `qa_analysis`, `qa_deterministic`, `qa_full_code` | Error-taxonomy and ICD-granularity analyses, locally and as a cluster Job (`k8s/qa_client_job.yaml`). |
 
 ---
 
@@ -116,6 +121,10 @@ base-model and external-model baselines).
 | 6. Evaluate | `python scripts/eval_checkpoints.py` · `eval_base_models.py` | Serves each checkpoint / base model with vLLM and runs the downstream eval (resumable). |
 | 7. Analyze + plot | `python scripts/eval_analysis.py wandb_check new_evals create_plots` | Pulls new results, re-evaluates locally, writes the reshaped results table, renders quick-look and publication figures. |
 | 8. Error analysis | `python scripts/qa_analysis.py` · `qa_deterministic.py` · `qa_full_code.py` | Error taxonomy, deterministic failure rates, ICD granularity breakdown. |
+| 9. Dataset analyses | `python scripts/dataset_analyses.py` | Corpus-level figures: ICD long-tail, per-chief-complaint breakdowns. |
+
+Figures are written to `figures/`, LaTeX tables to `tables/`, and CSV outputs to
+`data/results/`.
 
 `eval_analysis.py` also exposes two independent stages: `encoder_results` (folds
 in the encoder-classifier baselines) and `clinibench` (recomputes the encoder

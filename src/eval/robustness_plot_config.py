@@ -19,10 +19,10 @@ All metric names available (kept in sync with checkpoint_plots.ALL_METRICS):
 from src.eval.checkpoint_plots import ALL_METRICS, build_metrics, FULL_COLOR, LORA_COLOR
 
 # The active selection. Ranking is reported as Recall@3, matching the paper
-# body (2026-07-28, Jan): the V2 F1@1 / MRR variants were dropped from the
+# body (2026-07-28): the V2 F1@1 / MRR variants were dropped from the
 # paper because the pipeline's acceptance gate is effectively Recall@1, so a
 # graded ranking score implies an objective the pipeline does not optimize.
-# DotProduct dropped 2026-07-30 (Jan): not needed on this figure. Validated
+# DotProduct dropped 2026-07-30: not needed on this figure. Validated
 # against ALL_METRICS by build_metrics() below.
 METRICS_TO_PLOT = ["ICD F1 Macro", "ICD F1 Micro", "V2 Recall@3"]
 

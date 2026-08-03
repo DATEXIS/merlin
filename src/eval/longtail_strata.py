@@ -24,7 +24,7 @@ excluded here, because they have no training frequency to bucket them by.
 Outputs
 -------
 data/results/evaluation/longtail_strata.csv   per size/mode/stratum
-paper/EACL_2026_v2/table_longtail_body.tex    LaTeX table body
+tables/table_longtail_body.tex    LaTeX table body
 """
 from collections import defaultdict
 from pathlib import Path
@@ -40,7 +40,7 @@ EVAL_DIR = REPO_ROOT / "data" / "results" / "evaluation" / "1_4"
 NOTES_PQ = REPO_ROOT / "data" / "preprocessed_mimic" / "annotated_mimic_notes.pq"
 INSTRUCTIONS_PQ = REPO_ROOT / "data" / "results" / "instructions" / cfg.TRAIN_INSTRUCTIONS
 OUT_CSV = REPO_ROOT / "data" / "results" / "evaluation" / "longtail_strata.csv"
-OUT_TEX = REPO_ROOT / "paper" / "EACL_2026_v2" / "table_longtail_body.tex"
+OUT_TEX = REPO_ROOT / "tables" / "table_longtail_body.tex"
 
 
 def _short(codes) -> set:

@@ -1,10 +1,10 @@
 # Test-split eval of the raw Qwen3 base models (companion to the SFT test-set
-# runs in scripts/eval_checkpoints_config_test_8b_r128_rerun.yaml). Same four
+# runs in the 8B test-split rerun config). Same four
 # models as eval_config.yaml's dev-split `models:` list, but split="test" and
 # job_names prefixed "test-" so they don't collide with the dev-split base
 # evals already logged under 32b-base / 14b-base / 8b-base / 06b-base.
 #
-# GPU allocation per Jan's 2026-07-21 plan:
+# GPU allocation per the 2026-07-21 plan:
 #   0.6b -> 1x a100   8b -> 1x h200   14b -> 1x b200   32b -> 2x b200
 #
 # Run: python scripts/eval_base_models.py --config scripts/eval_base_models_config_test.yaml
@@ -40,7 +40,7 @@ models:
 
 Hardware:
   server_gpu: [b200, h200, h100]   # overridden per model above
-  client_gpu: [p100, v100]         # Jan's spec: "client p100 > v100"
+  client_gpu: [p100, v100]         # spec: "client p100 > v100"
   gpu_count: 1
   replicas: 1
   gpu_memory_utilization: 0.85

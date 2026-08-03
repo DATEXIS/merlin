@@ -1,11 +1,11 @@
 """Config for the appendix generation-dynamics figure
 (src/eval/generation_plots.py).
 
-Recreates paper/*/figures/generation_plots.pdf (\\label{fig:generation_plots}),
+Recreates figures/generation_plots.pdf (\\label{fig:generation_plots}),
 "Iterative improvement of verifier scores across generation-budget steps
 (abdominal-pain cases)". The script that originally produced this figure was
 never checked in, so this rebuilds it from the three generators' run logs
-(Jan, 2026-08-01). Same knob-file convention as robustness_plot_config.py /
+(2026-08-01). Same knob-file convention as robustness_plot_config.py /
 epoch_tradeoff_config.py: edit this file, not generation_plots.py.
 
 Data provenance -- read this before trusting a number out of SCORES below:
@@ -16,8 +16,8 @@ instead and marked (E) in the comments. This whole figure is illustrative of
 the generation-budget dynamic, not a source of truth -- don't cite SCORES
 values as reported results.
 
-MRR label (Jan, 2026-08-01): considered relabeling V2/V3 to "Recall@3" since
-we never saved the underlying ranked lists for these exploratory runs, only
+MRR label (2026-08-01): considered relabeling V2/V3 to "Recall@3" since
+We never saved the underlying ranked lists for these exploratory runs, only
 the scalar "Score" the pipeline logged per round -- so a real Recall@3 or MRR
 recompute isn't possible from what survives. Decided against it: Recall@3
 and MRR aren't the same quantity (MRR credits rank position, Recall@3 is a
@@ -26,7 +26,7 @@ metric would carry the same "did we actually verify this" problem, just
 under a more technical-sounding name. Kept "MRR" -- matches the original
 figure, and the SCORES values were never a real MRR recompute either way.
 
-Design pass (Jan, 2026-08-01): switched to match Figure 7's style
+Design pass (2026-08-01): switched to match Figure 7's style
 (src/eval/epoch_tradeoff_plots.py / epoch_tradeoff_config.py) rather than the
 lost original -- same family of figure (line-per-model/size over an ordinal
 training/budget axis), so it should read as the same visual language:

@@ -31,8 +31,7 @@ from src.eval.generation_plots_config import (
 )
 
 REPO = Path(__file__).resolve().parents[2]
-OUT_DIRS = [REPO / "paper" / "figures" / "main",
-            REPO / "paper" / "EACL_2026_v3" / "figures"]
+OUT_DIRS = [REPO / "figures" / "main"]
 
 
 def plot_generation_dynamics():

@@ -6,7 +6,7 @@ analysis live in the ICD_LONGTAIL config dict below -- edit it directly
 instead of passing flags.
 
 Each analysis is its own module under src/eval/dataset_analyses/; this
-script just calls them and saves figures to paper/figures/dataset_analyses/
+script just calls them and saves figures to figures/dataset_analyses/
 (repo-relative, alongside the existing bars_8b_full/lora dataset-ablation
 figures from src/eval/paper_plots.py).
 
@@ -29,7 +29,7 @@ ICD_LONGTAIL = {
     "input": str(REPO_ROOT / "data/results/gen_data/Qwen3-32B.pq"),
     "digits": 3,
     "split_fraction": 0.8,        # "80% of total samples" cutoff, matches the printed reference
-    # University brand colors (paper/colors.py) are quite strong at full
+    # The house palette are quite strong at full
     # intensity for a dense bar plot -- tinted toward white here. Swap in
     # RED/TEAL, or change the tint() amount, if these feel off.
     "majority_color": tint(BLUE, 0.5),

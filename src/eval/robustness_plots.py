@@ -4,17 +4,14 @@ once each on the TEST split, per ablation ARM (see ARMS below).
 
 Arm 1, "thrfull2icd" (the paper's headline run, "with reasoning traces"):
 ft-8b-full-thrfull2icd-v1-4, paper seed 42 + two robustness-check seeds,
-43/44 -- see run_plan.yaml runs 14-15 and scripts/watch_sft_and_eval.py.
-Each seed trained epochs=3 only (the dev-selected best epoch for this
-model/dataset).
+43/44 -- see run_plan.yaml runs 14-15. Each seed trained epochs=3 only
+(the dev-selected best epoch for this model/dataset).
 
 Arm 2, "mimic-icd2" (the traces-vs-no-traces ablation's other arm, "no
 reasoning traces" / label-only): ft-8b-full-mimic-2icd-v1-4, seed 42 +
-43/44 -- see run_plan.yaml runs 16-17 and
-scripts/watch_and_eval_epochs.py + scripts/eval_checkpoints_config_test_8b_
-mimic_icd2_seed{43,44}.yaml. Each seed trained the full 4 epochs (unlike
-thrfull2icd, epoch 4 is the dev-selected best here, not an early-stop
-point -- Jan confirmed 2026-07-30 that epoch 4 is best for both new seeds
+43/44 -- see run_plan.yaml runs 16-17. Each seed trained the full 4 epochs
+(unlike thrfull2icd, epoch 4 is the dev-selected best here, not an early-stop
+point -- we confirmed 2026-07-30 that epoch 4 is best for both new seeds
 too, matching seed 42).
 
 Metrics plotted and colors both come from src/eval/robustness_plot_config.py
@@ -29,17 +26,17 @@ stacking with the short_name already containing it); harmless here since we
 key off the row name directly instead of parsing it with
 checkpoint_metrics.py's FAMILY_RE.
 
-Outputs per arm (data/results/evaluation/, paper/figures/main/):
+Outputs per arm (data/results/evaluation/, figures/main/):
   {csv_stem}_per_seed_metrics.csv / {csv_stem}_summary.csv, {fig_stem}.png/.pdf
 thrfull2icd keeps its original filenames (csv_stem="robustness", i.e.
 robustness_per_seed_metrics.csv / robustness_summary.csv, fig_stem=
 "robustness_seed_variance") for backward compat with paper/
-EACL_2026_revision_notes.md and any .tex that already points at them.
+the revision notes and any .tex that already points at them.
 
 Plus one combined figure once every arm in COMBINED_ARM_ORDER has run: a 1
 row x N-arm panel (repo's "2x1" convention -- see paper_plots.
 plot_main_figure_2x1), shared y-axis, so the with-traces/no-traces arms are
-directly comparable side by side: paper/figures/main/
+directly comparable side by side: figures/main/
 robustness_seed_variance_2x1.png/.pdf. No separate CSV -- the two per-arm
 CSVs above already have the underlying numbers.
 
@@ -63,7 +60,7 @@ from src.eval.robustness_plot_config import (
 
 REPO = Path(__file__).resolve().parents[2]
 IN_CSV = REPO / "data" / "eval_metrics_merlin-eval-1.4.csv"
-OUT_FIG_DIR = REPO / "paper" / "figures" / "main"
+OUT_FIG_DIR = REPO / "figures" / "main"
 OUT_DATA_DIR = REPO / "data" / "results" / "evaluation"
 
 ARMS = {

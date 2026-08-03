@@ -43,7 +43,7 @@ def assert_assistant_masking(trainer):
 def load_model(args, accelerator):
     """Load model + tokenizer. use_lora selects LoRA vs full-parameter."""
     full = not args.use_lora
-    # Two full-FT paths (see merlin.md):
+    # Two full-FT paths (see the design notes):
     #  - STANDARD (default): load normally + requires_grad on all params. Works
     #    multi-GPU (DDP-safe), fast, stable for 8B+. This is the proven path.
     #  - UNSLOTH (unsloth_full_finetuning=True): Unsloth's full_finetuning. Use only

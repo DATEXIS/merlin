@@ -32,7 +32,7 @@ SELECTED_EPOCH = {"0.6B": 4, "8B": 3, "14B": 3, "32B": 3}
 # Recall@3 rather than Recall@1: the pipeline's acceptance gate is Recall@1,
 # but @3 is what the paper reports for ranking quality (see body.tex), and
 # @1 at 32B is dominated by list-length effects.
-# Diagnosis-stage JSON validity added 2026-07-28 (Jan): it is the mechanism
+# Diagnosis-stage JSON validity added 2026-07-28: it is the mechanism
 # behind the 14B Recall@3 collapse. A trace whose diagnosis stage emits
 # unparseable JSON has no ranked list at all, so it scores 0 on Recall@k --
 # the ranking drop is largely an output-format failure, not the model losing
@@ -40,7 +40,7 @@ SELECTED_EPOCH = {"0.6B": 4, "8B": 3, "14B": 3, "32B": 3}
 # readable straight off the figure.
 #
 # "V1 JSON Valid Rate" (symptom stage) was in this list briefly the same day
-# and removed again (Jan): the figure exists to explain the *ranking* drop,
+# and removed again: the figure exists to explain the *ranking* drop,
 # and the symptom stage is not on that causal path -- it only added a fourth
 # panel whose 14B line goes to zero for unrelated reasons. The symptom-stage
 # numbers are still quoted in the appendix text where they belong.

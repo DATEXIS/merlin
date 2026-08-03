@@ -23,13 +23,13 @@ repo's own src/eval/classification_metrics.calculate_icd_metrics_cpu (one
 score per seed, averaged across the 3 seeds), for consistency with how every
 other row in results_test.csv was scored.
 
-NOTE (2026-07-22, Jan's call): this deliberately does NOT reuse
+NOTE (2026-07-22): this deliberately does NOT reuse
 encoder_table_metrics.parquet's own Macro-F1 column. That column's Macro-F1
 does not reproduce from calculate_icd_metrics_cpu on the per-seed files --
 recomputing here gives a consistently ~37% higher Macro-F1 for all three
 models, which looks like the upstream number macro-averaged over a larger
 (training-time) label vocabulary than the one observed in this test split.
-Since that vocabulary isn't recoverable from the files here, Jan chose to
+Since that vocabulary isn't recoverable from the files here, we chose to
 recompute with this repo's own metric fn rather than import a number that
 isn't apples-to-apples with the rest of the table -- so the Macro-F1 written
 here WILL differ from encoder_table_metrics.parquet / table_encoders.tex in

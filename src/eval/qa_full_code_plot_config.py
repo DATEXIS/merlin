@@ -8,7 +8,7 @@ exact code), rows are the two aggregates the paper already distinguishes
 everywhere else -- micro-F1 (pools counts across codes, dominated by frequent
 ones) vs. macro-F1 (per-code F1 averaged unweighted, so rare codes count as
 much as common ones). A 'chapter' (2-char) column existed in an earlier
-version of this figure; cut 2026-07-27 (Jan) to keep the comparison to what
+version of this figure; cut 2026-07-27 to keep the comparison to what
 the paper reports (category) plus the new thing (full code).
 
 Colors are imported from checkpoint_plots rather than redefined, so this

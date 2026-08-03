@@ -16,10 +16,10 @@ spec:
       restartPolicy: Never
       nodeSelector:
         gpu: {{ cfg.Hardware.gpu }}
-      
+
       imagePullSecrets:
         - name: private-registry-auth
-      
+
       volumes:
         - name: dshm
           emptyDir:
@@ -33,14 +33,14 @@ spec:
           persistentVolumeClaim:
             claimName: merlin-ddx-ckpts-pvc
         {% endif %}
-           
+
 
       containers:
         - name: fine-tuning
           image: {{ cfg.project.image }}
           imagePullPolicy: Always
           {% if cfg.training.fsdp_full_finetuning|default(false) %}
-          {#- Non-Unsloth full-FT path (merlin.md gotchas): Unsloth is DDP-only
+          {#- Non-Unsloth full-FT path (the design notes): Unsloth is DDP-only
               (full model replicated per GPU), so it can't fit a model whose
               full optimizer state doesn't fit on a single GPU (32B+). This
               path bypasses Unsloth (src/fine_tuning/training_fsdp.py, chosen
@@ -102,7 +102,7 @@ spec:
             "--hf_cache_dir={{ cfg.project.hf_cache_dir }}",
             "--wandb_cache_dir={{ cfg.project.wandb_cache_dir }}"
           ]
-          
+
           resources:
             requests:
               memory: "32Gi" # Hardcoded or add to Hardware config
@@ -128,15 +128,15 @@ spec:
               value: "WARN"
             - name: NCCL_SOCKET_FAMILY
               value: "AF_INET"
-       
+
             - name: PYTORCH_CUDA_ALLOC_CONF
-              value: expandable_segments:True     
+              value: expandable_segments:True
             - name: HUGGING_FACE_HUB_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: hf-token-secret
                   key: HF_TOKEN
-              
+
             - name: WANDB_API_KEY
               valueFrom:
                 secretKeyRef:

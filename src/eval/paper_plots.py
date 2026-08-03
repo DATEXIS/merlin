@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publication-ready figures for the EACL 2027 submission, built on top of
+"""Publication-ready figures for the submission, built on top of
 data/results/evaluation/checkpoint_metrics.csv (see
 checkpoint_metrics.py) and reusing the metric/color constants
 from the "quick look" module src/eval/checkpoint_plots.py.
@@ -10,7 +10,7 @@ measurements that isn't actually there (that's real for something like a
 model-size scaling curve on a log axis, but not for training epoch). Bars
 and heatmaps only.
 
-Nine figure sets, written to paper/figures/ (six over the DEV
+Nine figure sets, written to figures/ (six over the DEV
 sweep, plus a TEST-split pair and two TEST-split compact alternates
 (3-panel and 2-panel) at the end):
 
@@ -18,7 +18,7 @@ sweep, plus a TEST-split pair and two TEST-split compact alternates
    results figure: for each model size, base vs. best-LoRA vs. best-full-
    fine-tune grouped bars, one subplot per metric (2x2). Polished version of
    checkpoint_plots.plot_all_sizes: no title (papers get a LaTeX
-   caption instead), narrower figure sized for a two-column ACL/EACL layout,
+   caption instead), narrower figure sized for a two-column layout,
    saved as both a vector PDF (for \\includegraphics) and a PNG (for quick
    viewing here). (Renamed from checkpoint_best_per_size.{png,pdf} on
    2026-07-21 to make the DEV/TEST split explicit alongside
@@ -63,32 +63,32 @@ sweep, plus a TEST-split pair and two TEST-split compact alternates
    {png,pdf} -- the TEST-split counterparts of figures 1 and 4's size x mode
    heatmap: the dev-selected best checkpoint per size/mode, evaluated on
    held-out test exactly once. No "best epoch" selection here -- there's
-   only ever one test row per size/mode, so (also as of 2026-07-21, per Jan)
+   only ever one test row per size/mode, so (also as of 2026-07-21,)
    no epoch label is drawn above the bars either. The base bar/column reuses
    the real TEST-split base-model eval where available.
 
 7. main/checkpoint_best_per_size_3x1.{png,pdf} -- a more compact TEST-split
    alternative to checkpoint_best_per_size_2x2 above: same base/lora/full
    bars, but only 3 metrics (ICD F1 Macro, ICD F1 Micro, and Diagnoses
-   Recall@3 -- swapped from Diagnosis MRR on 2026-07-24, per Jan; see
+   Recall@3 -- swapped from Diagnosis MRR on 2026-07-24,; see
    MAIN_3X1_METRICS) in this figure only) laid out as a single row
    of 3 panels instead of a 2x2 grid, so it's shorter vertically. Added
-   2026-07-21 per Jan as a candidate replacement for the 2x2 version as the
+   2026-07-21 as a candidate replacement for the 2x2 version as the
    paper's main-results figure (saves vertical space) -- see
-   paper/EACL_2026_revision_notes.md for which one body.tex currently uses.
+   the revision notes for which one body.tex currently uses.
    Also written as main/checkpoint_best_per_size_3x1_no_lora.{png,pdf} (same
    call, include_lora=False) -- base vs. full FT only, re-centered 2-slot
-   bars instead of a gap where LoRA used to sit. Added the same day per Jan:
+   bars instead of a gap where LoRA used to sit. Added the same day:
    LoRA's ranking vs. full FT isn't fully stable across metrics/sizes, so
    dropping it from the main figure and moving the LoRA-vs-full comparison
    to an ablation is an open question -- see the revision notes.
    Error bars added 2026-07-24, same seed-averaging as figure 8 below.
 
-8. main/checkpoint_best_per_size_2x1.{png,pdf} -- added 2026-07-23 per Jan,
+8. main/checkpoint_best_per_size_2x1.{png,pdf} -- added 2026-07-23
    superseding the 3x1 figure above as the main-results candidate: same
    TEST-split base/lora/full bars, but only 2 panels (ICD F1 Macro, ICD F1
    Micro -- MAIN_2X1_METRICS). V2 MRR is dropped outright, not swapped for
-   another metric -- per EACL_2026_revision_notes.md's "drop-V2" decision,
+   another metric -- per the revision notes's "drop-V2" decision,
    the other V2 metrics (F1@1, Accuracy@1) are being cut from the headline
    figure for the same reason, so there's nothing else in that family left
    to promote into the freed slot. Legend moved to the right side of the
@@ -105,7 +105,7 @@ sweep, plus a TEST-split pair and two TEST-split compact alternates
    (checkpoint_best_per_size_2x2 / plot_main_figure_test) gets the same
    treatment, sharing the same helper.
 
-9. diagnostics/v2_recall_at_k.{png,pdf} -- added 2026-07-24 per Jan, renamed
+9. diagnostics/v2_recall_at_k.{png,pdf} -- added 2026-07-24 renamed
    the same day from v2_ranking_recovery_2x2 when the metric set dropped
    MRR/F1 Macro@1 (both rank-1-only reads, same information as Recall@1)
    in favor of V2 Recall@1 / V2 Recall@3 / V2 Recall@5 -- one metric family
@@ -167,7 +167,7 @@ from src.eval.checkpoint_plots import (
 )
 
 REPO = Path(__file__).resolve().parents[2]
-OUT_ROOT = REPO / "paper" / "figures"
+OUT_ROOT = REPO / "figures"
 MAIN_DIR = OUT_ROOT / "main"
 DATASET_ANALYSES_DIR = OUT_ROOT / "dataset_analyses"
 EPOCH_ANALYSES_DIR = OUT_ROOT / "epoch_analyses"
@@ -354,7 +354,7 @@ def plot_main_figure_test(test: pd.DataFrame, base_test: pd.DataFrame, metrics: 
     number, but as of 2026-07-21 all four sizes have real test-split base
     scores, so that fallback shouldn't currently trigger.
 
-    No epoch labels above the bars (2026-07-21 -- dropped per Jan: the dev-
+    No epoch labels above the bars (2026-07-21 -- dropped: the dev-
     selected epoch is documented in checkpoint_best_epochs.csv/the appendix
     instead, cleaner for the print figure).
 
@@ -372,7 +372,7 @@ def plot_main_figure_test(test: pd.DataFrame, base_test: pd.DataFrame, metrics: 
     appending "_no_lora") -- this function doesn't rename the stem itself,
     since not every caller wants that suffix convention.
 
-    Error bars (added 2026-07-24, per Jan's scripts/eval_error_bars_config_
+    Error bars (added 2026-07-24, per scripts/eval_error_bars_config_
     seed{43,44}[.yaml|_8b.yaml] sweep): every bar is the MEAN across all seed
     replicates available for that (model_size, mode) -- just the canonical
     seed-42 checkpoint where no error-bar rerun has been downloaded yet, or
@@ -439,7 +439,7 @@ def plot_main_figure_test(test: pd.DataFrame, base_test: pd.DataFrame, metrics: 
     print(f"main (test, {stem}): saved held-out test-split figure to {out_dir}")
 
 
-# Diagnostic metric set, rewritten 2026-07-24 (per Jan) to drop MRR/F1 Macro@1
+# Diagnostic metric set, rewritten 2026-07-24 () to drop MRR/F1 Macro@1
 # entirely rather than pair them against Recall@3/@5. Reason: V2's own
 # candidate-acceptance gate (src/pipeline/verifier.py's get_mrr_score, used
 # via handle_diagnoses -> calculate_scores, gated by
@@ -486,10 +486,10 @@ def plot_v2_recall_at_k(test: pd.DataFrame, base_test: pd.DataFrame, include_lor
     diagnostics/ rather than main/ -- same convention as
     json_validity_impact.py's figure.
 
-    include_lora=False (added 2026-07-24, per Jan, same convention as
+    include_lora=False (added 2026-07-24, same convention as
     plot_main_figure_3x1/2x1's no-lora variants) drops the LoRA bars --
     base vs. full FT only -- since LoRA's ranking vs. full FT isn't stable
-    across metrics/sizes (see EACL_2026_revision_notes.md), a base/full-only
+    across metrics/sizes (see the revision notes), a base/full-only
     read of the Recall@k story is useful on its own."""
     stem = "v2_recall_at_k" if include_lora else "v2_recall_at_k_no_lora"
     plot_main_figure_test(test, base_test, metrics=V2_RANKING_DIAGNOSTIC_METRICS,
@@ -500,7 +500,7 @@ def plot_v2_recall_at_k(test: pd.DataFrame, base_test: pd.DataFrame, include_lor
 # ICD F1 Micro, and Diagnoses Recall@3 (V2 Recall@3 in ALL_METRICS -- the
 # diagnosis/differential-diagnosis stage, i.e. the \Vtwo{} stage in the
 # paper). Swapped from V2 MRR/"Diagnosis MRR" to V2 Recall@3/"Diagnoses
-# Recall@3" on 2026-07-24 per Jan -- MRR only credits the top-ranked
+# Recall@3" on 2026-07-24 -- MRR only credits the top-ranked
 # diagnosis, Recall@3 is the more forgiving "is the right diagnosis anywhere
 # in the top 3" read, consistent with why Recall@k got added alongside V2 MRR
 # in the first place (see V2_RANKING_DIAGNOSTIC_METRICS above).
@@ -523,10 +523,10 @@ NO_LORA_OFFSETS = {"base": -0.18, "full": 0.18}
 NO_LORA_WIDTH = 0.32
 
 # 2-metric selection for plot_main_figure_2x1 -- ICD F1 Macro/Micro only.
-# Added 2026-07-23 per Jan/revision-notes decision to drop V2 (diagnosis
+# Added 2026-07-23 per the revision-notes decision to drop V2 (diagnosis
 # ranking) from the main figure entirely (not just MRR -- V2 F1@1 and V2
 # Accuracy@1 are in the same "drop" bucket per
-# EACL_2026_revision_notes.md's "Figure 1 + main table + drop-V2" section,
+# the revision notes's "Figure 1 + main table + drop-V2" section,
 # so there's no other headline-worthy metric to swap into the freed slot).
 # That leaves exactly 2 metrics, hence a single row of 2 panels instead of
 # 3x1's fixed 3.
@@ -541,16 +541,16 @@ def plot_main_figure_3x1(test: pd.DataFrame, base_test: pd.DataFrame, include_lo
     TEST-split base/lora/full bars, but only 3 metrics (ICD F1 Macro, ICD F1
     Micro, Diagnoses Recall@3 -- see MAIN_3X1_METRICS) laid out as one row of
     3 panels instead of a 2x2 grid, so it's shorter vertically. Added
-    2026-07-21 per Jan as a candidate replacement for the 2x2 version as the
-    main results figure (2026-07-21, per Jan). No epoch labels, same as
+    2026-07-21 as a candidate replacement for the 2x2 version as the
+    main results figure (2026-07-21,). No epoch labels, same as
     checkpoint_best_per_size_2x2.
 
-    include_lora=False (added 2026-07-21, per Jan) drops the LoRA bars
+    include_lora=False (added 2026-07-21,) drops the LoRA bars
     entirely -- base vs. full FT only, re-centered to a 2-slot layout instead
     of leaving a gap where the LoRA bar used to sit -- saved as
     checkpoint_best_per_size_3x1_no_lora. Motivation: LoRA's ranking vs. full
     FT isn't fully stable across metrics/sizes (see the open question added
-    to EACL_2026_revision_notes.md), so a main-results figure arguably reads
+    to the revision notes), so a main-results figure arguably reads
     cleaner without it, with the LoRA-vs-full comparison moved to an
     ablation instead -- open question, not yet decided which cut is used in
     the paper.
@@ -622,20 +622,20 @@ def plot_main_figure_2x1(test: pd.DataFrame, base_test: pd.DataFrame, include_lo
     """TEST-split headline figure, take 2 (2026-07-23): same base/lora/full
     bars as plot_main_figure_3x1, but only the 2 metrics that survive the
     drop-V2 decision (ICD F1 Macro, ICD F1 Micro -- see MAIN_2X1_METRICS and
-    EACL_2026_revision_notes.md's "Figure 1 + main table + drop-V2" section).
+    the revision notes's "Figure 1 + main table + drop-V2" section).
     No epoch labels, same as _2x2/_3x1.
 
     Legend moved to the right side of the figure (vs. top-center in _2x2/
     _3x1) -- with only 2 panels a top-center legend eats a disproportionate
     share of vertical space relative to the plot area, and a side legend
-    reads more naturally for a wide-but-short 2-panel row. Per Jan,
+    reads more naturally for a wide-but-short 2-panel row. By decision,
     2026-07-23.
 
     include_lora=False drops the LoRA bars (base vs. full FT only, re-
     centered 2-slot layout), same open question as _3x1_no_lora -- both
     cuts saved so it's easy to compare before deciding.
 
-    Error bars (added 2026-07-24, per Jan's scripts/eval_error_bars_config_
+    Error bars (added 2026-07-24, per scripts/eval_error_bars_config_
     seed{43,44}[.yaml|_8b.yaml] sweep -- this is the figure that sweep's file
     headers name explicitly): same seed-averaging as plot_main_figure_test,
     see that function's docstring / _agg_seeds_by_size for details. Bars for
@@ -1062,7 +1062,7 @@ def run(primary_metric: str = DEFAULT_PRIMARY_METRIC, metric_names: list = None,
     if "seed" not in df.columns:
         df["seed"] = 42
 
-    # is_test rows (scripts/eval_checkpoints_config_test.yaml's held-out
+    # is_test rows (scripts/the test-split config's held-out
     # TEST-split sweep -- one dev-selected checkpoint per size/mode,
     # evaluated on test exactly once) share the same (model_size, dataset,
     # mode) keys as the dev sweep, so they're excluded from `ckpt` here --

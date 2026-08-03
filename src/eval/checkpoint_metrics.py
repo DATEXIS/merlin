@@ -62,7 +62,7 @@ FAMILY_INFO = {
     # NOTE (2026-07-15): there is no 8B LoRA v1.4 data yet. A "8b-r128-
     # thrfulldrop" entry briefly lived here, but its numbers turned out to be
     # stale v1.3 data mislabeled under a v1.4-looking name (identical to
-    # 8b-full-thrfulldrop at every epoch) -- removed. Jan is starting real 8B
+    # 8b-full-thrfulldrop at every epoch) -- removed. We are starting real 8B
     # LoRA (r128) SFT runs now; once those are evaluated, add their
     # short_name(s) here as ("8b", <dataset>, "lora") the same way the other
     # families above are wired in.
@@ -97,7 +97,7 @@ FAMILY_INFO = {
     # identical to "8b-full-thrfulldrop" at every epoch (confirmed in
     # data/eval_metrics_merlin-eval-1.4.csv), i.e. it's the full-FT run's
     # numbers duplicated under a misleading r128-looking name, not a second
-    # checkpoint. Jan confirmed thrfulldrop was only ever trained full-param
+    # checkpoint. We confirmed thrfulldrop was only ever trained full-param
     # (`ft-8b-full-thrfulldrop-v1-4`, `use_lora: False` in run_plan.yaml).
     # Removed again -- do not re-add a "8b-r128-thrfulldrop" key without
     # first checking it isn't just this duplicate resurfacing. This bug fed
@@ -111,7 +111,7 @@ FAMILY_INFO = {
 }
 
 # The held-out TEST-split sweep (originally driven by
-# eval_checkpoints_config_test.yaml -- since cleaned up/superseded, same as
+# the test-split config -- since cleaned up/superseded, same as
 # the one-off configs noted on FAMILY_INFO above): the size x mode grid
 # (lora/full at 0.6B/8B/14B/32B), all trained on the single canonical
 # merlin_thrfull_icd2x dataset. Unlike FAMILY_INFO above, each of these
@@ -155,13 +155,13 @@ BASE_RE = re.compile(r"^(?P<size>\d+)b-base$")
 # test-split figure needs a base reference.
 TEST_BASE_RE = re.compile(r"^test-(?P<size>\d+)b-base$")
 
-# job_name convention from scripts/eval_external_models_config_test.yaml:
+# job_name convention from the external-models config:
 # "test-{model-slug}" -- one-off TEST-split spot-checks of external/competitor
 # models, not part of the Qwen3 size/mode grid (no fine-tuning, no epoch
 # sweep, `model_size` doesn't apply so figures that group by size skip them
 # via the usual `.dropna()` on that column). Added 2026-07-21: Baichuan-M2-32B
 # and MEDITRON3-8B; MedGemma-27B-it and Llama-3.3-70B-Instruct queued next
-# (see paper/EACL_2026_revision_notes.md, "Competitor / base-model baseline
+# (see the revision notes, "Competitor / base-model baseline
 # testing"). Explicit allowlist rather than a generic "test-*" catchall, so
 # an unrecognized test- collection still lands in the "Skipped" list instead
 # of silently misparsing.

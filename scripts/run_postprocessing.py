@@ -27,7 +27,7 @@ Steps
 
 5. Test dataset        Build the downstream-eval test_dataset from combined.pq:
                        one row per patient, train split excluded. This is what
-                       scripts/wandb_upload_datasets.py uploads as the
+                       the dataset-upload step uploads as the
                        'test_dataset' artifact and what eval configs' client
                        loads (file_name: "test_dataset").
 
@@ -109,7 +109,7 @@ MERLIN_VARIANTS = {
 # direct prompts -- see src/postprocessing/build_mimic_instructions.py). Kept
 # under separate names from the original mimic_instructions.pq (single-stage,
 # V4-only) so that dataset is never overwritten -- it's already uploaded/used
-# by ft-qwen3-8b-lora-r128-mimic-v1-3 (see merlin.md: never overwrite a prior
+# by ft-qwen3-8b-lora-r128-mimic-v1-3 (see the design notes: never overwrite a prior
 # version's folder; old checkpoints' manifests may still reference it).
 #   name              -> (duplicate_verifiers,)
 MIMIC_VARIANTS = {
@@ -121,7 +121,7 @@ MIMIC_VARIANTS = {
 }
 
 # Output path for the downstream-eval test_dataset. Fixed filename (not
-# per-round-versioned like the instruction datasets) — wandb_upload_datasets.py
+# per-round-versioned like the instruction datasets) — the dataset-upload step
 # hardcodes this path and creates a new wandb artifact VERSION each time it's
 # uploaded, so history is preserved there, not via local filenames.
 TEST_DATASET_OUTPUT = "data/results/test_dataset.pq"

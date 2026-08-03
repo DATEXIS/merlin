@@ -37,7 +37,7 @@ if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 from paper.colors import BLUE, YELLOW, tint
 
-OUT_ROOT = REPO / "paper" / "figures" / "dataset_analyses"
+OUT_ROOT = REPO / "figures" / "dataset_analyses"
 DEFAULT_INPUT = REPO / (
     "data/results/evaluation/1_4/eval_results_8b-full-icd2-e1/"
     "eval_results_8b-full-icd2-e1.pq"
@@ -45,7 +45,7 @@ DEFAULT_INPUT = REPO / (
 
 # Merged over by `cfg` in run() -- edit here, or override per-key via the
 # ICD_LONGTAIL dict in scripts/dataset_analyses.py. Colors come from the
-# university brand palette (paper/colors.py), tinted toward white since the
+# house palette, tinted toward white since the
 # brand colors are quite strong at full intensity for a dense bar plot.
 DEFAULTS = {
     "input": str(DEFAULT_INPUT),

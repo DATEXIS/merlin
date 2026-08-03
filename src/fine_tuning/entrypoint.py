@@ -38,7 +38,7 @@ if __name__ == "__main__":
     # full_finetuning (single-GPU; only needed where standard NaNs, e.g. 0.6B).
     p.add_argument("--unsloth_full_finetuning", type=str2bool, default=False)
     # Third full-FT path, for models whose optimizer state doesn't fit replicated
-    # on one GPU (32B+, see merlin.md gotchas: "Unsloth is DDP-only ... needs
+    # on one GPU (32B+, see the design notes: "Unsloth is DDP-only ... needs
     # FSDP/DeepSpeed ZeRO-3, a non-Unsloth stack"). Routes to training_fsdp.py
     # instead of training.py below -- ignores unsloth_full_finetuning/lora_*.
     # Only meaningful with use_lora=False and gpu_count > 1 launched via
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     # Lazy import: training.py does `import unsloth` at module scope, which
     # monkey-patches transformers process-wide on import. The FSDP full-FT
     # path must never trigger that (Unsloth's patches are what make DDP-only
-    # training break under FSDP -- see merlin.md), so only import training.py
+    # training break under FSDP -- see the design notes), so only import training.py
     # when we're actually taking the Unsloth-based path.
     if args.fsdp_full_finetuning:
         from src.fine_tuning.training_fsdp import train

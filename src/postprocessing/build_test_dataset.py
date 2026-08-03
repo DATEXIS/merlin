@@ -26,7 +26,7 @@ def build_test_dataset(combined_path: str, output_path: str) -> pd.DataFrame:
 
     'val' is already folded into 'dev' upstream by combine_models, so the
     only splits present are 'dev' and 'test'. This is what scripts/
-    wandb_upload_datasets.py uploads as the 'test_dataset' wandb artifact,
+    the dataset-upload step uploads as the 'test_dataset' wandb artifact,
     and what *_config.yaml's eval-mode client loads via file_name:
     "test_dataset".
 

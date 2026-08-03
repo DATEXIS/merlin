@@ -22,7 +22,7 @@ from src.eval import qa_full_code_plot_config as cfg
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 IN_CSV = REPO_ROOT / "data" / "qa" / "full_code_by_granularity.csv"
-OUT_DIR = REPO_ROOT / "paper" / "figures" / "qa"
+OUT_DIR = REPO_ROOT / "figures" / "qa"
 
 
 def plot(out_dir: Path = OUT_DIR, in_csv: Path = IN_CSV):

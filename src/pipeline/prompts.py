@@ -166,16 +166,16 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 
 1. Analyze Patient Data: Review the Admission Note and Clinical Manifestations.
 2. Analyze Potential Diagnoses: Review Potential Diagnoses and think about their likelihood.
-3. Generate Predictions:  
+3. Generate Predictions:
   - Select and rank the 10 most likely diagnoses.
   - Print them as a simple list, NOT in JSON Format.
 4. Refine & Rerank:
   - How are the Manifestations related to your diagnoses?
   - Is every given name one of the potential diagnoses?
-  - Rerank diagnoses accordingly. NOT in JSON Format. 
+  - Rerank diagnoses accordingly. NOT in JSON Format.
 5. Output JSON Once: Provide your final ranked diagnoses and reasoning in JSON.
   - Use the format of the Output Format Example.
-  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.  
+  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.
   - The JSON is the only output. Stop after printing it.
 
 ### Admission Note
@@ -203,15 +203,15 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 
 1. Analyze Patient Data: Review the Admission Note and Clinical Manifestations.
 2. Analyze Potential Diagnoses: Review Potential Diagnoses and think about their likelihood.
-3. Generate Predictions:  
+3. Generate Predictions:
   - Select and rank the 10 most likely diagnoses.
   - Print them as a simple list, NOT in JSON Format.
 4. Refine & Rerank:
   - Is every given name one of the potential diagnoses?
-  - Rerank diagnoses accordingly. NOT in JSON Format. 
+  - Rerank diagnoses accordingly. NOT in JSON Format.
 5. Output JSON Once: Provide your final ranked diagnoses and reasoning in JSON.
   - Use the format of the Output Format Example.
-  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.  
+  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.
   - The JSON is the only output. Stop after printing it.
 
 ### Admission Note
@@ -242,10 +242,10 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 4. Generate Predictions: Print a list of diagnoses with a new ranking.
 5. Refine & Rerank:
   - Is every given name one of the potential diagnoses?
-  - Rerank diagnoses accordingly. NOT in JSON Format. 
+  - Rerank diagnoses accordingly. NOT in JSON Format.
 6. Output JSON Once: Provide your final ranked diagnoses and reasoning in JSON.
   - Use the format of the Output Format Example.
-  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.  
+  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.
   - The JSON is the only output. Stop after printing it.
 
 ### Admission Note
@@ -276,12 +276,12 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 3. Generate Predictions: Print a list of diagnoses with a new ranking.
 4. Refine & Rerank:
   - Is every given name one of the potential diagnoses?
-  - Rerank diagnoses accordingly. NOT in JSON Format. 
+  - Rerank diagnoses accordingly. NOT in JSON Format.
 5. Output JSON Once: Provide your final ranked diagnoses and reasoning in JSON.
   - Use the format of the Output Format Example.
-  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.  
+  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.
   - The JSON is the only output. Stop after printing it.
- 
+
 ### Admission Note
 {admission_note}
 
@@ -314,12 +314,12 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 5. Refine & Rerank:
   - How are the Manifestations and Laboratory Results related to your diagnoses?
   - Is every given name one of the potential diagnoses?
-  - Rerank diagnoses accordingly. NOT in JSON Format. 
+  - Rerank diagnoses accordingly. NOT in JSON Format.
 6. Output JSON Once: Provide your final ranked diagnoses and reasoning in JSON.
   - Use the format of the Output Format Example.
-  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.  
+  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.
   - The JSON is the only output. Stop after printing it.
- 
+
 ### Admission Note
 {admission_note}
 
@@ -348,15 +348,15 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 4. Refine & Rerank:
   - How are the Manifestations and Laboratory Results related to your diagnoses?
   - Is every given name one of the potential diagnoses?
-  - Rerank diagnoses accordingly. NOT in JSON Format. 
+  - Rerank diagnoses accordingly. NOT in JSON Format.
 5. Output JSON Once: Provide your final ranked diagnoses and reasoning in JSON.
   - Use the format of the Output Format Example.
-  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.  
+  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.
   - The JSON is the only output. Stop after printing it.
- 
+
 ### Admission Note
 {admission_note}
-   
+
 ### Clinical Manifestations
 {clinical_manifestations}
 
@@ -382,16 +382,16 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 
 1. Analyze Patient Data: Review the Admission Note, Clinical Manifestations and Laboratory Results at Admission Time.
 2. Analyze Potential Diagnoses: Review Potential Diagnoses and think about their likelihood.
-3. Generate Predictions:  
+3. Generate Predictions:
   - Select and rank the 10 most likely diagnoses.
   - Print them as a simple list, NOT in JSON Format.
 4. Refine & Rerank:
   - How are the Manifestations and Laboratory Results related to your diagnoses?
   - Is every given name one of the potential diagnoses?
-  - Rerank diagnoses accordingly. NOT in JSON Format. 
+  - Rerank diagnoses accordingly. NOT in JSON Format.
 5. Output JSON Once: Provide your final ranked diagnoses and reasoning in JSON.
   - Use the format of Output Format Example.
-  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.  
+  - Include only a short reasoning of 1 - 3 sentences for each diagnosis.
   - The JSON is the only output. Stop after printing it.
 
 ### Admission Note
@@ -416,24 +416,24 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 4. Stop after printing the JSON object - no extra commentary.
 
 ### Structured Reasoning Process
-1. Analyze Patient Data: 
+1. Analyze Patient Data:
   - Admission Note
   - Laboratory Results at Admission Time
   - Clinical Manifestations
   - Potential Diagnoses
-2. Predict many ICD-10 codes: 
+2. Predict many ICD-10 codes:
   - Predict up to 30 icd-codes based on 1. and put them in order of likelihood.
   - Think about all ICD-10 codes the patient could be assigned when leaving the hospital.
   - Go broad and prefer to predict more we can remove unlikely codes later.
-  - Print the ICD-10 as a simple list, not in JSON format. 
+  - Print the ICD-10 as a simple list, not in JSON format.
 3. Rethink your predicted ICD-10 codes:
   - How are the Manifestations related to your diagnoses?
   - Which ones do not fit, which did you miss?
   - Is every ICD-10 code an official ICD-10 code?
   - Is the amount of ICD-10 codes between 3 and 30?
-4. Print your final answer in json format. 
-  - Rerank the order if needed. 
-  - Use the format of the Output Format Example. 
+4. Print your final answer in json format.
+  - Rerank the order if needed.
+  - Use the format of the Output Format Example.
   - Give a reason for each code, why it is likely to be related to the patient.
   - The json can have 3 - 30 ICD-10 codes.
   - Stop after you printed the json, DO NOT print any other text or JSON.
@@ -463,21 +463,21 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 4. Stop after printing the JSON object - no extra commentary.
 
 ### Structured Reasoning Process
-1. Analyze Patient Data: 
+1. Analyze Patient Data:
   - Admission Note
   - Laboratory Results at Admission Time
-2. Predict many ICD-10 codes: 
+2. Predict many ICD-10 codes:
   - Predict up to 30 icd-codes based on 1. and put them in order of likelihood.
   - Think about all ICD-10 codes the patient could be assigned when leaving the hospital.
   - Go broad and prefer to predict more we can remove unlikely codes later.
-  - Print the ICD-10 as a simple list, not in JSON format. 
+  - Print the ICD-10 as a simple list, not in JSON format.
 3. Rethink your predicted ICD-10 codes:
   - Which ones do not fit, which did you miss?
   - Is every ICD-10 code an official ICD-10 code?
   - Is the amount of ICD-10 codes between 3 and 30?
-4. Print your final answer in json format. 
-  - Rerank the order if needed. 
-  - Use the format of the Output Format Example. 
+4. Print your final answer in json format.
+  - Rerank the order if needed.
+  - Use the format of the Output Format Example.
   - Give a reason for each code, why it is likely to be related to the patient.
   - The json can have 3 - 30 ICD-10 codes.
   - Stop after you printed the json, DO NOT print any other text or JSON.
@@ -503,24 +503,24 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 5. Stop after printing the JSON object - no extra commentary.
 
 ### Structured Reasoning Process
-1. Analyze Patient Data: 
+1. Analyze Patient Data:
   - Admission Note
   - Clinical Manifestations
   - Potential Diagnoses
-2. Predict many ICD-10 codes: 
+2. Predict many ICD-10 codes:
   - Predict up to 30 icd-codes based on 1. and put them in order of likelihood.
   - Think about all ICD-10 codes the patient could be assigned when leaving the hospital.
   - Go broad and prefer to predict more we can remove unlikely codes later.
-  - Print the ICD-10 as a simple list, not in JSON format. 
+  - Print the ICD-10 as a simple list, not in JSON format.
 3. Laboratory Results: Laboratory Results aren't given. Think about potential Laboratory Results at Admission Time and how they affect the likelyhood of ICD-Codes.
 4. Rethink your predicted ICD-10 codes:
   - How are the Manifestations related to your diagnoses?
   - Which ones do not fit, which did you miss?
   - Is every ICD-10 code an official ICD-10 code?
   - Is the amount of ICD-10 codes between 3 and 30?
-5. Print your final answer in json format. 
-  - Rerank the order if needed. 
-  - Use the format of the Output Format Example. 
+5. Print your final answer in json format.
+  - Rerank the order if needed.
+  - Use the format of the Output Format Example.
   - Give a reason for each code, why it is likely to be related to the patient.
   - The json can have 3 - 30 ICD-10 codes.
   - Stop after you printed the json, DO NOT print any other text or JSON.
@@ -547,23 +547,23 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 4. Stop after printing the JSON object - no extra commentary.
 
 ### Structured Reasoning Process
-1. Analyze Patient Data: 
+1. Analyze Patient Data:
   - Admission Note
   - Clinical Manifestations
   - Potential Diagnoses
-2. Predict many ICD-10 codes: 
+2. Predict many ICD-10 codes:
   - Predict up to 30 icd-codes based on 1. and put them in order of likelihood.
   - Think about all ICD-10 codes the patient could be assigned when leaving the hospital.
   - Go broad and prefer to predict more we can remove unlikely codes later.
-  - Print the ICD-10 as a simple list, not in JSON format. 
+  - Print the ICD-10 as a simple list, not in JSON format.
 3. Rethink your predicted ICD-10 codes:
   - How are the Manifestations related to your diagnoses?
   - Which ones do not fit, which did you miss?
   - Is every ICD-10 code an official ICD-10 code?
   - Is the amount of ICD-10 codes between 3 and 30?
-4. Print your final answer in json format. 
-  - Rerank the order if needed. 
-  - Use the format of the Output Format Example. 
+4. Print your final answer in json format.
+  - Rerank the order if needed.
+  - Use the format of the Output Format Example.
   - Give a reason for each code, why it is likely to be related to the patient.
   - The json can have 3 - 30 ICD-10 codes.
   - Stop after you printed the json, DO NOT print any other text or JSON.
@@ -592,21 +592,21 @@ Respond clearly and concisely. Avoid speculation, filler, or disclaimers.
 5. Stop after printing the JSON object - no extra commentary.
 
 ### Structured Reasoning Process
-1. Analyze Patient Data: 
+1. Analyze Patient Data:
   - Admission Note
-2. Predict many ICD-10 codes: 
+2. Predict many ICD-10 codes:
   - Predict up to 30 icd-codes based on 1. and put them in order of likelihood.
   - Think about all ICD-10 codes the patient could be assigned when leaving the hospital.
   - Go broad and prefer to predict more we can remove unlikely codes later.
-  - Print the ICD-10 as a simple list, not in JSON format. 
+  - Print the ICD-10 as a simple list, not in JSON format.
 3. Laboratory Results: Laboratory Results aren't given. Think about potential Laboratory Results at Admission Time and how they affect the likelyhood of ICD-Codes.
 4. Rethink your predicted ICD-10 codes:
   - Which ones do not fit, which did you miss?
   - Is every ICD-10 code an official ICD-10 code?
   - Is the amount of ICD-10 codes between 3 and 30?
-5. Print your final answer in json format. 
-  - Rerank the order if needed. 
-  - Use the format of the Output Format Example. 
+5. Print your final answer in json format.
+  - Rerank the order if needed.
+  - Use the format of the Output Format Example.
   - Give a reason for each code, why it is likely to be related to the patient.
   - The json can have 3 - 30 ICD-10 codes.
   - Stop after you printed the json, DO NOT print any other text or JSON.

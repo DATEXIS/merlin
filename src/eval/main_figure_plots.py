@@ -31,7 +31,7 @@ from src.eval.paper_plots import _agg_seeds_by_size, _bar_mean_err, _size_sort_k
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TEST_CSV = REPO_ROOT / "data" / "results" / "evaluation" / "checkpoint_metrics.csv"
-OUT_DIR = REPO_ROOT / "paper" / "figures" / "main"
+OUT_DIR = REPO_ROOT / "figures" / "main"
 
 
 def _load():
