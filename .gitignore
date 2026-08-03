@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------------
+# Restricted data. MIMIC-IV and everything derived from it (notes, labs,
+# preprocessed splits, reasoning traces, instruction datasets, per-admission
+# prediction dumps) is governed by the PhysioNet Credentialed Health Data
+# License and MUST NOT be committed. Only aggregate metric tables are tracked.
+# ---------------------------------------------------------------------------
+data/mimic-iv/
+data/preprocessed_mimic/
+data/reasoning/
+data/instructions/
+data/embeddings/
+data/fine_tuning/
+data/datasets/
+data/results/gen_data/
+data/results/instructions/
+data/results/evaluation/
+data/results/**/*_preds.parquet
+data/results/**/judge_table*
+*.tar.gz
+
+# Credentials
+config.json
+.env
+*.key
+
+# Checkpoints / models
+models/
+checkpoints/
+*.safetensors
+*.bin
+*.pt
+
+# Experiment tracking
+wandb/
+wandb_downloads/
+artifacts/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.installed.cfg
+*.egg
+
+# Envs
+.venv/
+venv/
+env/
+ENV/
+
+# Tooling
+.idea/
+.vscode/
+.mypy_cache/
+.pytest_cache/
+.ipynb_checkpoints
+.coverage
+htmlcov/
+
+# OS
+.DS_Store

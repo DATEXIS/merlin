@@ -1,0 +1,408 @@
+# v1.4 round -- data rebuilt after fixing the postprocessing match_category
+# rank filter (src/postprocessing/merge_gen_data.py: filter now runs before the
+# single-cc-per-subject assignment, so it actually reaches every chief
+# complaint -- headache alone lost ~50% unmatched/other rows to it).
+#
+# Datasets (see scripts/upload_datasets_to_pvc.py DATASETS), all under the
+# corrected v1.4 postprocessing:
+#   icd2x        -> /ft_models/datasets/merlin-v1.4/merlin_icd_2x
+#                   (icd_2x V4 duplication alone, no threshold filtering)
+#   thrfull2icd  -> /ft_models/datasets/merlin-v1.4/merlin_thrfull_icd2x
+#                   (thr_full thresholds [0.6,0.5,0.8,0.55] + icd_2x V4 dup,
+#                   combined -- the two v1.3 ablations that each improved
+#                   fine-tuning individually)
+#   mimic        -> /ft_models/datasets/mimic-v1.4/mimic_fixed
+#                   (full V1-V4 mimic, no icd_2x dup)
+#   mimic-2icd   -> /ft_models/datasets/mimic-v1.4/mimic_fixed_icd_2x
+#                   (full V1-V4 mimic + icd_2x V4 dup)
+#
+# Prereq: scripts/run_postprocessing.py has been (re)run against the corrected
+# gen_data, and scripts/upload_datasets_to_pvc.py has pushed all four datasets
+# above to their v1.4 PVC folders (merlin_icd_2x and mimic_fixed were added to
+# upload_datasets_to_pvc.py's DATASETS dict on 2026-07-10 -- re-run it before
+# launching the icd2x/mimic runs below if you haven't already).
+#
+# 6 runs requested, listed below in priority order (top = highest priority).
+# Total if launched all at once: 2+2+2+2+2+2 = 12 GPUs (8xB200 + 4xH200).
+# If the cluster can't fit all 6 in parallel, launch top-down with --only,
+# e.g.:
+#   python scripts/launch_all.py --config scripts/run_plan.yaml --only icd2x-v1-4          # #1, #3
+#   python scripts/launch_all.py --config scripts/run_plan.yaml --only thrfull2icd-v1-4     # #2, #4
+#   python scripts/launch_all.py --config scripts/run_plan.yaml --only mimic-v1-4            # #5
+#   python scripts/launch_all.py --config scripts/run_plan.yaml --only mimic-2icd-v1-4        # #6
+# or just launch everything if the budget allows:
+#   python scripts/launch_all.py --config scripts/run_plan.yaml --dry_run   # sanity-check first
+#   python scripts/launch_all.py --config scripts/run_plan.yaml
+#
+# 7th run added 2026-07-12: ft-8b-full-thrfulldrop-v1-4, an ablation of
+# merlin_thrfull_drop (src/postprocessing/build_instructions.py's
+# drop_below_threshold=True) -- same thr_full thresholds, but below-threshold/
+# nan/0 rows are DROPPED instead of mimic-fallback'd. Prereq same as the other
+# runs: run_postprocessing.py, then upload_datasets_to_pvc.py (both already
+# updated to include merlin_thrfull_drop / "merlin_thrfull_drop" -> "merlin-v1.4").
+# Launch just this one with:
+#   python scripts/launch_all.py --config scripts/run_plan.yaml --only thrfulldrop-v1-4
+#
+# Naming: ft-{size}-{mode}[-r{rank}]-{variant}-{version} for the 6 runs added
+# 2026-07-10 (dropped the "qwen3" segment used elsewhere in this file --
+# that's a deliberate deviation for this batch, not an oversight). version
+# "v1.4" -> "v1-4" (no dots -- job_name is the k8s Job's metadata.name).
+#
+# Hardware/hyperparams for the 5 existing size/mode combos are carried over
+# unchanged from scripts/run_plan.yaml (proven configs, see merlin.md's
+# gotchas section). ft-qwen3-06b-lora-r128-merlin-v1-4 is NEW -- no prior run
+# at this size/mode combo. Picked lora_r=128 (the standard rank used
+# everywhere except 32B's r256) and single-GPU h200 (LoRA freezes the base
+# weights, so the 0.6B full-FT NaN/gradient-offload issue tied to its tied
+# input/output embeddings shouldn't apply -- but this is untested, watch the
+# first steps for NaN loss same as any new combo).
+
+project:
+  wandb_project: "MERLIN-DDX-SFT"
+  wandb_entity: "anon-entity"
+  hf_cache_dir: "/ft_models/.cache/huggingface"
+  wandb_cache_dir: "/ft_models/.cache/wandb"
+  namespace: "merlin"
+  image: "registry.example.com/anon/fine_tuning:latest"
+
+models_root: "/ft_models/sft"
+
+cleanup:
+  tool_pod: "tool-anon"
+  pvc_models_root: "/merlin_ddx/sft"
+
+# Applied to every run; each run overrides dataset_path (mandatory) and any
+# hyperparams it needs to differ on.
+defaults:
+  dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thrfull_icd2x"
+  dataset_models: ["Qwen3-32B"]   # unused (no model filter)
+  epochs: 4
+  learning_rate: 1.0e-4
+  warmup_steps: 100
+  weight_decay: 0.01
+  max_seq_length: 8192
+  eval_batch_size: 2
+  eval_samples: 1000              # per-split eval-loss cap; -1 = full
+  use_lora: True
+  load_in_4bit: False
+  unsloth_full_finetuning: False
+  assistant_only_loss: False
+  packing: True
+  lora_r: 128
+  lora_dropout: 0.0
+  logging_steps: 20
+  seed: 42
+  resume_from_checkpoint: False
+
+# gpu/gpu_count are read directly off each run (not merged from defaults, see
+# launch_all.py:build_cfg) -- must be set per run even where identical.
+runs:
+  # 1. Priority 1 -- 32B LoRA r256, icd_2x alone.
+  - job_name: "ft-32b-lora-r256-icd2x-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_icd_2x"
+    model_name: "Qwen/Qwen3-32B"
+    use_lora: True
+    lora_r: 256
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 8                 # eff 4*8*2 = 64  (drop bs->2, ga->16 if OOM)
+
+  # 1. Priority 1 -- 32B LoRA r256, thr_full + icd_2x combined.
+  - job_name: "ft-32b-lora-r256-thrfull2icd-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thrfull_icd2x"
+    model_name: "Qwen/Qwen3-32B"
+    use_lora: True
+    lora_r: 256
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 8                 # eff 4*8*2 = 64  (drop bs->2, ga->16 if OOM)
+
+  # 2. Priority 2 -- 8B full-parameter, icd_2x alone.
+  - job_name: "ft-8b-full-icd2x-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_icd_2x"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False               # standard full-FT path, multi-GPU (proven: 65s/it, no NaN)
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256
+
+  # 2. Priority 2 -- 8B full-parameter, thr_full + icd_2x combined.
+  - job_name: "ft-8b-full-thrfull2icd-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thrfull_icd2x"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False               # standard full-FT path, multi-GPU (proven: 65s/it, no NaN)
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256
+
+  # 3. Priority 3 -- 8B full-parameter, mimic (reasoning-trace ablation), no icd dup.
+  - job_name: "ft-8b-full-mimic-v1-4"
+    model_name: "Qwen/Qwen3-8B"
+    dataset_path: "/ft_models/datasets/mimic-v1.4/mimic_fixed"
+    use_lora: False
+    gpu: "h200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256 -- matches the merlin full-FT runs' eff batch
+
+  # 3. Priority 3 -- 8B full-parameter, mimic + icd_2x dup.
+  - job_name: "ft-8b-full-mimic-2icd-v1-4"
+    model_name: "Qwen/Qwen3-8B"
+    dataset_path: "/ft_models/datasets/mimic-v1.4/mimic_fixed_icd_2x"
+    use_lora: False
+    gpu: "h200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256 -- matches the merlin full-FT runs' eff batch
+
+  # 4. Priority 4 -- 14B LoRA r128, merlin.
+  - job_name: "ft-14b-lora-r128-merlin-v1-4"
+    model_name: "Qwen/Qwen3-14B"
+    use_lora: True
+    lora_r: 128
+    learning_rate: 5.0e-5
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 8                 # eff 4*8*2 = 64
+
+  # 5. Priority 5 -- 0.6B full-parameter (Unsloth path), merlin.
+  - job_name: "ft-qwen3-06b-full-merlin-v1-4"
+    model_name: "Qwen/Qwen3-0.6B"
+    use_lora: False
+    unsloth_full_finetuning: True # standard path NaNs on 0.6B (tied embeddings); use Unsloth's
+    gpu: "b200"                   # B200 192GB: extra headroom avoids the gradient offload (= slow)
+    gpu_count: 1                  # full_finetuning offload deadlocks DDP -> single GPU
+    batch_size: 4                 # 8192-token logits (vocab ~152k) ~10GB at bs4; keep small to avoid offload
+    grad_accum: 32                # eff 4*32*1 = 128
+
+  # 6. Priority 6 -- 0.6B LoRA r128, merlin. NEW combo, untested -- see header note.
+  - job_name: "ft-qwen3-06b-lora-r128-merlin-v1-4"
+    model_name: "Qwen/Qwen3-0.6B"
+    use_lora: True
+    lora_r: 128
+    gpu: "h200"                   # idle Hopper card, matches the 8B-lora-r128 ablation's choice
+    gpu_count: 1
+    batch_size: 8
+    grad_accum: 8                 # eff 8*8*1 = 64
+
+  # 7. Added 2026-07-12 -- 8B full-parameter, thr_full thresholds but
+  # below-threshold/nan/0 rows DROPPED instead of mimic-fallback'd (see header
+  # note + merlin_thrfull_drop in run_postprocessing.py). Expected to
+  # underperform thr_full/thrfull2icd -- pure control, not a contender.
+  # 2xB200 is enough at this size/mode (same as the other 8b-full runs above);
+  # bump gpu_count to 4 and halve grad_accum (32->16) to keep eff batch at 256
+  # if you want it to run faster / the cluster has room.
+  - job_name: "ft-8b-full-thrfulldrop-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thrfull_drop"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False               # standard full-FT path, multi-GPU (proven: 65s/it, no NaN)
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256 -- matches the other 8b-full runs
+
+  # 8. Added 2026-07-15 -- 8B LoRA r128 on the default dataset
+  # (merlin_thrfull_icd2x): the LoRA-vs-full comparison point at 8B against
+  # ft-8b-full-thrfull2icd-v1-4. Same recipe as the v1.3 8B LoRA r128 runs
+  # (single B200, bs8, ga8 -> eff 64).
+  - job_name: "ft-8b-lora-r128-thrfull2icd-v1-4"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: True
+    lora_r: 128
+    gpu: "b200"
+    gpu_count: 4                  # bumped from 1 -> 4 (2026-07-18): DDP scales well
+                                   # for LoRA (only adapter grads synced), untested at
+                                   # this gpu_count though -- proven single-GPU number
+                                   # was 79488s/2572 steps (~31s/step); watch first
+                                   # steps for a healthy loss curve same as any new combo.
+    batch_size: 8
+    grad_accum: 2                  # eff 8*2*4 = 64 (unchanged -- same training dynamics)
+
+  # 8b. Added 2026-07-19 -- LR variant of the 8B LoRA r128 run above: same
+  # rank (128) and dataset (thrfull_icd2x), but learning_rate dropped to
+  # 5e-5 (matching the 14B-LoRA convention, ft-14b-lora-r128-merlin-v1-4)
+  # instead of the 1e-4 default. Both prior evals of the 1e-4/r128 run on
+  # this dataset (dev sweep + a dedicated test-set rerun) showed very low
+  # JSON validity (V1 JSON Valid Rate 18.5%->12.7%->10.8% across epochs
+  # 2-4) despite mild/non-collapsing F1 -- confirmed NOT a GPU-count
+  # artifact (the original run was single-GPU) and NOT reproduced by any
+  # other LoRA run (0.6b, 14b, 32b -- all 97-100% JSON valid) or by 8b
+  # full-FT on the same dataset. Rank left at 128 per Jan's call (2026-07-19)
+  # -- trying LR before capacity. 2xB200 (not the untested 4-GPU config
+  # above); proven single-GPU recipe was bs8/ga8 -> eff 64, so ga4 at 2 GPUs
+  # holds the same effective batch.
+  - job_name: "ft-8b-lora-r128-thrfull2icd-lr5e5-v1-4"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: True
+    lora_r: 128
+    learning_rate: 5.0e-5
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 8
+    grad_accum: 4                  # eff 8*4*2 = 64 (matches the r128 recipe above)
+
+  # 8c. Added 2026-07-21 -- rank variant of the same 8B LoRA / thrfull_icd2x
+  # JSON-validity collapse (see paper/EACL_2026_revision_notes.md for the
+  # full writeup). LR is ruled out (5e5 retry above scored worse, not
+  # better), and literal data contamination is ruled out (grepped the
+  # training parquet for the gibberish seen in eval output -- no hits), so
+  # this tries more adapter capacity: lora_r 128 -> 256, matching the 32B
+  # convention. learning_rate left at the 1e-4 default (unaffected variable).
+  # Last hyperparameter attempt before accepting this as a limitation --
+  # do not sweep further seeds/LRs on this combo if this doesn't fix it.
+  # Same 4xB200 hardware as the current r128 job (rank bump doesn't
+  # meaningfully change memory footprint at 8B); untested at this rank,
+  # watch first steps same as any new combo.
+  - job_name: "ft-8b-lora-r256-thrfull2icd-v1-4"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: True
+    lora_r: 256
+    gpu: "b200"
+    gpu_count: 4
+    batch_size: 8
+    grad_accum: 2                  # eff 8*2*4 = 64 (matches the r128 recipe)
+
+  # 9-11. Added 2026-07-15 -- 8B full-parameter on the remaining v1.3 dataset
+  # ablations, rebuilt under the corrected v1.4 postprocessing: replace (no
+  # threshold filtering), thr_half, thr_full. Prereq: re-run
+  # scripts/upload_datasets_to_pvc.py (merlin_replace / merlin_thr_half /
+  # merlin_thr_full were added to its DATASETS -> merlin-v1.4 on 2026-07-15;
+  # the local .pq files already exist from the v1.4 postprocessing rebuild).
+  # Same 8b-full recipe as runs 2/3/7. Launch with:
+  #   python scripts/launch_all.py --config scripts/run_plan.yaml \
+  #     --only 8b-lora-r128-thrfull2icd 8b-full-replace 8b-full-thrhalf 8b-full-thrfull-v1-4
+  - job_name: "ft-8b-full-replace-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_replace"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False               # standard full-FT path, multi-GPU (proven: 65s/it, no NaN)
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256 -- matches the other 8b-full runs
+
+  - job_name: "ft-8b-full-thrhalf-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thr_half"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256
+
+  - job_name: "ft-8b-full-thrfull-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thr_full"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256
+
+  # 14-15. Added 2026-07-16 -- robustness/seed-variance check for the paper's
+  # headline 8B full-FT run (ft-8b-full-thrfull2icd-v1-4, seed 42, epoch 3
+  # dev-selected -> test-8b-full-e3 in checkpoint_best_epochs.csv). Two more
+  # training seeds (43, 44) of the exact same recipe/dataset/hyperparams,
+  # `epochs: 3` only (not the usual 4) since epoch 3 is already the
+  # established best epoch for this model/dataset -- no need to train or
+  # eval epoch 4, and no per-epoch eval watcher needed since each run
+  # produces exactly one checkpoint. Once each finishes, eval its single
+  # checkpoint-3 on the TEST split (not dev) with a matching eval seed
+  # (43 / 44) -- see scripts/eval_config.yaml / the test-set eval config for
+  # how test-8b-full-e3 (seed 42) was wired in.
+  - job_name: "ft-8b-full-thrfull2icd-seed43-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thrfull_icd2x"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256 -- matches the other 8b-full runs
+    epochs: 3                     # only epoch 3 needed (dev-selected best, see header note)
+    seed: 43
+
+  - job_name: "ft-8b-full-thrfull2icd-seed44-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thrfull_icd2x"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32
+    epochs: 3
+    seed: 44
+
+  # 12-13. FSDP full-parameter runs (formerly separate
+  # fine_tuning_config_{14b,32b}_full_fsdp.yaml, merged here 2026-07-16).
+  # Why FSDP: Unsloth full-FT is DDP-only (full AdamW state ~16 bytes/param
+  # replicated per GPU); 14B (~224GB) and 32B (~512GB) state doesn't fit on
+  # one 180GB B200, so entrypoint.py routes to the non-Unsloth FSDP path
+  # (src/fine_tuning/training_fsdp.py) which shards state across GPUs.
+  # batch_size starts at 1 deliberately: at seq 8192 the ~152k-vocab logits
+  # dominate memory. 32B proven in production (~245 s/it, healthy loss); if
+  # step ~30 looks healthy on 14B try batch_size=2 / grad_accum=64.
+  - job_name: "ft-14b-full-fsdp-thrfull2icd-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thrfull_icd2x"
+    model_name: "Qwen/Qwen3-14B"
+    use_lora: False
+    fsdp_full_finetuning: True    # -> training_fsdp.py (non-Unsloth, sharded)
+    gpu: "b200"
+    gpu_count: 2
+    batch_size: 1                 # per-GPU; ~112GB/GPU state, ~68GB headroom
+    grad_accum: 128               # eff 1*128*2 = 256
+    learning_rate: 5.0e-5         # 14B convention (matches the 14B-LoRA run)
+
+  - job_name: "ft-32b-full-fsdp-thrfull2icd-v1-4"
+    dataset_path: "/ft_models/datasets/merlin-v1.4/merlin_thrfull_icd2x"
+    model_name: "Qwen/Qwen3-32B"
+    use_lora: False
+    fsdp_full_finetuning: True
+    gpu: "b200"
+    gpu_count: 4
+    batch_size: 1                 # per-GPU; ~128GB/GPU state, ~50GB headroom
+    grad_accum: 64                # eff 1*64*4 = 256
+    learning_rate: 1.0e-4         # carried from 8b-full; watch for instability
+
+  # 16-17. Added 2026-07-29 -- seed ablation for the reasoning-trace
+  # comparison (traces vs. no-traces), "no-traces" arm: two more training
+  # seeds (43, 44) of ft-8b-full-mimic-2icd-v1-4 (mimic-v1.4/
+  # mimic_fixed_icd_2x -- no `Thinking` column, see merlin.md section 3),
+  # same recipe/dataset/hyperparams as the seed-42 run. The "with-traces" arm
+  # already has its seed-43/44 pair (runs 14-15 above,
+  # ft-8b-full-thrfull2icd-seed{43,44}-v1-4) -- this completes the pair for
+  # the other side of the ablation.
+  #
+  # Unlike runs 14-15, this does NOT trim to `epochs: 3`: the seed-42
+  # dev-selected best epoch for mimic-2icd is e4 -- the LAST epoch (see
+  # scripts/eval_checkpoints_config_test_8b_mimic_icd2.yaml: dev ICD F1
+  # Macro 12.51 @ e4 vs 12.25 @ e3), so there's no early-stop epoch to skip,
+  # and the best epoch could shift at a new seed anyway. Trains the full 4
+  # epochs (defaults.epochs) and gets a real per-epoch watcher instead of
+  # watch_sft_and_eval.py's fixed-single-epoch-after-completion pattern --
+  # see scripts/watch_and_eval_epochs.py + scripts/watch_epochs_mimic2icd_
+  # seed{43,44}.yaml, run in parallel with the training jobs below.
+  #
+  # Same hardware/recipe as ft-8b-full-mimic-2icd-v1-4 (2xH200, bs4/ga32).
+  - job_name: "ft-8b-full-mimic-2icd-seed43-v1-4"
+    dataset_path: "/ft_models/datasets/mimic-v1.4/mimic_fixed_icd_2x"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False
+    gpu: "h200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256 -- matches ft-8b-full-mimic-2icd-v1-4
+    seed: 43
+
+  - job_name: "ft-8b-full-mimic-2icd-seed44-v1-4"
+    dataset_path: "/ft_models/datasets/mimic-v1.4/mimic_fixed_icd_2x"
+    model_name: "Qwen/Qwen3-8B"
+    use_lora: False
+    gpu: "h200"
+    gpu_count: 2
+    batch_size: 4
+    grad_accum: 32                # eff 4*32*2 = 256 -- matches ft-8b-full-mimic-2icd-v1-4
+    seed: 44

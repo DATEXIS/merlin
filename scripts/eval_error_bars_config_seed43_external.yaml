@@ -1,0 +1,127 @@
+# Error-bar seed for the main bar plot -- external/competitor baselines half
+# of the seed-43 sweep. Companion to eval_error_bars_config_seed43[.yaml|
+# _8b.yaml] (Qwen3 sizes) and eval_error_bars_config_seed44_external.yaml
+# (seed 44). Split into its own file because these aren't Qwen3-family
+# checkpoints and reuse eval_base_models.py's `models:` list format from
+# scripts/eval_external_models_config_test.yaml, not eval_checkpoints.py.
+#
+# NO retraining -- same base_model weights as the seed-42 external-baseline
+# run, only Client_Job.seed changes so the generator-verifier sampling
+# varies. See eval_error_bars_config_seed43.yaml's header for the full
+# rationale and the wandb doubled-"-seed{N}"-suffix quirk.
+#
+# Scope: medgemma-27b-it, llama-3.3-70b-instruct, meditron3-8b, baichuan-
+# m2-32b -- all four external/competitor baselines that have real seed-42
+# numbers already (table_main.tex / table_main_body.tex). This matches
+# revision_notes.md's 2026-07-24 "external-baseline seed reruns (MedGemma /
+# Llama-70B / Baichuan)" -- what the grey "±--" placeholders in
+# table_main_body.tex are waiting on.
+#
+# Baichuan is EXCLUDED from Figure 1 specifically (main_figure_config.py's
+# EXTERNAL_LABEL / EXTERNAL_REFERENCE dashed-line handling, removed from
+# Figure 1 per revision_notes.md line ~870) but IS a relevant row in the
+# Table 2 / table_main comparison -- so it still needs the seed rerun here,
+# it's just not plotted in Figure 1. Jan confirmed this scope 2026-07-25.
+#
+# job_name carries a "-seed43" suffix (test-medgemma-27b-it-seed43, etc.),
+# matching the test-*-base-seed43 convention from eval_error_bars_config_
+# seed43.yaml. src/wandb/run.py auto-appends its own "-seed43" whenever
+# Client_Job.seed != 42, so the actual wandb collection name doubles up,
+# e.g. "test-medgemma-27b-it-seed43-seed43" -- same as the base-model seed
+# runs.
+#
+# CAVEAT -- unverified whether this will show up in figures: src/eval/
+# checkpoint_metrics.py's EXTERNAL_TEST_MODELS is an exact-match dict keyed
+# on the un-suffixed job_name (e.g. "test-medgemma-27b-it") and parse_name()
+# has no regex path for a "-seed{N}-seed{N}"-suffixed external name (unlike
+# EVAL_SEED_TEST_BASE_RE, which exists for the Qwen base models). Confirm/
+# extend that before expecting these runs to land in plot_main_figure_test.
+#
+# CAVEAT -- chat-template routing (see memory is_model_chat_based_completions_
+# misroute / src/utils.py:53 `is_model_chat_based`): only "meditron3" was
+# added to the chat-based substring list so far. "google/medgemma-27b-it",
+# "meta-llama/llama-3.3-70b-instruct", AND "baichuan-inc/baichuan-m2-32b"
+# (Qwen2.5-based but the string itself doesn't contain "qwen") all still
+# don't match "chat", "mistral", "qwen", "lora_module", or "meditron3", so
+# all three will be routed to the raw /completions endpoint with no chat
+# template applied -- same bug documented for the seed-42 run of these
+# models. Baichuan tolerated this fine at seed 42 (scored normally on 30/30
+# patients per that memory); Llama-70B did not (29/30 empty). Check raw
+# v{n}_text for empty/truncated completions on medgemma/llama before
+# trusting these numbers.
+#
+# CAVEAT -- Baichuan-M2-32B reasoning parser: its HF card recommends `vllm
+# serve ... --reasoning-parser qwen3`, but this repo's server_template.py
+# only wires Model.thinking -> --reasoning-parser=deepseek_r1, so thinking
+# is left False here (same as the seed-42 run) -- its chat template default
+# (thinking_mode='auto') may still leak an unparsed <think> block into the
+# response budget. Same caveat as eval_external_models_config_test.yaml.
+#
+# Run:
+#   python scripts/eval_base_models.py --config scripts/eval_error_bars_config_seed43_external.yaml
+
+namespace: anon
+server_image: registry.example.com/anon/vllm_server:latest
+client_image: registry.example.com/anon/vllm_client:latest
+
+models_root: /ft_models/sft
+
+pvc:
+  tool_pod: tool-anon
+  ft_root: /ft_models
+  tool_root: /merlin_ddx
+
+models:
+#  - job_name: test-meditron3-8b-seed43
+#    base_model: "OpenMeditron/Meditron3-8B"
+#    gpu_count: 1
+#    server_gpu: h100
+  - job_name: test-medgemma-27b-it-seed43
+    base_model: "google/medgemma-27b-it"
+    gpu_count: 1
+    server_gpu: h200
+  - job_name: test-llama-3-70b-instruct-seed43
+    base_model: "meta-llama/Llama-3.3-70B-Instruct"
+    gpu_count: 2
+    server_gpu: b200
+  - job_name: test-baichuan-m2-32b-seed43
+    base_model: "baichuan-inc/Baichuan-M2-32B"
+    gpu_count: 2
+    server_gpu: b200
+
+Hardware:
+  server_gpu: [b200, h200, h100]   # overridden per model above
+  client_gpu: p100                 # matches eval_external_models_config_test.yaml
+  gpu_count: 1
+  replicas: 1
+  gpu_memory_utilization: 0.85
+  enforce_eager: True
+
+Model:
+  max_model_len: 8192
+  max_num_seqs: 512
+  max_num_batched_tokens: 8192
+  dtype: "auto"
+  thinking: False   # see chat-template caveat above
+  lora: False
+  full_finetuning: False
+  lora_modules: ""
+
+Client_Job:
+  chief_complaint: "all"
+  file_name: "test_dataset"
+  split: "test"
+  wandb_tags: "test_data"
+  num_choices: 4
+  num_samples: 100000
+  concurrency: 64
+  start_verifier: 1
+  budget: [4, 4, 4, 4]
+  temperatures: [0.4, 0.4, 0.4, 0.4]
+  max_tokens: [2000, 2000, 2000, 2200]
+  thresholds: [0.6, 0.5, 0.8, 0.55]
+  seed: 43
+  eval_mode: True
+  merlin_mode: True
+  think_about_labs: False
+  guided_decoding: False

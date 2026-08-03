@@ -1,0 +1,79 @@
+# Error-bar seed for the main bar plot -- 8B half of the seed-44 sweep.
+# Split out from scripts/eval_error_bars_config_seed44.yaml only because 8B
+# uses a different client_gpu (v100 vs p100); Hardware.client_gpu is shared
+# by every entry in one config file, so it can't vary per model/manifest
+# within a single file. See that file's header for the full rationale
+# (no new SFT, same checkpoint as seed 42, only the eval-time sampling seed
+# changes) and the seed-suffix / wandb-naming notes.
+#
+# Checkpoint pinned to the same epoch already selected for the seed-42 main
+# figure: 8b-full e3 (see git show bf0396c~1:scripts/eval_checkpoints_config_test.yaml).
+#
+# GPU allocation per Jan's 2026-07-23 plan: 8b -> server h200, client v100.
+#
+# Run:
+#   python scripts/eval_base_models.py --config scripts/eval_error_bars_config_seed44_8b.yaml
+#   python scripts/eval_checkpoints.py --config scripts/eval_error_bars_config_seed44_8b.yaml
+
+namespace: merlin
+server_image: registry.example.com/anon/vllm_server:latest
+client_image: registry.example.com/anon/vllm_client:latest
+
+models_root: /ft_models/sft
+
+pvc:
+  tool_pod: tool-anon
+  ft_root: /ft_models
+  tool_root: /merlin_ddx
+
+manifests:
+  - path: /ft_models/sft/ft-8b-full-thrfull2icd-v1-4/checkpoints.json
+    short_name: test-8b-full-seed44
+    server_gpu: h200
+    epochs: 3
+
+epochs: []
+max_pending: 2
+
+models:
+  - job_name: test-8b-base-seed44
+    base_model: "Qwen/Qwen3-8B"
+    gpu_count: 1
+    server_gpu: h200
+
+Hardware:
+  server_gpu: [b200, h200, h100]   # overridden above
+  client_gpu: v100
+  gpu_count: 1
+  replicas: 1
+  gpu_memory_utilization: 0.85
+  enforce_eager: True
+
+Model:
+  max_model_len: 8192
+  max_num_seqs: 512
+  max_num_batched_tokens: 8192
+  dtype: "auto"
+  thinking: False
+  lora: False
+  full_finetuning: False
+  lora_modules: ""
+
+Client_Job:
+  chief_complaint: "all"
+  file_name: "test_dataset"
+  split: "test"
+  wandb_tags: "test_data"
+  num_choices: 4
+  num_samples: 100000
+  concurrency: 64
+  start_verifier: 1
+  budget: [4, 4, 4, 4]
+  temperatures: [0.4, 0.4, 0.4, 0.4]
+  max_tokens: [2000, 2000, 2000, 2200]
+  thresholds: [0.6, 0.5, 0.8, 0.55]
+  seed: 44
+  eval_mode: True
+  merlin_mode: True
+  think_about_labs: False
+  guided_decoding: False

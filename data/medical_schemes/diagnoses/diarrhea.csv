@@ -1,0 +1,59 @@
+﻿Disease,Synonyms,icd10_regex,Onset Acute,Onset Chronic,Diarrhea Watery,Diarrhea Bloody,Diarrhea Fatty,Fever,Abdominal Pain,Weight Loss,Oral mucosal lesions,Hepatosplenomegaly,Nausea or Vomiting,Dehydration,Abdominal Distention,Abdominal Tenderness,Blood on Rectal Examination,Fecal Incontinence,Abnormal Bowel Sounds
+Abetalipoproteinemia,Bassen-Kornzweig disease; lipoprotein deficiency; familial abetalipoproteinemia,^E786$,-1,1,1,-1,1,-1,1,1,0,0,0,0,1,0,0,0,0
+Adenovirus,adenoviral enteritis,^A082$,1,-1,1,-1,-1,1,1,-1,0,0,0,0,1,0,0,0,0
+Aeromonas,Aeromonas enteritis; Aeromonas gastroenteritis,^A048\d*$,1,1,1,1,-1,1,1,-1,0,0,0,0,1,1,0,0,1
+Bacterial food poisoning,foodborne intoxication,^A05\d*$,1,-1,1,0,-1,1,1,0,0,0,0,0,1,0,0,0,0
+Bile acid malabsorption,bile salt diarrhea; bile acid diarrhea,^K9089$,-1,1,1,-1,1,-1,-1,1,0,0,0,0,0,0,0,0,0
+Campylobacteriosis,Campylobacter enteritis,^A045$,1,-1,1,1,-1,1,1,-1,0,0,0,0,0,1,0,0,0
+Carcinoid tumor,neuroendocrine tumor; carcinoid; NET,^(D3A\d*|C7A\d*|C7B\d*)$,-1,1,1,1,-1,-1,1,1,0,0,0,0,1,0,0,0,0
+Celiac disease,gluten-sensitive enteropathy; celiac sprue,^K900$,-1,1,0,-1,0,-1,1,1,1,1,0,0,1,0,0,0,1
+Chronic pancreatitis,chronic pancreatitis; alcohol-induced chronic pancreatitis,^K86(0\d*|1)$,-1,1,1,-1,1,-1,1,1,0,0,0,0,0,1,0,0,0
+CMV colitis,cytomegalovirus colitis; cytomegaloviral colitis,^B258$,1,1,-1,1,-1,0,1,-1,0,0,0,0,0,1,0,0,0
+Colorectal cancer,colon cancer; rectal cancer; colorectal carcinoma,^(C18\d*|C19\d*|C20\d*)$,-1,1,1,1,1,-1,1,1,0,0,0,0,0,1,0,0,0
+Crohn's disease,regional enteritis; ileitis; Crohn disease,^K50\d*$,-1,1,1,1,1,0,1,1,1,0,0,0,0,1,0,0,0
+Cryptosporidium,cryptosporidiosis,^A072$,-1,1,1,-1,-1,-1,1,1,0,0,0,0,1,1,0,0,0
+Cystic fibrosis,CF,^E84\d*$,-1,1,-1,-1,1,0,1,1,0,1,0,0,1,0,0,0,0
+Diabetic neuropathy,diabetic peripheral neuropathy; diabetic polyneuropathy,^(E10(4\d*)|E11(4\d*)|E13(4\d*)|G632)$,-1,1,1,-1,1,-1,1,1,0,0,0,0,0,0,0,1,0
+Drug-induced diarrhea,drug-induced diarrhea; medication side effect,^K521$,1,1,1,-1,0,0,1,1,0,0,0,1,1,0,0,0,0
+Dumping syndrome,postgastrectomy dumping syndrome; postvagotomy syndrome,^K911$,-1,1,1,-1,1,-1,-1,1,0,0,0,0,0,0,0,0,1
+EAEC,enteroaggregative E. coli; enteroaggregative Escherichia coli,^A044\d*$,1,1,1,1,-1,-1,1,-1,0,0,0,0,0,1,0,0,0
+Echovirus,echovirus enteritis; viral enteritis (echovirus),^A083\d*$,1,-1,1,-1,-1,1,1,-1,0,0,0,0,1,0,0,0,0
+EHEC,enterohemorrhagic E. coli; STEC,^A043\d*$,1,-1,1,1,-1,-1,1,-1,0,0,0,0,0,1,0,0,0
+EIEC,enteroinvasive E. coli,^A042\d*$,1,-1,1,1,-1,1,1,-1,0,0,0,0,0,1,0,0,0
+Entamoeba histolytica,amebiasis; amoebic dysentery,^A06\d*$,1,1,1,1,-1,1,1,-1,0,0,0,0,1,1,0,0,0
+EPEC,enteropathogenic E. coli,^A040\d*$,1,1,1,1,-1,1,1,1,0,0,0,0,0,1,0,0,0
+ETEC,enterotoxigenic E. coli; traveler's diarrhea,^A041\d*$,1,-1,1,-1,-1,1,-1,-1,0,0,0,0,0,1,0,0,0
+Factitious diarrhea,factitious disorder with physical symptoms; laxative abuse,^F681$,1,1,1,-1,-1,-1,1,1,0,0,0,0,1,0,0,0,0
+Giardia,giardiasis; lambliasis,^A071$,-1,1,1,-1,1,-1,1,1,0,0,0,0,1,1,0,0,0
+Heavy metal ingestion,heavy metal poisoning,^T56\d*$,-1,1,1,-1,-1,-1,1,1,0,0,0,0,1,0,0,0,0
+HIV,HIV disease; human immunodeficiency virus infection,^(B20\d*|Z21)$,-1,1,1,-1,-1,1,1,1,0,0,0,0,1,1,0,0,0
+Hyperthyroidism,thyrotoxicosis,^E05\d*$,-1,1,1,-1,-1,0,1,1,0,0,0,0,0,0,0,0,0
+Infective colitis,infectious gastroenteritis; infectious colitis,^A09$,-1,1,1,1,-1,1,1,1,0,0,0,0,0,1,0,0,0
+Irritable bowel syndrome,IBS,^K58\d*$,-1,1,0,-1,0,-1,0,-1,0,0,0,0,1,1,0,0,-1
+Ischemic colitis,ischemic colitis; vascular insufficiency of intestine,^K55\d*$,1,1,1,1,-1,1,1,1,0,0,0,0,0,1,0,0,1
+Isospora,isosporiasis,^A073$,1,1,1,-1,1,1,1,1,0,0,0,0,1,1,0,0,0
+Lactose intolerance,lactase deficiency; milk sugar intolerance,^E73\d*$,1,1,1,-1,-1,-1,1,-1,0,0,0,0,1,1,0,0,0
+Lymphoma,Hodgkin lymphoma; non-Hodgkin lymphoma,^(C81\d*|C82\d*|C83\d*|C84\d*|C85\d*|C88\d*|C96\d*)$,-1,1,1,1,-1,1,1,1,0,1,0,0,0,1,0,0,0
+Microscopic colitis,collagenous colitis; lymphocytic colitis,^K5283\d*$,-1,1,1,-1,-1,-1,1,1,0,0,0,0,0,1,0,1,0
+Microsporidia,intestinal microsporidiosis; microsporidiosis,^A078$,1,1,1,-1,-1,1,1,-1,0,0,0,0,1,1,0,0,0
+Mycobacterium avium complex,MAC infection; MAI infection,^A31\d*$,1,1,1,1,-1,1,1,-1,0,1,0,0,1,0,0,0,0
+Norovirus,Norwalk virus; norovirus gastroenteritis,^A0811$,1,-1,1,-1,-1,1,1,-1,0,0,0,0,1,0,0,0,0
+Opium withdrawal,opioid withdrawal,^(F1193|F1123\d*|F1113\d*)$,1,1,1,-1,-1,-1,1,-1,0,0,0,0,0,0,0,0,1
+Organophosphate poisoning,organophosphate toxicity,^T600\d*$,1,1,1,-1,-1,-1,1,-1,0,0,1,0,0,0,0,0,0
+Plesiomonas,Plesiomonas shigelloides enteritis,^A048\d*$,1,-1,1,1,-1,1,1,-1,0,0,0,0,0,1,0,0,1
+Pseudomembranous enterocolitis,C. difficile colitis; Clostridioides difficile infection,^A047\d*$,1,-1,1,0,-1,1,1,0,0,0,0,0,1,1,0,0,0
+Radiation enteritis,radiation gastroenteritis; radiation colitis,^K520$,1,1,1,1,1,-1,1,1,0,0,0,0,0,1,0,0,0
+Rotavirus,rotaviral enteritis,^A080$,1,-1,1,-1,-1,1,-1,-1,0,0,0,0,0,1,0,0,1
+Salmonellosis,salmonella enteritis; salmonella infection,^A02\d*$,1,1,1,1,-1,1,1,-1,0,1,0,0,1,1,0,0,0
+Shigellosis,bacillary dysentery; shigella infection,^A03\d*$,1,-1,1,1,-1,1,1,-1,0,0,0,0,1,1,0,0,1
+Short bowel syndrome,short gut syndrome,^K9082\d*$,1,1,1,-1,1,-1,-1,1,0,0,0,0,1,1,0,0,0
+Small bowel bacterial overgrowth,SIBO; intestinal microbial overgrowth,^K63821\d*$,-1,1,1,-1,1,-1,1,1,0,0,0,0,1,0,0,0,0
+Somatostatinoma,somatostatin-secreting tumor; pancreatic neuroendocrine tumor,^C254$,-1,1,1,-1,-1,-1,1,1,0,0,0,0,0,1,0,0,0
+Systemic sclerosis,scleroderma,^M34\d*$,-1,1,1,0,1,-1,1,1,0,0,0,0,0,1,0,0,0
+Tropical sprue,tropical malabsorption,^K901$,1,1,1,-1,1,1,1,1,1,0,0,0,0,0,0,0,0
+Ulcerative colitis,UC,^K51\d*$,-1,1,1,1,1,0,1,1,0,0,0,0,0,1,1,0,0
+Vibrio cholera,cholera,^A00\d*$,1,-1,1,-1,-1,-1,1,-1,0,0,0,0,0,0,0,0,0
+VIPoma,vasoactive intestinal peptide tumor; Verner-Morrison syndrome,^C254$,1,1,1,-1,1,-1,1,1,0,0,1,0,1,1,0,0,0
+Whipple's disease,Whipple disease,^K9081$,-1,1,1,-1,1,0,1,1,0,1,0,0,0,0,0,0,0
+Yersinia enterocolitica,yersiniosis; Yersinia enteritis,^A046\d*$,1,-1,1,1,-1,1,1,-1,0,0,0,0,1,1,0,0,1
+Zollinger-Ellison syndrome,gastrinoma; hypergastrinemia,^E164$,-1,1,1,1,1,-1,1,1,0,0,0,0,0,1,0,0,0

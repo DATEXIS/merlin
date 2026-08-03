@@ -1,0 +1,27 @@
+# Use CUDA 12.2 with cuDNN 8 and Ubuntu 22.04
+FROM nvidia/cuda:12.2.2-cudnn8-devel-ubuntu22.04
+
+# Use CUDA 11.8 with cuDNN 8 and Ubuntu 22.04 (supports Tesla P100 sm_60)
+#FROM nvidia/cuda:11.7.1-cudnn8-devel-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 python3-pip git openssh-server build-essential cmake ninja-build tzdata \
+ && rm -rf /var/lib/apt/lists/*
+
+# Copy your application requirements and SSH config
+COPY deployment/requirements_vllm_client.txt /app/
+COPY deployment/sshd_config /etc/ssh/sshd_config
+
+WORKDIR /app
+RUN pip install --no-cache-dir -r requirements_vllm_client.txt -f https://download.pytorch.org/whl/torch_stable.html
+
+# Copy application code
+COPY src ./src
+COPY scripts ./scripts
+COPY data/mimic-iv/icd_codes_9.csv ./data/mimic-iv/
+COPY data/mimic-iv/icd_codes_10.csv ./data/mimic-iv/
+COPY data/medical_schemes ./data/medical_schemes/
+COPY src/pipeline/entrypoint.py .

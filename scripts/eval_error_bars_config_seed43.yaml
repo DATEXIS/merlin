@@ -1,0 +1,117 @@
+# Error-bar seed for the main bar plot (src/eval/paper_plots.py
+# plot_main_figure_2x1 / plot_main_figure_test): re-eval the SAME already-
+# trained checkpoints + base models at a different Client_Job.seed, so the
+# generator-verifier pipeline's sampling varies but nothing is retrained.
+# NO NEW SFT -- this only reruns eval_base_models.py / eval_checkpoints.py.
+# Companion file scripts/eval_error_bars_config_seed43_8b.yaml covers 8B
+# (client_gpu differs -- see below); this file covers 0.6b/14b/32b.
+# Seed-44 counterparts: eval_error_bars_config_seed44[.yaml|_8b.yaml].
+#
+# This is deliberately different from the existing 8b seed-robustness figure
+# (src/eval/robustness_plots.py, run_plan.yaml runs 14-15): that one retrained
+# SFT at each seed. Here we hold the checkpoint fixed and only vary the eval
+# client's sampling seed -- cheaper, and now extended to every size + the
+# base models, not just 8b-full.
+#
+# Checkpoints pinned to the same epoch already selected for the seed-42 main
+# figure (see git show bf0396c~1:scripts/eval_checkpoints_config_test.yaml
+# and data/results/evaluation/results_test.csv): 06b-full e4, 14b-full e3,
+# 32b-full e3.
+#
+# GPU allocation per Jan's 2026-07-23 plan:
+#   0.6b -> server a100, client p100
+#   14b, 32b -> server b200, client p100
+#
+# short_name/job_name carry a "-seed43" suffix so these don't collide with
+# the existing seed-42 state-file entries / wandb runs (test-06b-full-e4,
+# test-14b-full-e3, test-32b-full-e3, test-*-base). src/wandb/run.py also
+# auto-appends "-seed{N}" to the wandb run name whenever Client_Job.seed !=
+# 42, so the wandb run name ends up with a harmless doubled suffix (e.g.
+# "test-14b-full-seed43-e3-seed43") -- same quirk already documented in
+# src/eval/robustness_plots.py, safe to key off directly.
+#
+# Run (both, any order -- independent scripts/resources):
+#   python scripts/eval_base_models.py --config scripts/eval_error_bars_config_seed43.yaml
+#   python scripts/eval_checkpoints.py --config scripts/eval_error_bars_config_seed43.yaml
+
+namespace: merlin
+server_image: registry.example.com/anon/vllm_server:latest
+client_image: registry.example.com/anon/vllm_client:latest
+
+models_root: /ft_models/sft
+
+pvc:
+  tool_pod: tool-anon
+  ft_root: /ft_models
+  tool_root: /merlin_ddx
+
+# --- eval_checkpoints.py: full-FT checkpoints, pinned to the seed-42 epoch --
+manifests:
+  - path: /ft_models/sft/ft-qwen3-06b-full-merlin-v1-4/checkpoints.json
+    short_name: test-06b-full-seed43
+    server_gpu: h200
+    epochs: 4
+#  - path: /ft_models/sft/ft-14b-full-fsdp-thrfull2icd-v1-4/checkpoints.json
+#    short_name: test-14b-full-seed43
+#    server_gpu: b200
+#    epochs: 3
+#  - path: /ft_models/sft/ft-32b-full-fsdp-thrfull2icd-v1-4/checkpoints.json
+#    short_name: test-32b-full-seed43
+#    server_gpu: b200
+#    epochs: 3
+
+# Global fallback only -- every manifest above pins its own epochs.
+epochs: []
+max_pending: 2
+
+# --- eval_base_models.py: untuned baselines ---------------------------------
+models:
+  - job_name: test-06b-base-seed43
+    base_model: "Qwen/Qwen3-0.6B"
+    gpu_count: 1
+    server_gpu: a100
+#  - job_name: test-14b-base-seed43
+#    base_model: "Qwen/Qwen3-14B"
+#    gpu_count: 1
+#    server_gpu: b200
+#  - job_name: test-32b-base-seed43
+#    base_model: "Qwen/Qwen3-32B"
+#    gpu_count: 2
+#    server_gpu: b200
+
+Hardware:
+  server_gpu: [b200, h200, h100]   # overridden per entry above
+  client_gpu: p100
+  gpu_count: 1
+  replicas: 1
+  gpu_memory_utilization: 0.85
+  enforce_eager: True
+
+Model:
+  max_model_len: 8192
+  max_num_seqs: 512
+  max_num_batched_tokens: 8192
+  dtype: "auto"
+  thinking: False
+  lora: False
+  full_finetuning: False
+  lora_modules: ""
+
+Client_Job:
+  chief_complaint: "all"
+  file_name: "test_dataset"
+  split: "test"
+  wandb_tags: "test_data"
+  num_choices: 4
+  num_samples: 100000
+  concurrency: 128
+  start_verifier: 1
+  budget: [4, 4, 4, 4]
+  temperatures: [0.4, 0.4, 0.4, 0.4]
+  max_tokens: [2000, 2000, 2000, 2200]
+  thresholds: [0.6, 0.5, 0.8, 0.55]
+  seed: 43
+  eval_mode: True
+  merlin_mode: True
+  think_about_labs: False
+  guided_decoding: False

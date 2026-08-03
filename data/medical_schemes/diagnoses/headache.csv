@@ -1,0 +1,20 @@
+﻿Disease,Synonyms,icd10_regex,Bilateral,Throbbing character,Autonomic symptoms,Fever,Photophobia,Aphasia,LOC,Aura,Nausea or Vomiting,Rash,Neck stiffness,Vision changes,Neurologic deficits
+Brain tumor,brain neoplasm; intracranial tumor; cerebral tumor; glioma,^(C71\d*|D33\d*|D43\d*)$,1,-1,-1,-1,-1,0,-1,-1,0,-1,-1,0,0
+Cluster headache,cluster headache syndrome; trigeminal autonomic cephalalgia (TAC),^G440\d*$,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,1,-1
+CNS abscess,intracranial abscess; brain abscess; intracranial granuloma,^G06\d*$,0,-1,-1,1,-1,0,-1,-1,0,0,0,0,0
+Conversion disorder,functional neurological symptom disorder; dissociative [conversion] disorder,^F44\d*$,0,-1,-1,-1,-1,0,-1,-1,-1,-1,0,0,0
+Drug toxicity,drug poisoning; adverse effect of drugs; toxic effect of medications,^T(3[6-9]|4[0-9]|50)\d*$,0,-1,-1,0,-1,-1,0,-1,0,-1,0,0,0
+Encephalitis,brain inflammation; viral encephalitis,^(G04\d*|A86\d*)$,1,0,-1,1,0,0,-1,-1,-1,0,1,-1,1
+Hemorrhagic stroke,intracerebral hemorrhage; cerebral hemorrhage,^(I61\d*|I62\d*)$,0,0,-1,-1,-1,0,-1,-1,-1,-1,-1,0,0
+Hypertensive encephalopathy,hypertension-related encephalopathy,^I674$,1,0,-1,-1,0,-1,-1,-1,-1,-1,-1,0,-1
+Meningitis,"bacterial meningitis; viral meningitis; meningitis, unspecified",^(G00\d*|G01\d*|G02\d*|G03\d*)$,1,-1,-1,1,0,0,-1,-1,0,0,1,-1,1
+Metabolic disturbances,electrolyte disturbance; acid-base disorder; dehydration; hypoglycemia,^(E87\d*|E86\d*|E16\d*|E83\d*|E88\d*)$,0,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,0,0
+Migraine,migraine headache,^G43\d*$,-1,1,-1,-1,1,-1,-1,1,1,-1,-1,1,-1
+Multiple sclerosis,MS; disseminated sclerosis,^G35$,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1,0
+Neurosyphilis,symptomatic neurosyphilis; asymptomatic neurosyphilis; late neurosyphilis,^A52(1\d*|2\d*|3\d*)$,0,-1,-1,-1,-1,-1,0,-1,-1,0,-1,0,0
+Seizure,seizures; epilepsy; convulsion,^(G40\d*|R56\d*)$,1,-1,-1,-1,-1,0,1,0,-1,-1,-1,-1,0
+Sinusitis,acute sinusitis; chronic sinusitis; rhinosinusitis,^(J01\d*|J32\d*)$,0,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Subarachnoid hemorrhage,SAH; nontraumatic subarachnoid hemorrhage,^I60\d*$,0,0,-1,-1,0,0,-1,-1,-1,-1,0,0,0
+Subdural hemorrhage,subdural hematoma; SDH,^(I620\d*|S065\d*)$,0,0,-1,-1,-1,0,-1,-1,-1,-1,-1,0,0
+Tension-type headache,TTH; tension headache; tension-type headache,^G442\d*$,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Wernicke's encephalopathy,Wernicke encephalopathy,^E512$,0,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,0,0

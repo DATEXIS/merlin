@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-server-lora-qwen
+  namespace: merlin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm-server-lora-qwen
+  template:
+    metadata:
+      labels:
+        app: vllm-server-lora-qwen
+    spec:
+      imagePullSecrets:
+        - name: private-registry-auth
+      containers:
+        - name: vllm-server-lora-qwen
+          image: vllm/vllm-openai:v0.9.1
+          command:  ["python3", "-m",
+                     "vllm.entrypoints.openai.api_server",
+                     "--model=Qwen/Qwen3-8B",
+                     "--max-model-len=8192",
+                     "--tensor-parallel-size=4",
+                     "--dtype=auto",
+                     "--download-dir=/models",
+                     "--enable-lora",
+                     "--lora-modules=medreason=/ft_models/merlin-ddx/output/qwen3-8b-merlin-ddx-lora-4000_samples-1_epoch-r_16-alpha_32",
+                     "--max-lora-rank=64",
+          ]
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              cpu: "8"
+              memory: "128Gi"
+              nvidia.com/gpu: "4"  # Only include if using GPU
+            requests:
+              cpu: "2"
+              memory: "32Gi"
+              nvidia.com/gpu: "4"
+          volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm  # Mount shared memory
+            - name: model-volume
+              mountPath: /models
+            - name: merlin-ddx-pvc
+              mountPath: /ft_models
+          env:
+            - name: HUGGING_FACE_HUB_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hf-token-secret
+                  key: HF_TOKEN
+            - name: NCCL_DEBUG
+              value: "INFO"
+      volumes:
+        - name: dshm  # Define shared memory volume
+          emptyDir:
+            medium: Memory
+        - name: model-volume
+          persistentVolumeClaim:
+            claimName: model-volume
+        - name: merlin-ddx-pvc
+          persistentVolumeClaim:
+            claimName: merlin-ddx-ckpts-pvc
+      nodeSelector:
+        gpu: a100
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-server-lora-qwen
+  namespace: merlin
+spec:
+  selector:
+    app: vllm-server-lora-qwen
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000

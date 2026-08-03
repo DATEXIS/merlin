@@ -1,0 +1,50 @@
+job_name: 8b-full-mimic-icd2-seed44-e4 # If lora on last 6 chars will be used in wandb name
+server_image: registry.example.com/anon/vllm_server:latest
+client_image: registry.example.com/anon/vllm_client:latest
+namespace: merlin
+# Prefix for Model.lora_modules paths. Omit (or this value) for OLD runs under
+# /ft_models/merlin-ddx/output; set to /ft_models/sft to serve a new SFT checkpoint.
+models_root: /ft_models/merlin-ddx/output
+load_from_checkpoint: False
+Hardware:
+  client_gpu: "p100"
+  server_gpu: "h200"
+  gpu_count: 1
+  replicas: 1
+  gpu_memory_utilization: 0.9
+  enforce_eager: False  # CUDA graphs unstable with LoRA rank 256 on B200
+Model:
+  base_model: "Qwen/Qwen3-8B"  # "Qwen/Qwen3-32B"  meta-llama/Llama-3.3-70B-Instruct
+  max_model_len: 8192
+  max_num_seqs: 96
+  max_num_batched_tokens: 65536  # 131072 causes cuBLAS GEMM failure in LoRA down_proj at high batch sizes
+  dtype: "auto"
+  thinking: False
+  lora: False
+  full_finetuning: False
+  lora_modules: "qwen3-14b-merlin-128/checkpoint-4732" # 8b 96, 592, 888, 1184; full3 148 296 444 592
+  max_lora_rank: 256  # 592 1184 2366 4732  | 14b: 1183 2366 3549 4732 | 32b 592 1184 1776 2368
+Client_Job:           #06b full 592 1184 1776 2366  3549 4732 | 06b 592 1184 1776
+  file_name: "test_dataset"
+  chief_complaint: "all"
+  split: "dev,val"        # each note evaluated once
+  num_choices: 4 # Set to 1 if guided decoding is applied
+  num_samples: 3055 # 3055
+  concurrency: 128
+  start_verifier: 1
+  budget: [4, 4, 4, 4]
+  temperatures: [0.4, 0.4, 0.4, 0.4]
+  max_tokens: [2000, 2000, 2000, 2200]
+  thresholds: [0.6, 0.5, 0.8, 0.55]
+  seed: 42
+  eval_mode: True
+  merlin_mode: True
+  think_about_labs: True
+  guided_decoding: False
+
+
+#  base_model: "meta-llama/Llama-3.3-70B-Instruct"
+#  base_model: "google/medgemma-27b-it"
+#  base_model: "deepseek-ai/DeepSeek-V3.2"
+#  base_model: "mistralai/Mistral-Large-Instruct-2407"
+#  base_model: "Qwen/Qwen3-32B"

@@ -1,0 +1,85 @@
+# Test-split eval of external medical-domain LLMs (Prio 2 baselines, added
+# 2026-07-21) -- same harness/dataset as eval_base_models_config_test.yaml,
+# split into its own file only because Hardware.client_gpu differs (p100 only,
+# not p100+v100) and these aren't Qwen3-family checkpoints.
+#
+# GPU allocation:
+#   Meditron3-8B     -> 1x h200
+#   Baichuan-M2-32B  -> 2x b200
+#
+# CAVEAT (Baichuan-M2-32B): it's a Qwen2.5-32B-based reasoning model; its HF
+# card recommends `vllm serve ... --reasoning-parser qwen3`. This repo's
+# server_template.py only wires Model.thinking -> --reasoning-parser=deepseek_r1,
+# so thinking is left False here -- the model's own chat template defaults to
+# thinking_mode='auto' and may still emit an unparsed <think> block that eats
+# into max_tokens/JSON validity (same failure mode as thinking_ate_budget in
+# src/qa/taxonomy.py). Check the first run's raw outputs for leaking <think>
+# tags before trusting its F1/JSON-valid numbers.
+#
+# Run: python scripts/eval_base_models.py --config scripts/eval_external_models_config_test.yaml
+
+namespace: anon
+server_image: registry.example.com/anon/vllm_server:latest
+client_image: registry.example.com/anon/vllm_client:latest
+
+models_root: /ft_models/sft
+
+pvc:
+  tool_pod: tool-anon
+  ft_root: /ft_models
+  tool_root: /merlin_ddx
+
+models:
+  - job_name: test-meditron3-8b
+    base_model: "OpenMeditron/Meditron3-8B"
+    gpu_count: 1
+    server_gpu: h100
+#  - job_name: test-llama-3-70b-instruct
+#    base_model: "meta-llama/Llama-3.3-70B-Instruct"
+#    gpu_count: 2
+#    server_gpu: b200
+  - job_name: test-medgemma-27b-it
+    base_model: "google/medgemma-27b-it"
+    gpu_count: 1
+    server_gpu: h200
+#  - job_name: test-baichuan-m2-32b
+#    base_model: "baichuan-inc/Baichuan-M2-32B"
+#    gpu_count: 2
+#    server_gpu: b200
+
+Hardware:
+  server_gpu: [b200, h200, h100]   # overridden per model above
+  client_gpu: p100                 # Jan's spec: "client p100"
+  gpu_count: 1
+  replicas: 1
+  gpu_memory_utilization: 0.85
+  enforce_eager: True
+
+Model:
+  max_model_len: 8192
+  max_num_seqs: 512
+  max_num_batched_tokens: 8192
+  dtype: "auto"
+  thinking: False   # see caveat above
+  lora: False
+  full_finetuning: False
+  lora_modules: ""
+
+Client_Job:
+  chief_complaint: "all"
+  file_name: "test_dataset"
+  split: "test"
+  wandb_tags: "test_data"
+  num_choices: 4
+  num_samples: 100000
+  concurrency: 64
+  start_verifier: 1
+  budget: [4, 4, 4, 4]
+  temperatures: [0.4, 0.4, 0.4, 0.4]
+  max_tokens: [2000, 2000, 2000, 2200]
+  thresholds: [0.6, 0.5, 0.8, 0.55]
+  seed: 42
+  eval_mode: True
+  merlin_mode: True
+  think_about_labs: False
+  guided_decoding: False

@@ -1,0 +1,49 @@
+﻿Disease,Synonyms,icd10_regex,Onset Acute,Onset Subacute,Onset Chronic,Duration Minutes,Duration Hours,Duration Days,Duration Weeks to Years,Duration Variable,Quality Sharp,Quality Dull,Quality Pressure,Quality Burning,Quality Tightness,Quality Stabbing,Quality Heaviness,Quality Squeezing,Location Central Chest,Location Left Chest,Location Pleuritic-side / side of lesion,Location Epigastric/Upper abdomen,Location Chest wall / musculoskeletal,Location Back,Location Joints,Cough,Fever,Dyspnea,Weight Loss
+Acute chest syndrome (Sickle cell anemia),Anemia-sickle cell; hemoglobin S disease; hemoglobin SS disease; Hb SS; sickle cell anemia; SCA; drepanocytosis,^D57(01|211|411|811)\d*$,1,0,0,1,1,-1,-1,-1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,-1
+Ankylosing spondylitis,"Ankylosing spondylitis, AS, Bechterew's disease, Bechterew syndrome, Marie Strümpell disease, Marie Struempell disease, Spondyloarthritis; rheumatoid spondylitis; spondylitis; spondylarthropathy",^M45\d*$,0,0,1,-1,-1,-1,1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,-1,-1,-1,-1
+Aortic Dissection,"Leaking aneurysm; dissecting aortic aneurysm; aneurysm, dissecting, aorta; aortic aneurysm - dissecting",^I710\d*$,1,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,-1,-1,1,-1
+Aortic Stenosis,AS; critical AS; tight AS; aortic valve stenosis; calcific aortic stenosis; senile calcific aortic stenosis; degenerative calcific aortic stenosis,^(I350\d*|I352\d*)$,1,0,0,1,-1,-1,-1,-1,0,0,0,1,1,0,1,1,1,0,0,0,0,0,0,-1,-1,1,-1
+Asthma & COPD,COAD; COPD; chronic obstructive airways disease; chronic obstructive lung disease; chronic airflow limitation; chronic obstructive respiratory disease,^(J45\d*|J44\d*)$,1,1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0
+Cholelithiasis,"Cholecystolithiasis, choleliths, cholelithiasis, biliary colic, gall stones, gallbladder calculus",^K80\d*$,1,1,0,1,1,-1,-1,-1,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,-1,0,-1,-1
+Costosternal syndromes,Costochondritis,^M940$,1,0,1,-1,-1,1,1,-1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,-1,1,-1,-1
+Diffuse Esophageal Spasm,Diffuse oesophageal spasm; esophageal spasm; DES; corkscrew esophagus,^K224$,1,0,0,1,1,-1,-1,-1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,1,-1,0,0
+Eosinophilic Esophagitis,Eosinophilic oesophagitis,^K200$,0,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,-1,-1,-1
+Esophageal Perforation,"Oesophageal rupture, esophageal perforation, esophageal rupture",^K223$,1,0,0,1,1,-1,-1,-1,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,-1,0,1,-1
+Esophagitis,Oesophagitis,^(K208\d*|K209\d*)$,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,1,-1,0
+Fibromyalgia,Fibromyositis; fibrositis; fibromyalgia primary; fibromyalgia secondary; fibromyalgia-fibromyositis syndrome; fibrositis,^M797$,0,0,1,0,0,0,0,1,0,1,0,1,0,0,0,0,0,0,0,0,1,0,1,-1,-1,1,-1
+"GERD, Peptic Ulcer","GORD, gastroesophageal reflux, oesophageal reflux, peptic esophagitis, esophageal reflux; Gastroduodenal ulcers; Peptic ulceration; gastric ulcer; duodenal ulcer",^(K21\d*|K25\d*|K26\d*|K27\d*)$,1,0,0,1,1,-1,-1,-1,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,-1,-1,0
+Heart Failure,CHF; pump failure; left heart failure; chronic heart failure; acute heart failure; LV dysfunction; LV failure; impaired filling; reduced cardiac output; HFpEF; HFrEF; heart failure preserved ejection fraction; heart failure reduced ejection fraction; decompensated heart failure; acute decompensated heart failure; ADHF,^I50\d*$,0,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,1
+Herpes Zoster,Shingles; zoster; varicella-zoster reactivation; VZV,^B02\d*$,1,0,1,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,-1,1,-1,-1
+Hypertrophic cardiomyopathy,"Hypertrophic cardiomyopathy; HCM, Asymmetric septal hypertrophy; ASH; Hypertrophic obstructive cardiomyopathy; HOCM; Idiopathic hypertrophic subaortic stenosis; IHSS",^(I421\d*|I422\d*)$,1,1,0,0,0,0,0,1,0,0,1,0,1,0,1,1,1,0,0,0,0,0,0,-1,-1,1,-1
+Lower rib pain syndromes,Slipping rib syndrome; rib tip syndrome; twelfth rib syndrome; interchondral subluxation,^R0782$,0,0,1,1,-1,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,-1,-1,1,-1
+Mediastinitis,Fibrosing mediastinitis; Sclerosing mediastinitis; Acute mediastinitis; Chronic mediastinitis; Descending necrotizing mediastinitis,^J9851$,1,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,-1
+Myocardial Infarction,"AMI, STEMI, heart attack, MI, myocardial infarct, acute MI, coronary, coronary thrombosis",^(I21\d*|I22\d*|I252)$,1,0,0,1,-1,-1,-1,-1,0,0,1,1,1,0,1,1,1,1,0,0,0,0,0,-1,-1,1,-1
+Myocarditis,Inflammatory cardiomyopathy; Idiopathic myocarditis; Viral cardiomyopathy; inflammation of the heart muscle; myocardium inflammation,^(I40\d*|I514)$,1,1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,-1
+Pancreatitis,Acute pancreatitis; chronic pancreatitis; pancreatic inflammation,^K85\d*$,1,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,1,0,-1,1,1,0
+Panic attack/ Disorder,Panic disorder; panic attacks; anxiety/panic episode; paroxysmal anxiety,^F410$,1,1,1,0,0,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,-1,1,-1
+Pericardial Tamponade,Pericardial tamponade; tamponade,^I314$,1,1,0,-1,1,1,-1,-1,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,1,1,-1
+Pericarditis,"acute pericarditis, chronic pericarditis, idiopathic pericarditis, recurrent pericarditis",^(I30\d*|I31(0|1|9)\d*|I32\d*)$,1,1,0,-1,1,1,-1,-1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,-1
+Pleural Effusion,Hydrothorax,^J90$,1,1,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,1,0
+Pleuritis,Pleurisy; pleural inflammation,^R091$,1,1,1,1,1,-1,-1,-1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,-1
+Pneumonia,PNA,^J1[2-8]\d*$,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,1,0
+Pneumothorax,Collapsed lung; air around the lung; air outside the lung,^J93\d*$,1,0,0,1,1,-1,-1,-1,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,-1,-1,1,-1
+Psoriatic arthritis,PsA; psoriatic arthropathy; arthritis psoriatica,^L405\d*$,0,0,1,-1,-1,-1,1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,-1,-1,-1,-1
+Pulmonary Embolism,PE; lung blood clot; blood clot-lung; embolism-pulmonary,^I26\d*$,1,0,0,1,1,-1,-1,-1,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,1,-1
+Pulmonary Hypertension,Hypertensive pulmonary vascular disease; pulmonary arterial hypertension; PAH; hypertensive pulmonary vascular disease; Ayerza syndrome; Ayerza's syndrome; Ayerza-Arrilaga syndrome,^I27\d*$,1,1,1,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,-1,1,-1
+Pulmonary Malignancy,Bronchogenic carcinoma; Carcinoma of the lung; Pulmonary carcinoma,^C34\d*$,0,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1
+Relapsing polychondritis,Relapsing chondritis; polychondritis; RP,^M941$,0,0,1,-1,-1,-1,1,-1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1
+Rheumatoid arthritis,Rheumatoid disease,^(M05\d*|M06\d*)$,0,0,1,-1,-1,-1,1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,-1,1,-1,1
+Sarcoidosis,Besnier-Boeck disease; Besnier-Boeck-Schaumann disease; Sarcoid; Uveoparotid fever; Loefgren's syndrome,^D86\d*$,0,0,1,-1,-1,1,1,-1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,-1,1,1
+Sliding Hiatal Hernia,Hiatal hernia,^K449$,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,-1,1,-1
+Spontaneous sternoclavicular subluxation,Sternoclavicular subluxation; SC joint subluxation; sternoclavicular joint instability; atraumatic SC joint subluxation,^S432\d*$,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,-1,-1,-1,-1
+Stable Angina,Stenocardia; angina pectoris; angor pectoris,^I208\d*|I209\d*$,1,0,0,1,-1,-1,-1,-1,0,0,1,1,1,0,1,1,1,1,0,0,0,0,0,-1,-1,0,-1
+Sternalis syndrome,Sternalis muscle syndrome; anterior chest wall pain syndrome; musculoskeletal sternal pain,^R0789$,0,0,1,1,-1,-1,-1,-1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,-1,-1,-1,-1
+Sternocostoclavicular hyperostosis,SAPHO syndrome,^M048$,0,0,1,-1,-1,-1,1,-1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,-1,1,-1,-1
+Stress (takotsubo) Cardiomyopathy,Takotsubo cardiomyopathy; Tako-tsubo syndrome; left ventricular apical ballooning syndrome; LVABS; ampulla-shaped cardiomyopathy; broken heart syndrome; transient apical dysfunction; stress-induced cardiomyopathy; SIC,^I5181$,1,0,0,1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,-1,-1,1,-1
+Substance abuse (Cocaine),Cocaine use disorder; cocaine intoxication; crack cocaine use; stimulant (cocaine) abuse,^F14\d*$,1,0,0,1,1,-1,-1,-1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,1
+Systemic lupus erythematosus,SLE; Lupus erythematosus; Systemic lupus; Lupus; Disseminated lupus erythematosus; Discoid lupus; Cutaneous lupus erythematosus,^M32\d*$,0,0,1,-1,-1,-1,1,-1,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,1,1,1
+Tietze's syndrome,Tietze syndrome; costochondral junction syndrome; costosternal chondritis (Tietze),^M940$,1,0,0,-1,-1,-1,1,-1,0,0,1,0,0,0,0,0,0,0,0,0,1,0,1,-1,-1,-1,-1
+Tracheitis/ Bronchitis,Bacterial tracheitis; acute bacterial tracheitis; Inflammation of bronchus,^(J041\d*|J20\d*|J40)$,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,-1
+Unstable Angina,Angina at rest; rest angina; progressive angina; crescendo angina; accelerating angina; new-onset angina; pre-infarction angina; unstable angina pectoris; UAP; UA; new-onset angina; angina - unstable,^I200$,1,0,0,1,-1,-1,-1,-1,0,0,1,1,1,0,1,1,1,1,0,0,0,0,0,-1,-1,1,-1
+Vasospastic/ Prinzmetal/ Variant Angina,Variant angina; angina inversa; vasospastic angina,^I201$,0,1,0,0,0,0,0,1,0,0,1,1,1,0,1,1,0,0,0,0,0,0,0,-1,-1,1,-1
+Xiphoidalgia,Xiphodynia; xiphoid syndrome; xiphoid pain syndrome,^R0789$,1,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,-1,-1,-1,-1

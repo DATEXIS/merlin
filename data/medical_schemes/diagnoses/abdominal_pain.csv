@@ -1,0 +1,68 @@
+Disease,Synonyms,icd10_regex,Abdominal Pain: Diffuse,Abdominal Pain: RUQ,Abdominal Pain: Epigastric,Abdominal Pain: LUQ,Abdominal Pain: Flank,Abdominal Pain: Umbilical,Abdominal Pain: RLQ,Abdominal Pain: Hypogastric,Abdominal Pain: LLQ,Fever,Rigors and chills,Nausea or vomiting,Jaundice,Constipation,Diarrhea,Weight loss,GI bleeding,Hypotension,Guarding,Rebound Tenderness,Bowel Sounds: Normal,Bowel Sounds: Hypoactive,Bowel Sounds: Hyperactive,Bowel Sounds: Absent
+Acute suppurative cholangitis,,^K8309$,0,1,0,0,0,0,0,0,0,1,1,1,1,-1,-1,-1,-1,1,1,1,1,0,0,0
+Acute cholangitis,Cholangitis; bile duct infection; bile duct inflammation; common bile duct inflammation; common bile duct infection,^K830$,0,1,0,0,0,0,0,0,0,1,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,1,0,0,0
+Acute cholecystitis,Acute calculous cholecystitis; Acute acalculous cholecystitis,^K810$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,-1,-1,-1,-1,-1,-1,0,1,0,0
+Acute pancreatitis,"Pancreatitis, acute; acute inflammation of pancreas; acute soreness of pancreas",^K85\d*$,0,0,1,0,0,0,0,0,0,1,-1,1,0,-1,-1,1,-1,0,-1,-1,1,0,0,0
+Chronic pancreatitis,"Pancreatitis, chronic",^(K860|K861)$,0,0,1,0,0,0,0,0,0,-1,-1,0,0,-1,1,1,-1,-1,-1,-1,1,0,0,0
+Pancreatic carcinoma,Carcinoma of pancreas,^C25\d*$,0,0,1,0,0,0,0,0,0,-1,-1,1,1,-1,1,1,-1,-1,-1,-1,1,0,0,0
+Primary biliary cirrhosis,Chronic non-suppurative destructive cholangitis; PBC; Primary biliary cholangitis,^K743$,0,1,1,0,0,0,0,0,0,-1,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,1,0,0,0
+Primary sclerosing cholangitis,PSC; primary sclerosing cholangitis,^K8301$,0,1,0,0,0,0,0,0,0,1,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,1,0,0,0
+Cholelithiasis,Cholecystolithiasis; choleliths; cholelithiasis; biliary colic; gall stones; gallbladder calculus,^(K800\d*|K801\d*|K802\d*|K806\d*|K807\d*)$,0,1,1,0,0,0,0,0,0,0,-1,0,0,-1,-1,-1,-1,-1,-1,-1,1,0,1,0
+Gastric ulcer without perforation,,^(K250|K253|K254|K257|K259)$,1,0,0,0,0,0,0,0,0,0,-1,1,-1,-1,-1,1,1,-1,-1,-1,1,0,0,0
+Gastric ulcer with perforation,,^(K251|K252|K255|K256)$,1,0,0,0,0,0,0,0,0,0,-1,1,-1,-1,-1,1,1,1,1,1,1,0,0,0
+Duodenal ulcer without perforation,,^(K260|K263|K264|K267|K269)$,1,0,0,0,0,0,0,0,0,0,-1,1,-1,-1,-1,1,1,-1,-1,-1,1,0,0,0
+Duodenal ulcer with perforation,,^(K261|K262|K265|K266)$,1,0,0,0,0,0,0,0,0,0,-1,1,-1,-1,-1,1,1,1,1,1,1,0,0,0
+Peptic ulcer site unspecified without perforation,,^(K270|K273|K274|K277|K279)$,1,0,0,0,0,0,0,0,0,0,-1,1,-1,-1,-1,1,1,-1,-1,-1,1,0,0,0
+Peptic ulcer site unspecified with perforation,,^(K271|K272|K275|K276)$,1,0,0,0,0,0,0,0,0,0,-1,1,-1,-1,-1,1,1,1,1,1,1,0,0,0
+Non-chronic gastritis,,^(K290\d*|K292\d*|K296\d*|K297\d*)$,0,0,1,0,0,0,0,0,0,0,-1,1,-1,-1,-1,-1,1,-1,-1,-1,1,0,0,0
+Chronic gastritis,,^(K293\d*|K294\d*|K295\d*)$,0,0,1,0,0,0,0,0,0,0,-1,1,-1,-1,-1,1,1,-1,-1,-1,1,0,0,0
+Gastroesophageal reflux disease,GERD; GORD; gastroesophageal reflux; oesophageal reflux; peptic esophagitis; esophageal reflux,^K21\d*$,0,0,1,0,0,0,0,0,0,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,1,0,0,0
+Gastric outlet obstruction,GOO,^K311$,0,0,1,0,0,0,0,0,0,-1,-1,0,-1,-1,-1,1,-1,-1,-1,-1,0,0,1,0
+Gastroparesis,Chronic delayed gastric emptying; delayed gastric emptying; gastric stasis,^K3184$,0,0,1,0,0,0,0,0,0,-1,-1,1,-1,-1,-1,1,-1,0,-1,-1,0,1,1,0
+Gastrointestinal perforation,Bowel perforation; intestinal perforation; colonic perforation; gut perforation,^K631$,1,0,0,0,0,0,0,0,0,1,0,-1,0,-1,-1,-1,1,1,1,0,0,1,1,0
+Dumping syndrome,Postgastrectomy dumping syndrome; gastric dumping,^K911$,1,0,0,0,0,0,0,0,0,-1,-1,1,-1,-1,1,1,-1,1,-1,-1,0,0,1,0
+Acute appendicitis without perforation,,^(K352\d*|K353|K358\d*)$,0,0,1,0,0,0,1,0,0,1,0,1,-1,-1,0,-1,-1,-1,1,1,0,1,0,0
+Acute appendicitis with perforation,,^(K3532|K3533)$,0,0,1,0,0,0,1,0,0,1,0,1,-1,-1,0,-1,-1,1,1,1,0,1,0,0
+Acute diverticulitis without perforation,,^(K571|K573|K575|K579)$,0,0,0,0,0,0,0,0,1,1,0,1,-1,1,0,-1,1,-1,1,1,0,1,0,0
+Acute diverticulitis with perforation,,^(K570|K572|K574|K578)$,0,0,0,0,0,0,0,0,1,1,0,1,-1,1,0,-1,1,1,1,1,0,1,0,0
+Inflammatory bowel disease,IBD,^K529$,1,0,0,0,0,0,0,0,0,0,-1,-1,0,-1,1,1,1,-1,-1,-1,1,0,1,0
+Irritable bowel syndrome,Spastic colon; functional bowel disorder; IBS,^K58\d*$,1,0,0,0,0,0,0,0,0,-1,-1,-1,-1,0,0,1,-1,-1,-1,-1,1,0,0,0
+Whipple's disease,Intestinal lipodystrophy; Whipple disease,^K9081$,1,0,0,0,0,0,0,0,0,0,-1,-1,0,-1,1,1,-1,0,-1,-1,1,0,0,0
+Toxic megacolon,Megacolon toxicum; Toxic colitis,^K5931$,1,0,0,0,0,0,0,0,0,1,-1,-1,-1,-1,1,-1,-1,1,0,1,0,1,0,0
+Tropical sprue,Postinfective tropical malabsorption; Sprue,^K900$,1,0,0,0,0,0,0,0,0,1,-1,-1,-1,-1,1,1,-1,-1,-1,-1,1,0,0,0
+Celiac disease,Coeliac disease; Celiac sprue; Gee-Herter-Heubner disease; Gluten sensitive enteropathy; GSE; Nontropical sprue,^K901$,1,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,1,1,-1,-1,-1,-1,0,0,1,0
+Infective colitis,,^A091$,1,0,0,0,0,0,0,0,0,1,-1,0,-1,-1,1,-1,1,0,0,0,0,0,1,0
+Colon carcinoma,Colon cancer; bowel cancer,^C18\d*$,1,0,0,0,0,0,1,0,1,-1,-1,-1,-1,0,0,1,1,0,-1,-1,1,0,1,0
+Acute viral hepatitis Type A,,^B15\d*$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,1,1,-1,-1,1,1,1,0,0,0
+Acute viral hepatitis Type B,,^B16\d*$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,-1,1,-1,-1,1,1,1,0,0,0
+Acute viral hepatitis Type C,,^B171\d*$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,-1,1,-1,-1,-1,1,1,0,0,0
+Acute viral hepatitis Type E,,^B172$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,1,1,-1,-1,1,1,1,0,0,0
+Acute viral hepatitis other specified,,^B178$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,-1,1,-1,-1,1,1,1,0,0,0
+Acute viral hepatitis unspecified,,^B179$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,-1,1,-1,-1,1,1,1,0,0,0
+Chronic viral hepatitis,,^B18\d*$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,-1,1,-1,-1,-1,1,1,0,0,0
+Unspecified viral hepatitis,,^B19\d*$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,-1,1,-1,-1,-1,1,1,0,0,0
+Fulminant viral hepatitis,,^K720\d*$,0,1,0,0,0,0,0,0,0,1,-1,1,1,-1,-1,1,-1,1,-1,1,1,0,0,0
+Liver abscess,Hepatic abscess,^K750$,0,1,0,0,0,0,0,0,0,1,1,1,1,-1,0,1,-1,1,1,0,1,1,0,0
+Hepatocellular carcinoma/Metastasis,,^C220$,0,1,0,0,0,0,0,0,0,1,-1,-1,1,-1,-1,1,-1,-1,-1,-1,1,0,1,0
+Budd-Chiari syndrome,Hepatic vein obstruction; hepatic vein thrombosis; Chiari-Budd syndrome; Chiari's disease; Rokitansky's disease,^I820$,0,1,0,0,0,0,0,0,0,0,-1,-1,0,-1,-1,-1,0,-1,-1,-1,1,0,0,0
+Hemochromatosis,Haemochromatosis; Hereditary Hemochromatosis,^E8311$,0,1,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,1,0,0,0
+Cirrhosis,Cirrhosis of liver; hepatic fibrosis; hepatic sclerosis,^K746\d*$,0,1,0,0,0,0,0,0,0,-1,-1,-1,1,-1,-1,1,1,1,-1,-1,1,0,0,0
+Spontaneous bacterial peritonitis,Primary peritonitis; Culture-negative neutrocytic ascites; Monomicrobial non-neutrocytic bacterascites; Bacterascites; SBP; Primary bacterial peritonitis,^K652$,1,0,0,0,0,0,0,0,0,1,-1,-1,0,-1,1,-1,-1,0,1,1,0,1,0,0
+Pyelonephritis,Kidney infection; acute pyelonephritis; acute kidney infection; chronic pyelonephritis; necrotizing pyelonephritis; acute necrotizing pyelonephritis,^(N10|N110|N111|N12|N136)$,0,0,0,0,1,0,0,0,0,1,0,1,-1,-1,-1,-1,-1,1,-1,-1,0,1,0,0
+Renal colic,,^N23$,0,0,0,0,1,0,0,0,0,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,1,0,0,0
+Small bowel obstruction,Intestinal obstruction; Partial bowel obstruction; Small bowel obstruction,^K566\d*$,1,0,0,0,0,0,0,0,0,1,-1,1,-1,1,-1,1,-1,1,1,0,0,0,1,1
+Volvulus,"Intestinal volvulus; Stomach volvulus; Gastric volvulus; Sigmoid volvulus; Cecal volvulus; Abdominal twisting; Colonic volvulus; Abdominal torsion; Intestinal torsion; Intestinal twisting; Colonic twisting; Stomach twisting, Volvulus neonatorum",^K562$,1,0,0,0,0,0,0,0,0,-1,-1,1,-1,1,-1,-1,-1,0,1,1,0,0,1,1
+Biliary colic,,^K8050$,0,1,0,0,0,0,0,0,0,-1,-1,1,1,-1,-1,-1,-1,-1,-1,-1,1,0,0,0
+Mesenteric ischemia,Intestinal ischemia; intestinal ischaemia; bowel ischemia; bowel ischaemia,^(K551|K559)$,0,0,0,0,0,1,0,0,0,0,-1,1,-1,-1,1,1,1,0,0,-1,0,0,1,1
+Acute ischemic colitis,,^K550\d*$,1,0,0,0,0,0,0,0,0,1,0,1,-1,-1,1,1,1,1,1,1,0,0,1,1
+Ruptured abdominal aortic aneurysm,"Abdominal aneurysm, aortic; aortic aneurysm, abdominal; AAA; triple A",^I713$,1,0,0,0,0,0,0,0,0,0,-1,1,-1,-1,-1,1,1,1,-1,-1,1,0,0,0
+Intra-abdominal hemorrhage,,^R58$,1,0,0,0,0,0,0,0,0,0,-1,0,-1,-1,-1,-1,1,1,-1,-1,1,0,0,0
+Retroperitoneal hemorrhage,,^K683$,1,0,0,0,0,0,0,0,0,0,-1,0,-1,-1,-1,-1,1,1,-1,-1,1,0,0,0
+Torsion of the cyst/ovary,,^N835\d*$,0,0,0,0,0,0,1,0,1,-1,-1,1,-1,-1,-1,-1,-1,-1,0,0,1,0,0,0
+Acute salpingitis,,^N7001$,0,0,0,0,0,0,1,0,1,1,0,-1,-1,-1,-1,-1,-1,-1,0,0,1,0,0,0
+Ovarian Cyst rupture,,^N8320\d*$,0,0,0,0,0,0,1,0,1,-1,-1,1,-1,-1,-1,-1,-1,1,0,0,1,0,0,0
+Ruptured ectopic pregnancy,,^O00\d*$,0,0,0,0,0,0,1,0,1,-1,-1,1,-1,-1,-1,-1,-1,1,1,1,1,0,0,0
+Pleural empyema,Empyema thoracis; Thoracic empyema; Pyothorax; Empyema - plural; Pleurisy - purulent,^J869$,0,1,1,0,0,0,0,0,0,1,0,-1,-1,-1,-1,1,-1,-1,-1,-1,1,0,0,0
+Pulmonary embolism,PE; lung blood clot; blood clot-lung; embolism-pulmonary,^I26\d*$,0,0,0,0,0,0,1,0,1,0,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,1,0,0,0
+Pneumonia,PNA,^J189$,0,0,0,0,0,0,1,0,1,1,1,1,-1,-1,0,-1,-1,1,-1,-1,1,1,0,0
+Myocardial Infarction,AMI; STEMI; heart attack; MI; myocardial infarct; acute MI; coronary; coronary thrombosis,^I21\d*$,0,0,1,0,0,0,0,0,0,0,-1,1,-1,-1,-1,-1,-1,0,-1,-1,1,0,0,0

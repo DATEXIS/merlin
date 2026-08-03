@@ -1,0 +1,67 @@
+# One-off dev-split eval of the new LR variant (ft-8b-lora-r128-thrfull2icd-lr5e5-v1-4,
+# lora_r=128 unchanged, learning_rate=5e-5 instead of the 1e-4 default -- see
+# run_plan.yaml's "8b." block comment). Trimmed from scripts/eval_config.yaml
+# (same Hardware/Model/Client_Job) to just this manifest so it doesn't wait
+# behind the full 15-manifest sweep. This job is already also listed in
+# eval_config.yaml's manifests (short_name 8b-r128-thrfull-icd2-lr5e5) --
+# running eval_checkpoints.py with --config scripts/eval_config.yaml later
+# will just skip it as already done (resumable via the state file). Safe to
+# delete this file after the run.
+#
+#   python scripts/eval_checkpoints.py \
+#       --config scripts/eval_checkpoints_config_8b_r128_lr5e5.yaml
+
+namespace: merlin
+server_image: registry.example.com/anon/vllm_server:latest
+client_image: registry.example.com/anon/vllm_client:latest
+
+models_root: /ft_models/sft
+
+pvc:
+  tool_pod: tool-anon
+  ft_root: /ft_models
+  tool_root: /merlin_ddx
+
+manifests:
+  - path: /ft_models/sft/ft-8b-lora-r128-thrfull2icd-lr5e5-v1-4/checkpoints.json
+    short_name: 8b-r128-thrfull-icd2-lr5e5
+    epochs: [4]
+
+epochs: []
+max_pending: 2
+
+Hardware:
+  server_gpu: [b200, h200, h100]
+  client_gpu: [p100, v100, a100]
+  gpu_count: 1
+  replicas: 1
+  gpu_memory_utilization: 0.85
+  enforce_eager: True
+
+Model:
+  max_model_len: 8192
+  max_num_seqs: 512
+  max_num_batched_tokens: 8192
+  dtype: "auto"
+  thinking: False
+  lora: False
+  full_finetuning: False
+  lora_modules: ""
+
+Client_Job:
+  chief_complaint: "all"
+  file_name: "test_dataset"
+  split: "dev"
+  num_choices: 4
+  num_samples: 100000
+  concurrency: 64
+  start_verifier: 1
+  budget: [4, 4, 4, 4]
+  temperatures: [0.4, 0.4, 0.4, 0.4]
+  max_tokens: [2000, 2000, 2000, 2200]
+  thresholds: [0.6, 0.5, 0.8, 0.55]
+  seed: 42
+  eval_mode: True
+  merlin_mode: True
+  think_about_labs: False
+  guided_decoding: False

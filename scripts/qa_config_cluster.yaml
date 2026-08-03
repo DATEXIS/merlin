@@ -1,0 +1,93 @@
+# In-cluster variant of qa_config.yaml: the client runs as a k8s Job next to the
+# judge, so a flaky home connection can't kill requests or the port-forward.
+#
+# Workflow (laptop):
+#   1. one-time: sync data to the PVC (see k8s/qa_client_job.yaml header)
+#   2. python scripts/qa_analysis.py server --up          # deploy judge, leave running
+#   3. kubectl apply -f k8s/qa_client_job.yaml            # run the stage in-cluster
+#      kubectl logs -f job/qa-client -n merlin
+#   4. python scripts/qa_analysis.py server --down        # free the GPUs
+#
+# Differences from qa_config.yaml: connection in-cluster, no server management by
+# the client (the pod has no kubectl), absolute data/output paths on the PVC.
+# Outputs land on the PVC AND in wandb (project merlin_qa).
+QA:
+  server:
+    manage: false                  # job pod cannot manage deployments; use server --up/--down
+    keep_alive: true
+    connection: in-cluster
+    job_name: qa                   # -> service vllm-server-qa
+    namespace: merlin
+    server_image: registry.example.com/anon/vllm_server:latest
+    ready_timeout_min: 45
+    Hardware:
+      gpu_count: 4
+      server_gpu: [b200]
+      replicas: 1
+      gpu_memory_utilization: 0.85
+      enforce_eager: True
+    Model:
+      base_model: "Qwen/Qwen3-32B"
+      max_model_len: 32768
+      max_num_seqs: 128
+      max_num_batched_tokens: 32768
+      dtype: "auto"
+      thinking: False
+      lora: False
+      full_finetuning: False
+      lora_modules: ""
+
+  round: "1_4"
+  data_root: /merlin_ddx/qa/data   # PVC: results/evaluation/... + mimic-iv/discharge_notes/...
+  output_dir: /merlin_ddx/qa/out   # PVC: taxonomy, counts, cache (checkpoints persist!)
+  wandb: true
+  seed: 42
+  concurrency: 128                 # matches TP=4 headroom (max_num_seqs 128)
+  checkpoint_every: 500
+
+  # Clean 2x2: base vs. full-FT at 8B and 32B. LoRA (both scales) deliberately
+  # excluded from induction -- see scripts/qa_config.yaml's stage1 comment for
+  # why (8b-r128/r256 degenerate and closed as a limitation; 32b-r256, even
+  # though healthy, would be a single-instance adaptation method confounded
+  # with scale). LoRA still gets scored in stage2 below.
+  stage1:
+    models:
+      - 8b-base
+      - 32b-base
+      - 8b-full-thrfull-icd2-e3
+      - 32b-full-thrfull-icd2-e3
+    sample_per_model: null
+    temperature: 0.4
+    max_tokens: 1000
+    min_keyword_count: 2
+    cluster_input_tokens: 4000
+    cluster_max_tokens: 6000
+
+  # Test-split names are shorter than dev (dataset-variant suffix dropped -- see
+  # scripts/qa_config.yaml's stage2 comment for the dev<->test checkpoint mapping
+  # and provenance). 8B LoRA has no test-split eval and is excluded regardless.
+  stage2:
+    taxonomy_file: taxonomy.json
+    models:
+      - test-06b-base
+      - test-06b-full-e4
+      - test-8b-base
+      - test-8b-full-e3
+      - test-14b-base
+      - test-14b-full-e3
+      - test-32b-base
+      - test-32b-full-e3
+#      - test-32b-r256-e4
+    shift_pairs:
+      - [test-06b-base, test-06b-full-e4]
+      - [test-8b-base, test-8b-full-e3]
+      - [test-14b-base, test-14b-full-e3]
+      - [test-32b-base, test-32b-full-e3]
+#      - [test-32b-full-e3, test-32b-r256-e4]
+    guided_decoding: true
+    temperature: 0.0
+    max_tokens: 512
+    limit: null
+
+  validation:
+    sample_per_model: 25

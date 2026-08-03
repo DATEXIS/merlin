@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: tool-anon
+  namespace: merlin
+spec:
+  containers:
+    - args:
+        - while true; do sleep 30; done;
+      command:
+        - /bin/bash
+        - -c
+        - --
+      image: debian
+      name: tool
+      volumeMounts:
+        - mountPath: /data
+          name: merlin-pvc
+        - mountPath: /merlin_ddx
+          name: merlin-ddx-pvc
+        - mountPath: /models
+          name: model-volume
+        - name: checkpoint-volume
+          mountPath: /checkpoints
+  volumes:
+    - name: merlin-pvc
+      persistentVolumeClaim:
+        claimName: merlin-pvc
+    - name: merlin-ddx-pvc
+      persistentVolumeClaim:
+        claimName: merlin-ddx-ckpts-pvc
+    - name: model-volume
+      persistentVolumeClaim:
+        claimName: model-volume
+    - name: checkpoint-volume
+      persistentVolumeClaim:
+        claimName: checkpoint-volume
+
+

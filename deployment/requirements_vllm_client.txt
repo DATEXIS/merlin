@@ -1,0 +1,28 @@
+# sentence_transformers
+# wandb
+# openai
+# pyarrow
+# fastparquet
+# scikit-learn
+# aiohttp
+# numpy<2.0
+
+
+#  P100 Setup
+torch==1.13.1+cu117
+torchvision==0.14.1+cu117
+torchaudio==0.13.1
+torchmetrics==0.11.4  # eval metrics (multiclass_f1_score); compatible with torch 1.13
+sentence-transformers==2.2.2
+transformers==4.24.0
+huggingface-hub==0.14.1
+wandb==0.15.0
+openai
+pyarrow
+fastparquet
+scikit-learn
+aiohttp
+numpy<2.0
+datasets
+pydantic>=2      # src/qa schemas use pydantic v2 APIs (create_model, model_validate)
+pyyaml           # qa_analysis.py config loading

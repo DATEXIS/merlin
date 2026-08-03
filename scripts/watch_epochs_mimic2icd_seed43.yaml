@@ -1,0 +1,88 @@
+# True per-epoch watcher (not wait-for-job-completion) for the mimic-icd2
+# (no reasoning traces) seed-43 retrain, ft-8b-full-mimic-2icd-seed43-v1-4
+# (run_plan.yaml, added 2026-07-29). Companion:
+# watch_epochs_mimic2icd_seed44.yaml.
+#
+# Why a true per-epoch watcher (scripts/watch_and_eval_epochs.py) instead of
+# watch_sft_and_eval.py's wait-for-job-then-eval-one-fixed-epoch pattern: the
+# seed-42 dev-selected best epoch for this dataset is e4 (see
+# scripts/eval_checkpoints_config_test_8b_mimic_icd2.yaml) -- the LAST
+# epoch, so unlike the thrfull2icd seed pair (run_plan.yaml runs 14-15) there
+# is no known early-stop epoch to train alone, and the best epoch could
+# shift at a new seed anyway. This polls the manifest and evals each new
+# checkpoint on DEV as it lands, so all 4 epochs get scored without waiting
+# for the full 4-epoch job to finish. Once training + dev sweep are done,
+# rerun the winning epoch on TEST with a dedicated one-off config (same
+# pattern as eval_checkpoints_config_test_8b_mimic_icd2.yaml), matching
+# report_test_split_by_default.md's dev-for-selection/test-for-results split.
+#
+# short_name carries a "-seed43" suffix (same convention as
+# watch_sft_and_eval.py's BASE_SHORT_NAME + "-seed{N}") so these don't
+# collide with the seed-42 state-file entries (8b-full-mimic-icd2-e*).
+# Client_Job.seed is set to 43 (this run's training seed), matching every
+# other seed-repeat config's convention (see
+# eval_error_bars_config_seed43_mimic.yaml's header). Hardware
+# (server_gpu b200, client_gpu p100, concurrency 64) copied from that same
+# checkpoint family's proven eval recipe
+# (eval_checkpoints_config_test_8b_mimic_icd2.yaml).
+#
+# Run (leave running in a terminal/tmux for as long as training takes --
+# polls every 10 min by default, evaluates whatever's newly ready; safe
+# to run alongside watch_epochs_mimic2icd_seed44.yaml and the training jobs):
+#   python scripts/watch_and_eval_epochs.py --config scripts/watch_epochs_mimic2icd_seed43.yaml
+
+namespace: merlin
+server_image: registry.example.com/anon/vllm_server:latest
+client_image: registry.example.com/anon/vllm_client:latest
+
+models_root: /ft_models/sft
+
+pvc:
+  tool_pod: tool-anon
+  ft_root: /ft_models
+  tool_root: /merlin_ddx
+
+manifests:
+  - path: /ft_models/sft/ft-8b-full-mimic-2icd-seed43-v1-4/checkpoints.json
+    short_name: 8b-full-mimic-icd2-seed43
+    server_gpu: b200
+
+# []: sweep whatever epochs exist in the manifest right now.
+epochs: []
+max_pending: 2
+
+Hardware:
+  server_gpu: [b200, h200, h100]   # overridden to b200 above
+  client_gpu: p100
+  gpu_count: 1
+  replicas: 1
+  gpu_memory_utilization: 0.85
+  enforce_eager: True
+
+Model:
+  max_model_len: 8192
+  max_num_seqs: 512
+  max_num_batched_tokens: 8192
+  dtype: "auto"
+  thinking: False
+  lora: False
+  full_finetuning: False
+  lora_modules: ""
+
+Client_Job:
+  chief_complaint: "all"
+  file_name: "test_dataset"
+  split: "dev"                    # epoch selection, not paper reporting -- see header
+  num_choices: 4
+  num_samples: 100000
+  concurrency: 64
+  start_verifier: 1
+  budget: [4, 4, 4, 4]
+  temperatures: [0.4, 0.4, 0.4, 0.4]
+  max_tokens: [2000, 2000, 2000, 2200]
+  thresholds: [0.6, 0.5, 0.8, 0.55]
+  seed: 43
+  eval_mode: True
+  merlin_mode: True
+  think_about_labs: False
+  guided_decoding: False

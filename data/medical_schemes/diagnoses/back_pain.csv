@@ -1,0 +1,65 @@
+Disease,Synonyms,icd10_regex,Onset Acute,Onset Subacute,Onset Chronic,Duration Minutes to hours,Duration Days to weeks,Duration Months to years,Pain Sharp,Pain Dull aching,Pain Severe or shooting,Pain Tearing or Ripping,Pain Sudden,Radiation Back or Flanks,"Radiation Head, Neck or Arms",Radiation Legs or Hips,Radiation Groin or Testicles,Radiation Chest or Abdomen,Radiation Local,Stiffness,Fever,Rigors and chills,Headache,Nausea and vomiting,Syncopy,Weight loss,Motor weakness,Sensory deficit,Pulse Deficit,Heart Murmur,Bowel or bladder dysfunction,Horner's syndrome
+Retroperitoneal hematoma,Retroperitoneal hemorrhage,^S36893|^K683,1,1,0,1,0,0,1,0,0,1,0,1,0,0,0,0,0,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1
+Arachnoiditis,Spinal arachnoiditis,^G039|^G09,1,0,0,1,0,0,0,1,0,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0,-1,-1,0,0
+Cauda equina syndrome,Spinal nerve root compression; CES,^G834,1,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,1,0,-1,-1,0,-1
+Epidural abscess,Spinal epidural abscess,^G061,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,-1,0,0,0,0,0,0,0,0,-1,-1,0,0
+Radiculopathy,Pinched nerve; Radicular pain; Radicular syndrome,^M541,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,-1,-1,0,-1
+Sciatica,Sciatic neuralgia,^M543,1,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,-1,-1,0,-1
+Spinal cord compression,Myelopathy,^G9520,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,1,-1,-1,-1,-1,-1,-1,-1,0,0,-1,-1,0,-1
+Ankylosing spondylitis,Axial spondyloarthritis; inflammatory spinal arthritis; Marie-Strumpell disease,^M45,0,1,1,0,0,1,0,1,0,0,0,0,0,0,0,0,1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Bertolotti's syndrome (Lumbosacral transitional vertebrae),Lumbosacral transitional vertebra,^Q764,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Chronic recurrent focal osteomyelitis,CRMO,^M863,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,1,1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1
+Cervical fracture,Broken neck,^S12,1,0,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,-1,-1,-1,0,-1,-1,-1,0,0,-1,-1,-1,0
+Degenerative disc disease,Spinal disc degeneration; collapsed disc; Spondylosis,^M513,0,1,1,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,-1,-1,-1,-1,-1,-1,0,0,-1,-1,0,0
+Disc herniation,Slipped disc; Herniated nucleus pulposus,^M512,1,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,-1,-1,-1,-1,-1,-1,-1,0,0,-1,-1,0,-1
+Discitis,Diskitis,^M464,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,1,-1,1,0,-1,0,-1,0,0,0,-1,-1,0,-1
+Hyperkyphosis,Kyphosis,^M402,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,1,0,-1,-1,-1,-1,-1,-1,0,0,-1,-1,-1,-1
+Osteoarthritis,Degenerative joint disease; OA,^M199,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Sacroiliac joint dysfunction,SI joint pain,^M533,0,0,1,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,-1,-1,0,-1
+Sacroilitis,Sacroiliitis,^M461,1,0,1,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0,-1,-1,-1,0,0,0,-1,-1,0,-1
+Scheuermann (juvenile) kyphosis,Scheuermann disease,^M420,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Scoliosis,Spinal curvature,^M41,0,0,1,0,0,1,0,1,0,0,0,0,1,1,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,-1,-1,0,-1
+Spinal stenosis,Narrowing of spinal canal,^M480,0,0,1,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,-1,-1,-1,-1,-1,-1,0,0,-1,-1,0,0
+Spondylosis,Spinal osteoarthritis; degenerative spinal disease,^M47,0,0,1,0,0,1,0,1,0,0,0,0,1,1,0,0,0,0,-1,-1,0,-1,-1,-1,0,0,-1,-1,0,0
+Vertebral compression fracture,Spinal compression fracture,^S220|^S320,1,0,0,1,0,0,1,0,1,0,1,0,1,1,0,0,0,0,-1,-1,0,0,0,-1,0,0,-1,-1,0,-1
+Vertebral osteomyelitis,Spinal osteomyelitis,^M462,1,0,0,1,0,0,1,0,1,0,1,0,1,1,0,0,0,0,1,0,-1,0,-1,-1,0,0,-1,-1,0,-1
+Aortic aneurysm rupture,Ruptured AAA,^I713,1,0,0,1,0,0,1,0,0,1,0,1,0,0,0,0,0,-1,-1,-1,-1,-1,0,-1,-1,-1,1,0,-1,-1
+Aortic dissection,Dissecting aneurysm,^I710,1,0,1,1,0,0,1,0,0,1,0,1,0,0,0,0,0,-1,-1,-1,-1,-1,0,-1,-1,-1,1,0,-1,-1
+Appendicitis,Inflammation of the appendix; inflamed appendix; Epityphlitis,^K35|^K36|^K37,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,1,0,-1,1,-1,-1,-1,-1,-1,-1,-1,-1
+Cholelithiasis,Gallstones,^K80,1,1,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,-1,0,0,-1,1,-1,0,-1,-1,-1,-1,-1,-1
+Chronic stable angina,Angina pectoris,^I208|^I209,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,-1,-1,-1,-1,0,0,-1,-1,-1,0,-1,-1,-1
+Cystitis,Bladder infection,^N30,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,0,0,-1,-1,-1,-1,-1,-1,-1,-1,0,-1
+Endocarditis,Infective endocarditis,^I33,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,-1,0,0,-1,0,0,-1,-1,-1,0,1,-1,-1
+Myalgia,Muscle ache; muscle pain; body aches,^M791,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Nephrolithiasis,Kidney stones,^N200,1,0,0,1,0,0,1,0,1,0,0,0,0,1,1,1,0,-1,0,0,-1,0,-1,-1,-1,-1,-1,-1,-1,-1
+Pancreatitis,Inflammation of pancreas,^K85|^K86,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,1,0,-1,0,0,-1,1,0,0,-1,-1,-1,-1,-1,-1
+Pelvic inflammatory disease,PID; female reproductive organ infection,^N73,1,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,-1,0,0,-1,0,-1,-1,-1,-1,-1,-1,-1,-1
+Pulmonary embolism,PE,^I26,1,0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0,-1,-1,-1,0,0,0,-1,-1,-1,0,0,-1,-1
+Pyelonephritis,Kidney infection; upper urinary tract infection,^N10|^N11,1,0,1,0,0,0,1,1,1,0,0,0,0,1,1,0,0,-1,1,0,-1,0,-1,-1,-1,-1,-1,-1,0,-1
+Pneumonia,Lung infection,^J18,1,0,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,-1,1,1,0,0,0,0,-1,-1,-1,-1,-1,-1
+Pyomyositis,Bacterial muscle infection,^M600,1,0,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,-1,1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Rheumatoid arthritis,RA,^M05|^M06,0,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,1,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1
+Traumatic aortic rupture,Traumatic aortic transection,^S250,1,0,0,1,0,0,1,0,0,1,0,1,0,0,0,0,0,-1,-1,-1,-1,-1,0,-1,-1,-1,0,0,-1,-1
+Waterhouse-Friderichsen syndrome,Meningococcemia,^A391,1,0,0,1,0,0,1,0,1,0,1,1,0,0,0,0,0,-1,1,0,0,0,0,0,-1,-1,-1,-1,-1,-1
+Ewing's sarcoma,Ewing tumor,^C41,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,-1,-1,-1,1,-1,-1,-1,-1,-1,-1
+Langerhans cell histiocytosis (eosinophilic granulomas),LCH,^C960,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,-1,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Leukemia,Blood cancer,^C91|^C92|^C93|^C94|^C95,1,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,-1,0,0,-1,-1,-1,1,-1,-1,-1,-1,-1,-1
+Lymphoma,Lymph node cancer,^C81|^C82|^C83|^C84|^C85,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,-1,0,0,-1,-1,-1,1,-1,-1,-1,-1,-1,-1
+Multiple myeloma,Plasma cell myeloma; bone marrow cancer; Kahler's disease,^C900,0,0,1,0,0,1,0,1,0,0,0,0,0,1,1,0,0,0,0,0,-1,-1,-1,0,-1,-1,-1,-1,0,-1
+Neurofibroma,Nerve sheath tumor,^D361,0,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Osteoblastoma,Giant osteoid osteoma; Large benign bone-forming tumor,^D16,0,0,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Osteoid osteoma,Small benign bone-forming tumor; Cortical osteoid osteoma,^D16,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Osteosarcoma,Osteogenic sarcoma,^C40|^C41,0,0,1,0,1,1,1,0,1,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Prostate cancer,Prostatic neoplasm,^C61,0,0,1,0,0,1,1,0,1,0,0,0,0,1,1,1,0,-1,0,0,-1,-1,-1,0,-1,-1,-1,-1,0,-1
+Abnormal posturing,Decerebrate/decorticate posturing,^R293,0,0,1,0,0,1,0,1,0,0,0,0,1,1,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Muscle spasm,Cramp,^M6283,1,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Pyriformis syndrome,Piriformis syndrome,^G53,0,0,1,0,0,1,0,1,0,0,0,0,0,1,0,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Chronic fatigue syndrome,Myalgic encephalomyelitis,^R5382,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,-1,-1,0,0,-1,-1,-1,-1,-1,-1,-1,-1
+Depression,Major depressive disorder,^F32|^F33,0,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,0,-1,-1,0,0,0,0,-1,-1,-1,-1,-1,-1
+Dysmenorrhea,Menstrual cramps,^N944|^N945,1,0,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,-1,-1,-1,0,0,-1,-1,-1,-1,-1,-1,-1,-1
+Herpes zoster,Shingles,^B02,1,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,-1,0,0,0,0,0,0,-1,0,-1,-1,-1,-1
+Pregnancy,Gestation,^Z33|^O00-O9A,0,0,1,0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Sickle cell anemia,Sickle cell disease,^D57,1,0,1,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Syringomyelia,Syrinx,^G950,0,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,-1,0,0,-1,-1,-1,-1,-1,-1,-1,-1
+Trauma,Injury,^S00-T88,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,-1,-1,-1,0,0,-1,0,0,-1,-1,0,0
+Ureteropelvic junction obstruction (UPJ),Blocked ureter; Ureteropelvic junction blockage; UPJO,^Q621,1,0,0,1,1,0,0,1,0,0,0,0,0,1,1,0,0,-1,0,0,0,0,-1,-1,-1,-1,-1,-1,0,-1

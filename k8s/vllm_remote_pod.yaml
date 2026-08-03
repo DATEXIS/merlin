@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-remote-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm-remote-pod
+  template:
+    metadata:
+      labels:
+        app: vllm-remote-pod
+    spec:
+      containers:
+        - name: vllm-remote-pod
+          image: registry.example.com/anon/vllm_client:latest
+          command: ["/usr/sbin/sshd", "-D"]
+          env:
+            - name: OPENAI_API_BASE
+              value: "http://vllm-server:80/v1"
+            - name: MODEL
+              value: "Qwen/Qwen2.5-3B-Instruct"
+            - name: WANDB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: wandb-secret
+                  key: api-key
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: ssh-key
+              mountPath: /root/ssh-key
+            - name: embedding-volume
+              mountPath: /data
+          ports:
+            - containerPort: 22
+          lifecycle:
+            postStart:
+              exec:
+                command: [ "/bin/sh", "-c", "cat /root/ssh-key/id_rsa.pub >> /root/.ssh/authorized_keys" ]
+          resources:
+            limits:
+              memory: "32Gi"
+              cpu: "2"
+              nvidia.com/gpu: "1"
+            requests:
+              memory: "16Gi"
+              cpu: "1"
+              nvidia.com/gpu: "1"
+      imagePullSecrets:
+        - name: private-registry-auth
+      nodeSelector:
+        gpu: a100
+      volumes:
+        - name: ssh-key
+          secret:
+            secretName: my-ssh-public-key
+            defaultMode: 256
+        - name: embedding-volume
+          persistentVolumeClaim:
+            claimName: embedding-volume

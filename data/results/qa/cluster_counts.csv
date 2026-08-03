@@ -1,0 +1,8 @@
+error_class,errors,cases,cases_32b-base,cases_32b-full-thrfull-icd2-e3,cases_8b-base,cases_8b-full-thrfull-icd2-e3
+underprediction_omission,3629,3629,914,894,915,906
+incorrect_code_usage,2779,2779,714,830,470,765
+overly_unspecific_codes,2645,2645,770,535,784,556
+symptom_overcoding,1127,1127,164,402,126,435
+missed_chronic_comorbidities,321,321,73,64,130,54
+incorrect_primary_diagnosis,5,5,4,0,1,0
+other,13,13,2,2,1,8

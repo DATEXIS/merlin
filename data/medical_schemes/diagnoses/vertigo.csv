@@ -1,0 +1,22 @@
+﻿Disease,Synonyms,icd10_regex,Acute onset,Recurrency,Nystagmus,Hearing problems,Focal neurological deficits,Gait/limb ataxia,Non-nystagmus oculomotor abnormality,Dix-Hallpike,Abnormal head impulse,Fever/ear effusion,Facial palsy/vesicles
+Aminoglycoside toxicity,aminoglycoside adverse effect; gentamicin toxicity; streptomycin toxicity; ototoxicity due to aminoglycoside,^T365X\d*$,1,-1,-1,1,0,0,0,0,0,0,0
+BPPV,benign paroxysmal positional vertigo; benign paroxysmal vertigo,^H811\d*$,1,1,0,-1,0,0,0,1,0,0,0
+Brain stem ischemia,brainstem infarction; vertebrobasilar ischemia; brain stem stroke,^(G463\d*|I63\d*)$,1,-1,0,-1,1,0,1,0,0,0,0
+Brain tumors,brain neoplasm; intracranial tumor,^(C71\d*|D33\d*|D43\d*)$,0,1,1,1,1,0,1,0,0,0,0
+Cerebellar infarction/hemorrhage,cerebellar stroke; cerebellar infarct; cerebellar hemorrhage,^(I6381\d*|I614\d*)$,1,-1,0,-1,0,1,0,0,0,0,0
+Chiari malformation,Arnold-Chiari malformation; Chiari malformation type I/II,^Q070\d*$,-1,1,1,-1,0,1,0,0,0,0,0
+Cogan syndrome,oculovestibuloauditory syndrome; Cogan's syndrome,^H163\d*$,-1,1,0,1,0,0,0,0,0,0,0
+Epileptic vertigo,seizure-related vertigo; vestibular epilepsy,^G40\d*$,-1,1,0,-1,1,0,0,0,0,0,0
+HSV oticus,herpes zoster oticus; Ramsay Hunt syndrome,^B022\d*$,1,0,-1,0,0,0,0,0,0,0,1
+Labyrinthine concussion,labyrinthine dysfunction due to trauma; inner ear concussion,^H832\d*$,1,-1,-1,1,0,0,0,0,0,0,0
+Meniere disease,Ménière's disease; endolymphatic hydrops; Ménière syndrome,^H810\d*$,0,1,0,1,0,0,0,0,0,0,0
+Multiple sclerosis,MS; disseminated sclerosis,^G35\d*$,-1,1,0,-1,1,1,1,0,0,0,0
+Otitis media,middle ear infection; acute otitis media; suppurative otitis media,^H66\d*$,1,-1,-1,0,0,0,0,0,0,1,0
+Parkinson,Parkinson's disease; parkinsonism,^G20\d*$,-1,1,-1,-1,0,1,0,0,0,0,0
+Perilymphatic fistula,labyrinthine fistula; perilymph fistula,^H831\d*$,0,1,-1,1,0,0,0,0,0,0,0
+Recurrent vestibulopathy,recurrent vertigo; aural vertigo,^H813\d*$,1,-1,-1,-1,0,0,0,0,0,0,0
+Semicircular canal/ dehiscence syndrome,superior semicircular canal dehiscence syndrome; SSCD,^H838X\d*$,0,1,-1,1,0,0,0,0,0,0,0
+Vestibular migrain,migraine-associated vertigo; migrainous vertigo,^G4381\d*$,-1,1,0,0,0,0,0,0,0,0,0
+Vestibular neuritis,vestibular neuronitis,^H812\d*$,1,0,0,-1,0,0,0,0,1,0,0
+Vestibular paroxysmia,paroxysmal vestibular disorder,^H818\d*$,1,1,0,-1,0,0,0,0,0,0,0
+Vestibular schwannoma,acoustic neuroma; vestibular schwannoma,^D333\d*$,-1,1,0,1,0,0,0,0,0,0,0

@@ -1,0 +1,32 @@
+﻿Disease,Synonyms,icd10_regex,Onset Acute,Onset Subacute,Onset Chronic,Duration Minutes,Duration Hours,Duration Days,Duration Weeks to Years,Duration Variable,Productive cough,Hemoptysis,Weight lost,Fever,Dyspnea,Tachypnea,Hoarseness,Stridor,Wheezing,Crackles,Diminished Breath Sounds,Rhonchi,Hyperinflation
+ACE inhibitors,ACEI adverse effect; angiotensin-converting-enzyme inhibitors adverse effect,^T464X5\d*$,1,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,1,0,0,0,1,0,0,0,0
+Acute Bronchitis,acute bronchitis,^J20\d*$,1,-1,-1,-1,-1,1,-1,-1,1,-1,-1,0,1,0,0,0,1,0,0,1,0
+Asthma,bronchial asthma,^J45\d*$,-1,-1,1,-1,-1,-1,1,-1,1,-1,-1,-1,1,0,0,0,1,0,0,1,0
+Bronchiectasis,bronchiectasis,^J47\d*$,-1,-1,1,-1,-1,-1,1,-1,1,1,-1,-1,1,0,0,0,1,1,0,0,0
+Bronchiolitis,acute bronchiolitis,^J21\d*$,1,-1,-1,-1,-1,1,-1,-1,1,-1,-1,1,1,1,0,0,1,1,0,0,0
+Cardiogenic pulmonary edema,acute pulmonary edema,^J81\d*$,1,-1,-1,-1,-1,1,1,-1,1,-1,1,-1,1,1,0,0,1,1,0,1,0
+Chronic Bronchitis,chronic bronchitis,^J42$,-1,-1,1,-1,-1,1,-1,-1,1,-1,-1,1,1,0,0,0,1,0,0,1,0
+Churg-Strauss,eosinophilic granulomatosis with polyangiitis; EGPA,^M301\d*$,-1,-1,1,-1,-1,-1,-1,1,1,1,1,1,1,0,0,0,1,1,0,1,0
+Common Cold,acute nasopharyngitis,^J00$,1,-1,-1,-1,-1,1,-1,-1,1,-1,-1,1,-1,0,0,0,1,1,0,0,0
+Croup,laryngotracheobronchitis,^J050\d*$,1,-1,-1,-1,-1,1,-1,-1,1,-1,-1,1,1,0,0,1,0,1,0,0,0
+Cystic fibrosis,CF,^E84\d*$,-1,-1,1,-1,-1,-1,-1,1,1,-1,1,0,1,1,0,0,1,0,0,0,1
+Emphysema,pulmonary emphysema,^J43\d*$,-1,-1,1,-1,-1,-1,1,-1,1,-1,-1,1,1,0,0,0,1,1,0,0,0
+Epiglottitis,supraglottitis,^J051\d*$,1,-1,-1,-1,1,-1,-1,-1,-1,-1,-1,1,1,0,1,1,0,0,0,0,0
+Foreing body  aspiration,foreign body in airway; aspiration of foreign body,^(T17\d*|J69\d*)$,1,-1,-1,-1,-1,-1,-1,1,1,1,-1,1,1,0,0,0,1,0,1,0,0
+Gastroesophageal reflux,GERD; GORD,^K21\d*$,-1,-1,1,-1,-1,-1,-1,1,1,-1,1,-1,1,0,1,0,1,0,0,0,0
+Goodpasture syndrome,anti-GBM disease; Goodpasture disease,^M310\d*$,-1,-1,1,-1,-1,-1,-1,1,-1,1,-1,-1,1,0,0,0,0,0,0,0,0
+Interstitial lung disease,ILD; pulmonary fibrosis,^J84\d*$,-1,-1,1,-1,-1,-1,-1,1,-1,1,1,-1,1,0,0,0,1,1,0,1,0
+Laryngopharyngeal reflux,LPR; extraesophageal reflux,^K21\d*$,-1,-1,1,-1,-1,-1,-1,1,1,-1,-1,-1,1,0,1,1,0,0,0,0,0
+Lung cancer,lung carcinoma; bronchogenic carcinoma,^C34\d*$,-1,-1,1,-1,-1,-1,1,-1,1,1,1,0,1,0,1,0,0,0,0,0,0
+Microscopic polyangitis (MPA),microscopic polyangiitis,^M317\d*$,-1,-1,1,-1,-1,-1,-1,1,1,1,1,1,1,0,1,1,1,0,0,0,0
+Mitral Stenosis,mitral valve stenosis; rheumatic mitral stenosis; nonrheumatic mitral stenosis,^(I050\d*|I342\d*)$,-1,-1,1,-1,-1,-1,-1,1,1,1,-1,-1,1,0,1,0,0,1,0,0,0
+Non-asthmatic eosinophilic bronchitis,eosinophilic bronchitis (nonasthmatic),^J8289\d*$,-1,-1,1,-1,-1,-1,1,-1,1,-1,-1,-1,1,0,0,0,1,0,0,0,0
+Pertussis,whooping cough,^A37\d*$,1,-1,-1,-1,-1,-1,1,-1,1,-1,1,1,1,0,0,-1,-1,-1,-1,-1,-1
+Pneumoconioses,coal workers' pneumoconiosis; silicosis; asbestosis; pneumoconiosis,^(J60\d*|J61\d*|J62\d*|J63\d*|J64\d*|J65\d*)$,1,-1,1,-1,-1,-1,1,-1,-1,-1,1,1,1,0,0,0,1,1,0,1,0
+Pneumonia,pneumonitis; PNA,^(J12\d*|J13\d*|J14\d*|J15\d*|J16\d*|J17\d*|J18\d*)$,1,-1,-1,-1,-1,-1,-1,1,1,-1,-1,1,1,0,0,0,0,1,1,0,0
+Pulmonary hypertension,PAH; pulmonary arterial hypertension,^I27\d*$,-1,-1,1,-1,-1,-1,1,-1,-1,1,1,-1,1,0,1,0,0,0,0,0,0
+Rhinosinusitis,sinusitis; acute sinusitis; chronic sinusitis,^(J01\d*|J32\d*)$,1,1,1,-1,-1,-1,-1,1,1,-1,-1,1,1,0,0,-1,-1,-1,-1,-1,-1
+Sarcoidosis,sarcoid; Besnier-Boeck disease,^D86\d*$,-1,-1,1,-1,-1,-1,1,-1,-1,-1,1,1,1,0,0,0,1,0,0,0,0
+Seasonal  Influenza,flu; influenza,^(J09\d*|J10\d*|J11\d*)$,1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,1,1,0,0,0,0,0,0,0,0
+Tuberculosis,TB,^(A15\d*|A16\d*|A17\d*|A18\d*|A19\d*)$,-1,-1,1,-1,-1,-1,1,-1,1,1,1,1,1,0,0,0,0,1,0,1,0
+Wegener's disease,GPA; granulomatosis with polyangiitis; Wegener granulomatosis,^M313\d*$,-1,-1,1,-1,-1,-1,1,-1,1,1,1,1,1,0,1,1,1,0,0,0,0

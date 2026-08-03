@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vllm-client-qwen32b-sft
+  namespace: merlin
+spec:
+  template:
+    spec:
+      containers:
+        - name: vllm-client-gemma
+          image: registry.example.com/anon/vllm_client:latest
+          command: ["python3", "/app/entrypoint.py",
+                    '--server_name=vllm-server-gemma',
+#                    '--namespace=merlin',
+                    '--num_choices=30',
+                    '--num_samples=63', # Will be used as tag, Currently up to 10 / 63 / 1411
+                    '--concurrency=1',
+                    '--batch_size=1',  # Has to be 1 for chat style models
+                    '--start_verifier=1',
+                    '--budget=[4, 4, 4, 5]',
+                    '--temperatures=[0.2, 0.2, 0.2, 0.2]',
+                    '--max_tokens=[1600, 1300, 1400, 1800]',
+                    '--thresholds=[0.65, 0.5, 0.8, 0.35]',
+                    '--eval_mode=False',
+                    '--lora=False',
+                    '--store_patients=True',
+          ]
+          env:
+            - name: WANDB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: wandb-secret
+                  key: api-key
+          resources:
+            limits:
+              memory: "32Gi"
+              cpu: "4"
+              nvidia.com/gpu: "1"
+            requests:
+              memory: "4Gi"
+              cpu: "1"
+              nvidia.com/gpu: "1"
+          volumeMounts:
+            - name: checkpoint-volume
+              mountPath: /checkpoints
+      volumes:
+        - name: checkpoint-volume
+          persistentVolumeClaim:
+            claimName: checkpoint-volume
+      imagePullSecrets:
+        - name: private-registry-auth
+      nodeSelector:
+        gpu: a100
+      restartPolicy: Never
+  backoffLimit: 0

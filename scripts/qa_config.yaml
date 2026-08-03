@@ -1,0 +1,136 @@
+# Two-stage qualitative error analysis (QA) for ICD-code predictions.
+#
+# Replaces the old single-pass, closed-model error mapping (git main:
+# scripts/run_analyses.py + src/qa). Now:
+#   Stage 1  induce an error taxonomy from dev-split mispredictions (open model).
+#   (human)  review taxonomy_candidate.json -> taxonomy.json, set approved: true.
+#   Stage 2  score every test-split misprediction yes/no against each frozen class.
+#   validate judge-vs-human Cohen's kappa on a hand-labelled sample.
+#
+# One command does everything: deploy the judge server (shared eval
+# server_template), port-forward, merge discharge notes, run all configured
+# result sets, write data/qa/* AND mirror results to wandb (project merlin_qa),
+# then tear the server down.
+#
+# Driven by scripts/qa_analysis.py; the CLI only selects the stage:
+#   python scripts/qa_analysis.py stage1
+#   python scripts/qa_analysis.py stage2
+#   python scripts/qa_analysis.py validate --export | --score
+QA:
+  # --- judge server (managed automatically) ----------------------------------
+  server:
+    manage: false                  # vllm-server-qa already running -- skip deploy/teardown,
+                                    # just port-forward to it (flip back to true once done)
+    keep_alive: false              # true: leave running (e.g. between stages); irrelevant while manage: false
+    connection: port-forward       # port-forward | in-cluster | localhost
+    local_port: 8000
+    ready_timeout_min: 45          # wall-time budget for server readiness (model load)
+    job_name: qa                   # -> deployment+service vllm-server-qa
+    namespace: merlin
+    server_image: registry.example.com/anon/vllm_server:latest
+    Hardware:
+      gpu_count: 2                 # 4x b200 free right now -- TP=4 roughly halves wall time vs 2
+      server_gpu: [b200]
+      replicas: 1
+      gpu_memory_utilization: 0.85
+      enforce_eager: True
+    Model:
+      # Qwen3-32B: same family/era as the evaluated models (newest open family
+      # at project start); open weights keep MIMIC notes on compliant hardware.
+      base_model: "Qwen/Qwen3-32B"
+      # 32k context: discharge note + admission prompt + prediction reach ~11k
+      # input tokens at the tail (vs 8k on the eval servers). Don't go below 16k.
+      max_model_len: 32768
+      max_num_seqs: 128
+      max_num_batched_tokens: 32768
+      dtype: "auto"
+      thinking: False
+      lora: False
+      full_finetuning: False
+      lora_modules: ""
+
+  # --- data / logging --------------------------------------------------------
+  round: "1_4"                     # data/results/evaluation/{round}/eval_results_*
+  data_root: data
+  output_dir: data/qa              # local artifacts (source of truth)
+  wandb: true                      # mirror tables + artifacts to project merlin_qa
+  seed: 42
+  concurrency: 128                  # matches TP=4 headroom (max_num_seqs 128)
+  checkpoint_every: 500            # cases per chunk; cache flushed after each
+                                   # (data/qa/cache/; delete to force fresh judge calls)
+
+  # --- Stage 1: taxonomy induction (dev split) -------------------------------
+  # Keyword-grounded: every RCA error carries a snake_case keyword; keywords are
+  # clustered into classes (purely data-driven -- deliberately NOT seeded with
+  # prior analyses, so convergence with earlier findings is evidence), then
+  # samples are counted per cluster deterministically -> cluster_counts.csv.
+  stage1:
+    # Scoped down to the thrfull-icd2 dataset variant, best epoch each
+    # (checkpoint_best_epochs.csv / checkpoint_metrics.csv). Clean 2x2: base vs.
+    # full-FT, at 8B and 32B -- symmetric by design.
+    # LoRA is deliberately excluded from induction at BOTH scales (not just
+    # 8b-r128/r256, which are additionally degenerate -- low JSON validity,
+    # closed 2026-07-22 as an accepted paper limitation, r256 confirmed worse
+    # than r128). Even a healthy LoRA checkpoint (32b-r256) stays out of Stage 1:
+    # with only one adaptation-method instance at one scale, any pattern the
+    # clustering step attributes to "LoRA" is confounded with "32B". The
+    # taxonomy just needs to generalize across regimes (no adaptation vs. full
+    # adaptation) at both scales; LoRA still gets SCORED against it in Stage 2
+    # (see stage2.models below) -- induction and quantification are different
+    # jobs.
+    models:
+      - 8b-base
+      - 32b-base
+      - 8b-full-thrfull-icd2-e3
+      - 32b-full-thrfull-icd2-e3
+    sample_per_model: null         # null = ALL mispredicted dev cases per model
+    temperature: 0.4               # some diversity helps surface distinct causes
+    max_tokens: 1000               # RCA output is a short tag list now
+    min_keyword_count: 2           # singleton tags skip clustering, count as 'other'
+    cluster_input_tokens: 4000     # token budget per clustering prompt (chunked above);
+                                   # kept well under cluster_max_tokens so the judge has
+                                   # enough output room to enumerate every keyword
+    cluster_max_tokens: 6000       # auto-doubles on a truncated/empty response
+
+  # --- Stage 2: quantification (test split) -----------------------------------
+  # Test-split eval_results use SHORTER names than dev (dataset-variant suffix
+  # dropped -- only one "headline" test eval per checkpoint, so no ambiguity).
+  # test-8b-full-e3 confirmed via run_plan.yaml provenance comment to be the
+  # test-split eval of the same checkpoint as dev's 8b-full-thrfull-icd2-e3
+  # (ft-8b-full-thrfull2icd-v1-4, seed 42, epoch 3); test-32b-full-e3 and
+  # test-32b-r256-e4 follow the same pattern (epochs match dev config).
+  # No test-split eval exists for 8B LoRA r256 (only r128, which is moot -- 8B
+  # LoRA is excluded from QA entirely, see stage1 comment above).
+  stage2:
+    taxonomy_file: taxonomy.json   # the human-approved taxonomy in output_dir
+    # All 4 sizes, base + full-FT only (LoRA still excluded, see above).
+    # 06b/14b confirmed unambiguous: each only ever had one full-FT dataset
+    # variant, so the short test- name can't be confused with a different run
+    # (unlike 8b/32b, which had several dataset variants disambiguated by the
+    # dropped thrfull-icd2 suffix -- see note above).
+    models:
+      - test-06b-base
+      - test-06b-full-e4
+      - test-8b-base
+      - test-8b-full-e3
+      - test-14b-base
+      - test-14b-full-e3
+      - test-32b-base
+      - test-32b-full-e3
+#      - test-32b-r256-e4
+    # base->full delta at each size, plus full->LoRA at 32B. Each adds a
+    # delta_count__X_vs_Y / delta_rate__X_vs_Y column pair to qa_error_shift.csv.
+    shift_pairs:
+      - [test-06b-base, test-06b-full-e4]
+      - [test-8b-base, test-8b-full-e3]
+      - [test-14b-base, test-14b-full-e3]
+      - [test-32b-base, test-32b-full-e3]
+#      - [test-32b-full-e3, test-32b-r256-e4]
+    guided_decoding: true          # flat boolean object schema (array-bug-safe)
+    temperature: 0.0               # deterministic, reproducible verdicts
+    max_tokens: 512
+    limit: null                    # cap cases per model (quick smoke test)
+
+  # --- Validation: judge vs. human ------------------------------------------
+  validation:
+    sample_per_model: 25           # cases per model in the annotation template

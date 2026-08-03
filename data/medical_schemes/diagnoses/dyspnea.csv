@@ -1,0 +1,75 @@
+﻿Disease,Synonyms,icd10_regex,Loss of Consciousness,Agitation,Weight Loss,Fever,Chest Pain,Cough,Orthopnea,Dyspnea on exercise,Cyanosis,Clubbing,JVD,Peripheral Edema,Stridor,Wheezing,Crackles,Diminished Breath Sounds,Rhonchi,Hyperinflation,S3 or Gallop,Cardiac Murmur,Accentuated S2,Muffled Heart Sounds,Tachycardia or High Pulse
+Acute heart failure,acute decompensated heart failure; ADHF,^I50\d*$,0,1,-1,-1,0,1,0,1,1,-1,1,1,0,0,0,0,0,0,1,0,0,0,0
+Acute myocardial ischemia,acute coronary syndrome; myocardial ischemia,^(I20\d*|I24\d*|I21\d*)$,0,1,-1,0,1,-1,1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Alveolitis,hypersensitivity pneumonitis; extrinsic allergic alveolitis,^J67\d*$,-1,-1,-1,1,1,1,-1,-1,-1,-1,-1,-1,0,0,1,0,0,0,0,0,0,0,0
+Amyotrophic lateral sclerosis,ALS; Lou Gehrig disease,^G122\d*$,0,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Anaphylaxis,anaphylactic shock; anaphylactic reaction,^T782\d*$,0,1,-1,0,-1,-1,-1,-1,0,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Anemia,anaemia,^(D50\d*|D51\d*|D52\d*|D53\d*|D55\d*|D56\d*|D57\d*|D58\d*|D59\d*|D60\d*|D61\d*|D62\d*|D63\d*|D64\d*)$,-1,-1,1,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Angioedema,angio-oedema; angioneurotic edema,^T783\d*$,-1,-1,-1,-1,-1,0,1,-1,-1,0,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Anxiety,anxiety disorder,^F41\d*$,1,1,1,-1,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Ascites,abdominal ascites,^R18\d*$,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Aspiration,foreign body aspiration; aspiration pneumonitis,^(T17\d*|J69\d*)$,-1,1,-1,-1,0,1,-1,-1,1,-1,-1,-1,0,0,0,1,0,0,0,0,0,0,0
+Asthma attack,acute asthma exacerbation; status asthmaticus,^J45\d*$,-1,1,-1,-1,0,1,-1,-1,1,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Atelectasis,lung collapse; pulmonary atelectasis,^J981\d*$,-1,-1,-1,0,0,0,-1,-1,0,-1,-1,-1,0,1,0,1,0,0,0,0,0,0,0
+Bradyarrhythmia,bradycardia; sick sinus syndrome,^(I495\d*|R001)$,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Bronchial asthma,asthma,^J45\d*$,-1,1,0,-1,0,1,-1,-1,1,1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Bronchiectasis,bronchiectasis,^J47\d*$,-1,-1,-1,1,1,1,-1,-1,1,1,-1,-1,0,1,1,0,1,0,0,0,0,0,0
+Bronchiolitis,acute bronchiolitis,^J21\d*$,-1,-1,-1,1,0,1,-1,-1,-1,-1,-1,-1,0,1,1,0,0,0,0,0,0,0,0
+Bronchiolitis obliterans,obliterative bronchiolitis,^J448\d*$,-1,-1,-1,1,1,1,-1,-1,1,1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Bronchitis,acute bronchitis; chronic bronchitis,^(J20\d*|J40)$,-1,-1,-1,1,1,1,-1,-1,-1,-1,-1,-1,0,0,0,0,1,0,0,0,0,0,0
+Bronchospasm,bronchial spasm,^J9801\d*$,0,1,-1,-1,1,0,-1,-1,1,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Carbon monoxide poisoning,CO poisoning,^T58\d*$,1,-1,-1,-1,1,1,-1,-1,1,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Churg-1Strauss syndrome,eosinophilic granulomatosis with polyangiitis; EGPA,^M301\d*$,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Constrictive pericarditis,pericardial constriction,^I311$,-1,-1,-1,-1,1,-1,1,1,-1,-1,1,-1,0,0,0,0,0,0,0,0,0,1,0
+COPD,chronic obstructive pulmonary disease,^J44\d*$,-1,-1,0,-1,-1,1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0
+COPD exacerbation,AECOPD; acute exacerbation of chronic obstructive pulmonary disease,^J441\d*$,-1,1,-1,1,1,1,1,-1,1,0,0,0,0,1,1,0,1,0,0,0,0,0,0
+Coronary heart disease,coronary artery disease; ischemic heart disease,^I25\d*$,-1,0,-1,-1,1,-1,1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Croup,laryngotracheobronchitis,^J050\d*$,-1,1,-1,0,-1,1,-1,-1,1,-1,-1,-1,1,0,0,0,0,0,0,0,0,0,0
+Cystic fibrosis,CF,^E84\d*$,-1,-1,1,1,-1,0,-1,-1,1,1,-1,-1,0,1,1,0,1,0,0,0,0,0,0
+Depression,major depressive disorder,^(F32\d*|F33\d*)$,-1,1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Diabetic ketoacidosis,DKA,^(E10(1\d*)|E11(1\d*)|E13(1\d*))$,1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Emphysema,pulmonary emphysema,^J43\d*$,-1,-1,-1,-1,-1,0,-1,-1,1,1,-1,-1,0,1,0,0,0,1,0,0,0,0,0
+Encephalitis,brain inflammation; viral encephalitis,^(G04\d*|A86\d*)$,1,1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Epiglottitis,supraglottitis,^J051\d*$,-1,1,-1,1,-1,1,-1,-1,-1,-1,-1,-1,1,0,0,0,0,0,0,0,0,0,0
+Glycolytic enzyme defects (e.g. McArdle),McArdle disease; glycogen storage disease type V,^G710\d*$,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Goiter,thyroid goiter; nontoxic goiter,^(E04\d*|E01\d*)$,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Goodpasture's disease,anti-GBM disease; Goodpasture syndrome,^M310\d*$,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,-1,0,0,1,0,0,0,0,0,0,0,0
+Interstitial lung disease,ILD; pulmonary fibrosis,^J84\d*$,-1,-1,-1,-1,1,1,-1,-1,1,1,-1,-1,0,1,1,0,1,0,0,0,0,0,0
+Intracardiac shunt,atrial septal defect; ventricular septal defect; congenital cardiac shunt,^Q21\d*$,-1,-1,-1,-1,0,-1,0,1,1,1,-1,-1,0,0,0,0,0,0,0,1,0,0,0
+Kyphoscoliosis,kyphosis; scoliosis; kyphoscoliosis,^(M40\d*|M41\d*)$,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Laryngeal adenocarcinoma,laryngeal cancer,^C32\d*$,-1,-1,1,-1,-1,0,-1,-1,-1,-1,-1,-1,1,0,0,0,0,0,0,0,0,0,0
+Lung carcinoma,lung cancer; bronchogenic carcinoma,^C34\d*$,-1,-1,1,-1,-1,1,-1,-1,1,1,-1,-1,0,1,1,0,0,0,0,0,0,0,0
+Metabolic acidosis,acidosis,^E872\d*$,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Microscopic polyangiitis,MPA,^M317\d*$,-1,-1,0,1,1,-1,-1,-1,-1,-1,-1,0,0,1,0,0,0,0,0,0,0,0,0
+Mitochondrial diseases,mitochondrial disorder; mitochondrial myopathy,^E884\d*$,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Obesity,overweight; obesity,^E66\d*$,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Organophosphate poisoning,organophosphate toxicity,^T600\d*$,1,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,0,1,0,0,0,0,0,0,0,0,0
+Panic attack,panic disorder,^F410$,0,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Pericardial effusion,pericardial effusion,^I313\d*$,-1,-1,-1,0,1,1,0,0,-1,-1,1,-1,0,0,0,0,0,0,0,0,0,1,0
+Pericardial tamponade,cardiac tamponade,^I314$,0,-1,-1,-1,1,-1,0,0,-1,-1,1,-1,0,0,0,0,0,0,0,0,0,1,0
+Phrenic nerve palsy,diaphragmatic paralysis; phrenic nerve paralysis,^(G523\d*|J98(6\d*)?)$,-1,-1,-1,0,0,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Pleural effusion,hydrothorax,^J90$,-1,0,1,-1,1,-1,0,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,0,0,0
+Pneumonia,PNA; pneumonitis,^(J12\d*|J13\d*|J14\d*|J15\d*|J16\d*|J17\d*|J18\d*)$,-1,-1,-1,1,1,1,-1,-1,-1,-1,-1,-1,0,1,1,0,1,0,0,0,0,0,0
+Pneumothorax,collapsed lung,^J93\d*$,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,0,-1,0,0,0,1,0,0,0,0,0,0,0
+Polymyositis/dermatomyositis,polymyositis; dermatomyositis,^M33\d*$,-1,-1,0,-1,1,-1,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Pregnancy,pregnant state,^(Z33\d*|O09\d*|O99\d*)$,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Pulmonary edema,acute pulmonary edema,^J81\d*$,0,1,-1,1,1,1,1,1,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0
+Pulmonary embolism,PE,^I26\d*$,-1,-1,-1,-1,1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Pulmonary hypertension,PAH; pulmonary arterial hypertension,^I27\d*$,-1,-1,-1,-1,0,0,-1,-1,0,0,1,1,0,0,0,0,0,0,0,0,1,0,0
+Pulmonary right-1to-1left shunt,right-to-left shunt; pulmonary arteriovenous malformation,^(I280\d*|Q211\d*)$,-1,-1,-1,-1,0,1,-1,-1,1,1,-1,-1,0,0,0,1,0,0,0,0,0,0,0
+Renal failure,kidney failure; acute kidney failure; chronic kidney disease,^(N17\d*|N18\d*|N19)$,-1,-1,1,-1,-1,-1,1,1,-1,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Restrictive cardiomyopathy,restrictive cardiomyopathy,^I425\d*$,-1,-1,-1,-1,1,-1,1,1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Rhinosinusitis,sinusitis; acute sinusitis; chronic sinusitis; rhinosinusitis,^(J01\d*|J32\d*)$,-1,-1,-1,1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Rib fractures (flail chest),flail chest,^S225\d*$,-1,1,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Salicylate poisoning,aspirin poisoning; salicylate toxicity,^T390\d*$,1,-1,-1,-1,-1,-1,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Sarcoidosis,sarcoid; Besnier-Boeck disease,^D86\d*$,-1,-1,0,-1,0,1,-1,-1,1,-1,-1,-1,0,0,1,0,0,0,0,0,0,0,0
+Sepsis,septicemia; septic shock,^(A41\d*|R652\d*)$,0,-1,-1,1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Stroke,CVA; cerebral infarction; ischemic stroke,^(I63\d*|I64)$,1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Tachyarrhythmia,tachycardia; supraventricular tachycardia; atrial fibrillation/flutter,^(I47\d*|I48\d*|R000)$,0,1,-1,-1,0,-1,-1,-1,-1,-1,-1,-1,0,0,0,0,0,0,0,0,0,0,1
+Tracheal stenosis,tracheal stricture,^(J398\d*|J950\d*)$,-1,-1,-1,-1,0,0,-1,-1,1,1,-1,-1,1,0,0,0,0,0,0,0,0,0,0
+Traumatic brain injury,TBI; intracranial injury,^S06\d*$,1,0,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+Tuberculosis,TB,^(A15\d*|A16\d*|A17\d*|A18\d*|A19\d*)$,-1,-1,1,1,1,1,-1,-1,0,-1,-1,-1,0,1,1,0,1,0,0,0,0,0,0
+Valvular heart disease,valvular disease; valve disorder,^(I34\d*|I35\d*|I36\d*|I37\d*|I38\d*|I39\d*)$,-1,-1,-1,-1,1,-1,0,1,-1,-1,-1,-1,0,0,0,0,0,0,0,1,0,0,0
+Vocal cord dysfunction,paradoxical vocal fold motion; paradoxical vocal cord motion,^J383\d*$,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,1,0,0,0,0,0,0,0,0,0,0
+Vocal cord paralysis,vocal fold paralysis,^J380\d*$,-1,-1,-1,-1,-1,0,-1,-1,-1,-1,-1,-1,1,0,0,0,0,0,0,0,0,0,0
+Wegener's granulomatosis,granulomatosis with polyangiitis; GPA,^M313\d*$,-1,-1,0,-1,-1,1,-1,-1,-1,-1,-1,-1,0,1,1,0,0,0,0,0,0,0,0

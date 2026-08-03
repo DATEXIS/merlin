@@ -1,0 +1,204 @@
+# Single eval config for the v1.4 round (v1.4 is the standard; older configs
+# live in git history). Drives BOTH eval scripts:
+#
+#   python scripts/eval_checkpoints.py   [--config scripts/eval_config.yaml]
+#     -> sweeps every SFT checkpoint in `manifests:` (resumable via state file;
+#        epochs: [] = whatever epochs exist in each manifest at invocation)
+#   python scripts/eval_base_models.py   [--config scripts/eval_config.yaml]
+#     -> one-off eval of the raw base models in `models:` (no manifest, no
+#        state file; served straight from the HF hub)
+#
+# Both share Hardware/Model/Client_Job below so base models and their
+# fine-tuned descendants are scored identically and comparable in wandb.
+# eval_checkpoints.py overrides Model.lora / full_finetuning / lora_modules /
+# max_lora_rank per checkpoint; eval_base_models.py overrides
+# Hardware.gpu_count / server_gpu per model entry.
+#
+# Short job names: each manifest sets `short_name`, so eval jobs come out as
+# `{short_name}-e{epoch}` (safe: every eval shares the same fixed params, so
+# epoch alone disambiguates within a run; see eval_job_name()).
+
+namespace: merlin
+server_image: registry.example.com/anon/vllm_server:latest
+client_image: registry.example.com/anon/vllm_client:latest
+
+models_root: /ft_models/sft
+
+pvc:
+  tool_pod: tool-anon
+  ft_root: /ft_models
+  tool_root: /merlin_ddx
+
+# --- eval_checkpoints.py: SFT checkpoint sweep -------------------------------
+manifests:
+  - path: /ft_models/sft/ft-32b-lora-r256-icd2x-v1-4/checkpoints.json
+    short_name: 32b-r256-icd2
+  - path: /ft_models/sft/ft-32b-lora-r256-thrfull2icd-v1-4/checkpoints.json
+    short_name: 32b-r256-thrfull-icd2
+  - path: /ft_models/sft/ft-8b-full-icd2x-v1-4/checkpoints.json
+    short_name: 8b-full-icd2
+  - path: /ft_models/sft/ft-8b-full-thrfull2icd-v1-4/checkpoints.json
+    short_name: 8b-full-thrfull-icd2
+  - path: /ft_models/sft/ft-8b-full-mimic-v1-4/checkpoints.json
+    short_name: 8b-full-mimic
+  - path: /ft_models/sft/ft-8b-full-mimic-2icd-v1-4/checkpoints.json
+    short_name: 8b-full-mimic-icd2
+  - path: /ft_models/sft/ft-14b-lora-r128-merlin-v1-4/checkpoints.json
+    short_name: 14b-r128
+  - path: /ft_models/sft/ft-qwen3-06b-full-merlin-v1-4/checkpoints.json
+    short_name: 06b-full
+  - path: /ft_models/sft/ft-qwen3-06b-lora-r128-merlin-v1-4/checkpoints.json
+    short_name: 06b-r128
+  - path: /ft_models/sft/ft-32b-full-fsdp-thrfull2icd-v1-4/checkpoints.json
+    short_name: 32b-full-thrfull-icd2
+  - path: /ft_models/sft/ft-14b-full-fsdp-thrfull2icd-v1-4/checkpoints.json
+    short_name: 14b-full-thrfull-icd2
+  - path: /ft_models/sft/ft-8b-lora-r128-thrfull2icd-v1-4/checkpoints.json
+    short_name: 8b-r128-thrfull-icd2
+  - path: /ft_models/sft/ft-8b-lora-r128-thrfull2icd-lr5e5-v1-4/checkpoints.json
+    short_name: 8b-r128-thrfull-icd2-lr5e5
+  - path: /ft_models/sft/ft-8b-full-replace-v1-4/checkpoints.json
+    short_name: 8b-full-replace
+  - path: /ft_models/sft/ft-8b-full-thrhalf-v1-4/checkpoints.json
+    short_name: 8b-full-thrhalf
+  - path: /ft_models/sft/ft-8b-full-thrfull-v1-4/checkpoints.json
+    short_name: 8b-full-thrfull
+
+# []: sweep whatever epochs exist in each manifest right now.
+epochs: []
+
+# Fair-share cap, NOT a concurrency cap: bounds how many of THIS sweep's
+# servers may be simultaneously unscheduled (created but not yet Ready);
+# released the moment a pod goes Ready (see deploy_server()). No cap on how
+# many evals run in parallel once they land.
+max_pending: 2
+
+# --- eval_base_models.py: untuned baselines ----------------------------------
+# GPU per model per 2026-07-11 allocation; entries override Hardware per model.
+models:
+  - job_name: 32b-base
+    base_model: "Qwen/Qwen3-32B"
+    gpu_count: 2
+    server_gpu: b200
+  - job_name: 14b-base
+    base_model: "Qwen/Qwen3-14B"
+    gpu_count: 2
+    server_gpu: h200
+  - job_name: 8b-base
+    base_model: "Qwen/Qwen3-8B"
+    gpu_count: 1
+    server_gpu: h200
+  - job_name: 06b-base
+    base_model: "Qwen/Qwen3-0.6B"
+    gpu_count: 1
+    server_gpu: a100
+
+# --- scripts/eval_analysis.py: post-hoc analysis (download/reshape/plot) -----
+# Settings for the local analysis pipeline; stages are given on the command
+# line (`python scripts/eval_analysis.py wandb_check|new_evals|create_plots`),
+# everything else is configured here.
+Analysis:
+  entity: anon-entity
+  project: merlin-eval-1.4      # wandb eval project; also names the metrics CSV
+  output_dir: data              # root for eval_metrics_{project}.csv + results/evaluation/
+  paper_figures_dir: figures   # publication figures (repo-relative)
+  # Metric that picks the single "best" checkpoint per group in every figure.
+  primary_metric: "ICD F1 Macro"
+  # Which metrics to plot, in order (see ALL_METRICS in
+  # src/eval/checkpoint_plots.py for the choices).
+  metrics: ["ICD F1 Macro", "ICD F1 Micro", "V2 Recall@3", "V2 MRR"]
+  plots: both                   # quick | paper | both
+  filter: null                  # only collections whose name contains this substring
+  limit: null                   # new_evals: stop after N new collections (quick test)
+  isolate: True                 # new_evals: one subprocess per artifact (segfault-safe)
+  as_percent: True              # scale metrics by 100
+
+# --- scripts/eval_analysis.py `encoder_results` stage: encoder baselines -----
+# Encoder classifiers (BioClinical ModernBERT, PubMedBERT, S-Proto) bypass the
+# whole vLLM/wandb pipeline above -- they're precomputed prediction parquets
+# dropped straight into `results_dir` (added 2026-07-22, see
+# src/eval/encoder_metrics.py). This stage folds their ICD F1 Micro/Macro into
+# results_test_csv alongside the LLM checkpoint/base/external rows.
+Encoder:
+  results_dir: data/results/encoder
+  metrics_file: encoder_table_metrics.parquet   # lists encoder_model/model_export/prediction_files
+  results_test_csv: data/results/evaluation/results_test.csv
+
+# --- eval_analysis.py: CliniBench head-to-head -------------------------------
+# Recomputes CliniBench's encoder baselines from their RELEASED per-admission
+# predictions (not their published numbers) on our own test admissions, so the
+# encoder comparison in the paper is ours end-to-end. Added 2026-08-02, see
+# src/eval/clinibench_headtohead.py for the protocol and the reproduction audit.
+CliniBench:
+  # Their prediction dumps live outside the repo (they're large and not ours).
+  encoder_dir: ./data/results/encoder
+  splits_dir: data/mimic-iv/admission_notes    # <splits_dir>/icd-<v>/<dataset>/test_<v>_<dataset>.pq
+  eval_results_dir: data/results/evaluation/1_4
+  output_dir: data/results/evaluation
+
+  dataset: hosp
+  icd_version: 10          # our test split is ICD-10 HOSP only
+  icd_versions: [9, 10]    # reproduction only: their Table 2 averages both
+  top_n: 20                # their fixed output budget
+
+  # Fail loudly if the three rows that reproduced exactly on 2026-08-02 stop
+  # doing so -- that means our metric code changed, or they re-exported.
+  strict_reproduction: true
+
+  # Our generative runs: eval_results collection -> display name.
+  models:
+    test-32b-full-e3: MERLIN-32B
+    test-8b-full-e3: MERLIN-8B
+
+  # Encoder configs to score, as [model, config]. "untuned"/"tuned" is about
+  # THRESHOLD tuning; both are fine-tuned classifiers. GatorTronS/untuned is
+  # scored but flagged provisional -- its released predictions disagree with
+  # its own published row (recall off ~5 pts) while its three siblings match
+  # exactly. Prefer BiomedBERT/untuned for any un-threshold-tuned claim.
+  encoders:
+    - [GatorTronS, tuned]
+    - [GatorTronS, untuned]
+    - [BiomedBERT, tuned]
+    - [BiomedBERT, untuned]
+
+# --- shared ------------------------------------------------------------------
+Hardware:
+  # Eligible set, not a priority order: nodeAffinity `operator: In` lets k8s
+  # schedule onto whichever is actually free (client-side round-robin was
+  # broken in practice: cycle index reset every poll, everything hit b200).
+  server_gpu: [b200, h200, h100]
+  client_gpu: [p100, v100, a100]   # same true-OR mechanism (client_template.py)
+  gpu_count: 1
+  replicas: 1
+  gpu_memory_utilization: 0.85
+  enforce_eager: True
+
+Model:
+  max_model_len: 8192
+  max_num_seqs: 512
+  max_num_batched_tokens: 8192
+  dtype: "auto"
+  thinking: False
+  # Base-model serving defaults; eval_checkpoints.py overrides these (plus
+  # lora_modules/max_lora_rank) per checkpoint from the manifest.
+  lora: False
+  full_finetuning: False
+  lora_modules: ""   # unused when lora=False; template still renders it
+
+Client_Job:
+  chief_complaint: "all"
+  file_name: "test_dataset"
+  split: "dev"
+  num_choices: 4
+  num_samples: 100000
+  concurrency: 64
+  start_verifier: 1
+  budget: [4, 4, 4, 4]
+  temperatures: [0.4, 0.4, 0.4, 0.4]
+  max_tokens: [2000, 2000, 2000, 2200]
+  thresholds: [0.6, 0.5, 0.8, 0.55]
+  seed: 42
+  eval_mode: True
+  merlin_mode: True
+  think_about_labs: False
+  guided_decoding: False
