@@ -25,11 +25,11 @@ def extract_events_within_hours(labevents, hadm_id_list, hours=12, first_only=Tr
 
     Parameters
     ----------
-    hadm_id_list : list-like
+    hadm_id_list: list-like
         List of hospital admission IDs to filter.
-    hours : int
+    hours: int
         Time window (in hours) from admission.
-    first_only : bool, optional (default=False)
+    first_only: bool, optional (default=False)
         If True, keep only the first event per (hadm_id, itemid).
     """
     mask = (
@@ -61,7 +61,7 @@ def format_lab_events_for_note(labevents: pd.DataFrame) -> pd.DataFrame:
         ]
         # # include comments only when it is **not** NaN
         # if pd.notna(r['comments']):
-        #     parts.append(str(r['comments']))
+        # parts.append(str(r['comments']))
 
         # drop 'nan' / 'None' artefacts that come from str()-ing missing values
         return ' '.join(p for p in parts if p.lower() not in {'nan', 'none', ''})

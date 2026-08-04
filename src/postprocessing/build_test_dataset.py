@@ -32,9 +32,9 @@ def build_test_dataset(combined_path: str, output_path: str) -> pd.DataFrame:
 
     Parameters
     ----------
-    combined_path : str
+    combined_path: str
         Path to combined.pq (output of merge_gen_data.combine_models).
-    output_path : str
+    output_path: str
         Destination path for the eval parquet file.
     """
     df = pd.read_parquet(combined_path, columns=TEST_DATASET_COLUMNS)

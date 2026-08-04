@@ -43,12 +43,12 @@ def assert_assistant_masking(trainer):
 def load_model(args, accelerator):
     """Load model + tokenizer. use_lora selects LoRA vs full-parameter."""
     full = not args.use_lora
-    # Two full-FT paths (see the design notes):
-    #  - STANDARD (default): load normally + requires_grad on all params. Works
-    #    multi-GPU (DDP-safe), fast, stable for 8B+. This is the proven path.
-    #  - UNSLOTH (unsloth_full_finetuning=True): Unsloth's full_finetuning. Use only
-    #    for models where STANDARD breaks (0.6B NaNs + crawls — likely its tied
-    #    embeddings). It enables gradient offload that deadlocks DDP -> SINGLE-GPU.
+    # Two full-FT paths :
+    # - STANDARD (default): load normally + requires_grad on all params. Works
+    # multi-GPU (DDP-safe), fast, stable for 8B+. This is the proven path.
+    # - UNSLOTH (unsloth_full_finetuning=True): Unsloth's full_finetuning. Use only
+    # for models where STANDARD breaks (0.6B NaNs + crawls — likely its tied
+    # embeddings). It enables gradient offload that deadlocks DDP -> SINGLE-GPU.
     use_uft = full and args.unsloth_full_finetuning
     model, tokenizer = FastLanguageModel.from_pretrained(
         model_name=args.model_name,

@@ -1,6 +1,6 @@
-# Error-bar seed for the main bar plot (src/eval/paper_plots.py
-# plot_main_figure_2x1 / plot_main_figure_test): re-eval the SAME already-
-# trained checkpoints + base models at a different Client_Job.seed, so the
+# Error-bar seed for the main bar plot (src/eval/main_figure_plots_macro.py):
+# re-eval the SAME already-trained checkpoints + base models at a different
+# Client_Job.seed, so the
 # generator-verifier pipeline's sampling varies but nothing is retrained.
 # NO NEW SFT -- this only reruns eval_base_models.py / eval_checkpoints.py.
 # This file is the one retained example of a seed-repeat eval config: it
@@ -20,7 +20,7 @@
 # and data/results/evaluation/results_test.csv): 06b-full e4, 14b-full e3,
 # 32b-full e3.
 #
-# GPU allocation per the 2026-07-23 plan:
+# GPU allocation:
 #   0.6b -> server a100, client p100
 #   14b, 32b -> server b200, client p100
 #

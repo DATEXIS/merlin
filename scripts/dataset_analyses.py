@@ -8,7 +8,7 @@ instead of passing flags.
 Each analysis is its own module under src/eval/dataset_analyses/; this
 script just calls them and saves figures to figures/dataset_analyses/
 (repo-relative, alongside the existing bars_8b_full/lora dataset-ablation
-figures from src/eval/paper_plots.py).
+figures).
 
 Usage:
     python scripts/dataset_analyses.py
@@ -21,10 +21,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from paper.colors import BLUE, YELLOW, tint
+from src.eval.colors import BLUE, YELLOW, tint
 
 # --- ICD 3-digit long-tail -- edit these to tweak the figure -----------------
-# Single-model eval .pq (one row per hadm_id); non-"mimic" filename = Merlin.
+# Single-model eval.pq (one row per hadm_id); non-"mimic" filename = Merlin.
 ICD_LONGTAIL = {
     "input": str(REPO_ROOT / "data/results/gen_data/Qwen3-32B.pq"),
     "digits": 3,

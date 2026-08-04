@@ -301,27 +301,27 @@ def build_instruction_dataset(
 
     Parameters
     ----------
-    gen_data_dir : str
+    gen_data_dir: str
         Directory with the merged per-model ``<model>.pq`` files (output of
         merge_gen_data.merge_all).
-    output_path : str
+    output_path: str
         Destination parquet path.
-    thresholds : dict[int, float] | None
+    thresholds: dict[int, float] | None
         Per-verifier acceptance thresholds. A row keeps its reasoning trace iff
         ``score > 0 and score >= thresholds[verifier]``; otherwise it becomes a
         mimic-style no-reasoning row (or is dropped, see ``drop_below_threshold``).
         ``None`` means "only nan/0 fall back" (effective threshold just above 0).
-    models : list[str] | None
+    models: list[str] | None
         Which teacher models to include (per-model file stems). ``None`` = all.
-    best_per_id : bool
+    best_per_id: bool
         If True, keep only the highest-scoring model's row per
         (hadm_id, verifier) before rendering.
-    duplicate_verifiers : tuple[int, ...]
+    duplicate_verifiers: tuple[int, ...]
         Verifier steps to include twice per patient per model (e.g. (4,) to
         oversample the ICD-prediction step). Incompatible with
         best_per_id=True: that dedups on (hadm_id, Verifier), which would
         just collapse the duplicates back down to one row.
-    drop_below_threshold : bool
+    drop_below_threshold: bool
         Ablation switch. If True, every row that would otherwise fall back to
         the mimic-style no-reasoning target (nan/0 score, or score below its
         verifier's threshold) is dropped from the dataset instead of kept as a

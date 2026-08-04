@@ -11,12 +11,12 @@ Arm 2, "mimic-icd2" (the traces-vs-no-traces ablation's other arm, "no
 reasoning traces" / label-only): ft-8b-full-mimic-2icd-v1-4, seed 42 +
 43/44 -- see run_plan.yaml runs 16-17. Each seed trained the full 4 epochs
 (unlike thrfull2icd, epoch 4 is the dev-selected best here, not an early-stop
-point -- we confirmed 2026-07-30 that epoch 4 is best for both new seeds
+point -- we confirmed that epoch 4 is best for both new seeds
 too, matching seed 42).
 
 Metrics plotted and colors both come from src/eval/robustness_plot_config.py
 -- edit that file, not this one, to change either. Metric selection matches
-checkpoint_plots.DEFAULT_METRIC_SELECTION (the same 4 metrics every other
+plot_common.DEFAULT_METRIC_SELECTION (the same 4 metrics every other
 bar plot in the paper uses), so these figures stay comparable to the rest.
 
 Data source: data/eval_metrics_merlin-eval-1.4.csv, rows named in each arm's
@@ -30,18 +30,16 @@ Outputs per arm (data/results/evaluation/, figures/main/):
   {csv_stem}_per_seed_metrics.csv / {csv_stem}_summary.csv, {fig_stem}.png/.pdf
 thrfull2icd keeps its original filenames (csv_stem="robustness", i.e.
 robustness_per_seed_metrics.csv / robustness_summary.csv, fig_stem=
-"robustness_seed_variance") for backward compat with paper/
-the revision notes and any .tex that already points at them.
+"robustness_seed_variance") for backward compatibility with anything that already points at them.
 
 Plus one combined figure once every arm in COMBINED_ARM_ORDER has run: a 1
-row x N-arm panel (repo's "2x1" convention -- see paper_plots.
-plot_main_figure_2x1), shared y-axis, so the with-traces/no-traces arms are
+row x N-arm panel (repo's "2x1" convention -- the shared 2x1 layout), shared y-axis, so the with-traces/no-traces arms are
 directly comparable side by side: figures/main/
 robustness_seed_variance_2x1.png/.pdf. No separate CSV -- the two per-arm
 CSVs above already have the underlying numbers.
 
 Run as `python -m src.eval.robustness_plots` from repo root (same
-convention as paper_plots.py -- this module does `from src...` imports so a
+convention -- this module does `from src...` imports so a
 plain `python src/eval/robustness_plots.py` won't resolve them). Regenerates
 every arm in ARMS by default (which also produces the combined figure);
 `--arm mimic-icd2` runs just one arm and skips the combined figure.
@@ -93,7 +91,7 @@ ARMS = {
 }
 
 # Combined side-by-side figure (repo convention: "AxB" = A columns, B row(s)
-# -- see paper_plots.plot_main_figure_2x1's plt.subplots(1, 2, ...)), one
+# -- the shared 1x2 subplot layout), one
 # panel per arm sharing a y-axis so magnitudes are directly comparable.
 COMBINED_ARM_ORDER = ["thrfull2icd", "mimic-icd2"]
 COMBINED_FIG_STEM = "robustness_seed_variance_2x1"
@@ -116,7 +114,7 @@ def load_per_seed(rows: dict, in_csv: Path = IN_CSV) -> pd.DataFrame:
 def write_csvs(sub: pd.DataFrame, csv_stem: str, out_dir: Path = OUT_DATA_DIR):
     """Per-seed raw values + summary stats (mean/std/min/max/range/cv_%) --
     the same shape as the original hand-produced robustness_per_seed_metrics
-    .csv / robustness_summary.csv (2026-07-17), now generated here instead of
+    .csv / robustness_summary.csv, now generated here instead of
     out-of-band so a new arm doesn't need its own one-off notebook cell."""
     out_dir.mkdir(parents=True, exist_ok=True)
     per_seed_path = out_dir / f"{csv_stem}_per_seed_metrics.csv"
@@ -152,7 +150,7 @@ def _draw_arm(ax, sub: pd.DataFrame, title: str, show_ylabel: bool = True, fonts
     # Solid FULL_COLOR fill (no alpha wash) so this bar matches every other
     # full-FT bar in the paper instead of reading as a separate, paler
     # palette. Error bar gets the same white-halo treatment as
-    # methodology_bars_plot.py: a thick white line under a thin dark one, so
+    # a thick white line under a thin dark one, so
     # it stays legible wherever it crosses a seed marker or the bar edge.
     ax.bar(x, means, color=BAR_COLOR, edgecolor="#1F1F1F", linewidth=1.2, zorder=2)
     ax.errorbar(x, means, yerr=stds, fmt="none", ecolor="white",
@@ -191,7 +189,7 @@ def plot_robustness_combined(subs: dict, arm_order: list = None,
                              fig_stem: str = COMBINED_FIG_STEM, out_dir: Path = OUT_FIG_DIR):
     """Side-by-side (1 row x N arms) comparison, one panel per arm, sharing a
     y-axis so the two arms' magnitudes/error bars are directly comparable --
-    same convention as paper_plots.plot_main_figure_2x1 (1 row, 2 columns)."""
+    the shared 2x1 convention (1 row, 2 columns)."""
     arm_order = arm_order or list(subs)
     n = len(arm_order)
     fig, axes = plt.subplots(1, n, figsize=(6.5 * n / 1.4, 4.5), sharey=True)
@@ -303,14 +301,10 @@ def run_arm(arm_name: str):
     return sub
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--arm", choices=list(ARMS), default=None,
-                    help="Regenerate just one arm (default: all arms in ARMS). "
-                         "The combined 2x1 figure only runs when every arm in "
-                         "COMBINED_ARM_ORDER is included, so --arm skips it.")
-    args = ap.parse_args()
-    arm_names = [args.arm] if args.arm else list(ARMS)
+def run_all(arm_names=None):
+    """Regenerate every arm and the combined figures. argparse-free, so
+    scripts/eval_analysis.py can call it directly."""
+    arm_names = arm_names or list(ARMS)
     subs = {}
     for arm_name in arm_names:
         print(f"=== {arm_name} ===")
@@ -321,6 +315,17 @@ def main():
         plot_robustness_combined(subs, COMBINED_ARM_ORDER)
         print("=== combined (grouped, one panel) ===")
         plot_robustness_grouped(subs, COMBINED_ARM_ORDER)
+    return subs
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--arm", choices=list(ARMS), default=None,
+                    help="Regenerate just one arm (default: all arms in ARMS). "
+                         "The combined 2x1 figure only runs when every arm in "
+                         "COMBINED_ARM_ORDER is included, so --arm skips it.")
+    args = ap.parse_args()
+    run_all([args.arm] if args.arm else None)
 
 
 if __name__ == "__main__":

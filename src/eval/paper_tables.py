@@ -4,13 +4,13 @@
     python -m src.eval.paper_tables
 
 Writes into tables/:
-    table_main.tex      held-out test split, mean +- std over eval seeds
-    table_ablation.tex  8B data-construction ablation (dev split)
-    table_qa.tex        deterministic ICD error decomposition (test split)
+    table_main.tex held-out test split, mean +- std over eval seeds
+    table_ablation.tex 8B data-construction ablation (dev split)
+    table_qa.tex deterministic ICD error decomposition (test split)
 
 Why generate rather than hand-write: the v1 tables were typed by hand and
 drifted from the CSVs twice (the thrfulldrop relabel and the seed-43/44
-sweep both changed numbers that stayed stale in the .tex). Everything here
+sweep both changed numbers that stayed stale in the.tex). Everything here
 reads the same files the figures read, so a table can no longer disagree
 with a plot.
 
@@ -24,7 +24,7 @@ data/eval_metrics_merlin-eval-1.4.csv
 data/results/evaluation/results_dev.csv + checkpoint_best_epochs.csv
     the 8B dataset ablation at each variant's dev-selected best epoch.
 data/qa/deterministic_rates.csv
-    scripts/qa_deterministic.py output; no LLM judge is used any more.
+    scripts/qa_deterministic.py output.
 
 Seeds: rows whose collection differs only by a `-seed43`/`-seed44` suffix
 are averaged and reported as mean +- sample std. These are EVAL repeats of
@@ -62,7 +62,7 @@ def _load_eval() -> pd.DataFrame:
 
 # Placeholder printed in the +- slot of a row that still has only one eval
 # seed, so a pending rerun is visible in the typeset table rather than
-# silently absent (2026-07-24: "placeholders for pending externals").
+# silently absent ("placeholders for pending externals").
 PENDING_STD = "{\\scriptsize\\textcolor{gray}{$\\pm$--}}"
 
 
@@ -94,12 +94,11 @@ def _fmt(v: float, digits: int = 1, bold: bool = False) -> str:
 # --------------------------------------------------------------------------
 # Table 1 -- main results
 # --------------------------------------------------------------------------
-# Diagnoses Recall@1 RESTORED to the main table (2026-07-28), reversing
-# the 2026-07-24 decision to drop it. It is the pipeline's curation gate, so
+# Diagnoses Recall@1 is in the main table.
 # hiding it looks like hiding the 32B rank-1 regression; the paper now reports
 # it and discusses the regression directly in "Diagnosis Ranking".
 #
-# JSON Valid dropped, ICD Recall/Precision Macro added (2026-07-27):
+# JSON Valid dropped, ICD Recall/Precision Macro added:
 # decomposes the existing F1 Macro column into its components, mirroring how
 # F1 Micro already sits next to F1 Macro -- deliberately macro, not micro,
 # Recall/Precision, since macro is the paper's stated primary metric
@@ -107,7 +106,7 @@ def _fmt(v: float, digits: int = 1, bold: bool = False) -> str:
 # the headline table; it is still discussed in prose where it matters (the
 # 14B epoch trade-off).
 #
-# NormDot (DotProduct) REMOVED from the main table (2026-07-30, reviewer
+# NormDot (DotProduct) is not in the main table (
 # feedback for v3): the paper itself argues that NormDot scores agreement
 # with a disease-level symptom prototype rather than per-note extraction
 # accuracy, so presenting it as one of three evaluated tasks and then
@@ -127,7 +126,7 @@ MAIN_METRICS = [
 
 # (latex row label, collection group, kind)
 #
-# Encoder row promoted into the main table (2026-07-29). BioClinical
+# Encoder row is in the main table. BioClinical
 # ModernBERT's macro-F1 moved 4.3 -> 8.2 on the reseeded run, which makes it a
 # real baseline rather than the collapsed one the appendix used to describe --
 # and encoder classifiers are the incumbent method for this task (we align the
@@ -142,7 +141,7 @@ MAIN_METRICS = [
 # map notes into a fixed label space without exposing intermediate reasoning,
 # and three empty cells show it rather than assert it.
 #
-# RESOLVED (2026-07-29): the encoder predictions used to sit on a DIFFERENT
+# Note: the encoder predictions sat on a DIFFERENT
 # test split -- 2,350 admissions, only 441 shared with the 2,184-case MERLIN
 # test split, and 1,639 of them were MERLIN *train* admissions. We supplied a
 # corrected export (data/results/encoder_results_29_07, hadm_ids verified 1:1
@@ -315,7 +314,7 @@ def table_ablation() -> str:
 
 # --------------------------------------------------------------------------
 # Table 3 -- deterministic ICD error decomposition, merged with the
-# head/body/tail frequency-stratum F1 (2026-07-24: put the long-tail
+# head/body/tail frequency-stratum F1 (put the long-tail
 # numbers in the same table as the error decomposition rather than a
 # separate one -- both are "where the ICD gain comes from" cuts of the same
 # base-vs-full comparison, at the same four sizes, so they share a row
@@ -323,7 +322,7 @@ def table_ablation() -> str:
 # into longtail_strata.csv via LONGTAIL_SIZE.
 # --------------------------------------------------------------------------
 QA_ROWS = [("0.6B", "06b"), ("8B", "8b"), ("14B", "14b"), ("32B", "32b")]
-# Redesigned 2026-07-27 (analyses-table redesign): JSON is out everywhere
+# Redesigned (analyses-table redesign): JSON is out everywhere
 # and the old missed_X% columns (lower-is-better, sitting next to everything
 # else higher-is-better) are replaced by real class-conditional F1 for
 # history/medication/chronic (scripts/qa_deterministic.py::score_model) and a
@@ -415,9 +414,8 @@ LORA_ROWS = [
 ]
 
 
-# ICD Recall/Precision Macro added 2026-07-28 so this appendix table
+# ICD Recall/Precision Macro added: so this appendix table
 # carries the same ICD block as the main table. Seed-42 values for these two
-# columns came from src/eval/backfill_eval_metrics_pr.py.
 LORA_METRICS = ("DotProduct", "V2 Recall@1", "V2 Recall@3",
                 "ICD F1 Micro", "ICD F1 Macro",
                 "ICD Recall Macro", "ICD Precision Macro")
@@ -464,7 +462,7 @@ def table_lora(df: pd.DataFrame) -> str:
 # --------------------------------------------------------------------------
 # Appendix -- symptom-extraction diagnostic (NormDot)
 # --------------------------------------------------------------------------
-# Added 2026-07-30 when NormDot left the main table. This is deliberately a
+# This is deliberately a
 # one-metric table in the appendix rather than a column in Table 2: NormDot
 # scores agreement with a disease-level symptom prototype, so it documents
 # the pipeline's first acceptance gate and nothing is claimed about

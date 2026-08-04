@@ -1,12 +1,12 @@
 """Full-parameter fine-tuning via Accelerate FSDP, for models whose optimizer
-state doesn't fit replicated on a single GPU (32B+ full-FT, per the design notes: gotchas: "Unsloth is DDP-only ... full-parameter 32B cannot run on Unsloth --
+state doesn't fit replicated on a single GPU (32B+ full-FT, note: Unsloth is DDP-only... full-parameter 32B cannot run on Unsloth --
 it needs FSDP/DeepSpeed ZeRO-3, a non-Unsloth stack").
 
 Deliberately does NOT import unsloth (see entrypoint.py's lazy-import comment):
 Unsloth monkey-patches transformers process-wide on import, which is exactly
 what makes its DDP-only multi-GPU path incompatible with FSDP sharding/hooks.
 This module loads a plain transformers model instead, and lets Accelerate's
-FSDP plugin (configured via `accelerate launch --use_fsdp ...` CLI flags in
+FSDP plugin (configured via `accelerate launch --use_fsdp...` CLI flags in
 src/kubernetes/fine_tuning_template.py) do the sharding.
 
 Reuses data_formatting.py and manifest_callback.py from the Unsloth path
@@ -78,7 +78,7 @@ def load_model(args):
 def train(args):
     assert not args.use_lora, "training_fsdp.py is full-parameter only -- use training.py for LoRA."
     assert args.packing, "FSDP path requires packing=True (full-sequence loss); matches the multi-GPU combo in run_plan.yaml."
-    assert not args.assistant_only_loss, "assistant_only_loss is unsupported here (single-GPU-only trick, see the design notes); use packing=True instead."
+    assert not args.assistant_only_loss, "assistant_only_loss is unsupported here (single-GPU-only trick); use packing=True instead."
 
     set_seed(args.seed)
     setup_hf_cache(args)

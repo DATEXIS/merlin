@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Reshape scripts/eval_analysis.py new_evals's flat eval_metrics CSV into the
-long format src/eval/checkpoint_plots.py needs: one row per
+long format src/eval/plot_common.py needs: one row per
 (model_size, dataset, epoch) for every fine-tuned checkpoint family in
 scripts/eval_config.yaml, plus one row per untuned base
 model (no epoch -- the `{size}b-base` entries from
@@ -8,22 +8,22 @@ scripts/eval_config.yaml, evaluated in the same
 merlin-eval-1.4 wandb project so they land in the same input CSV).
 
 Distinct from scripts/compute_checkpoint_metrics_local.py (the v1.3 sibling):
-that script reads raw .pq files from wandb_downloads/eval_results/ and
+that script reads raw.pq files from wandb_downloads/eval_results/ and
 hand-computes ICD F1/MRR/etc. itself. This script instead just parses names
 out of the already-computed metrics CSV (src/eval/eval_results.py) -- no metric
 math here, evaluate_experiment() already did it.
 
-Lives in src/eval/ (moved from scripts/ on 2026-07-15) alongside the rest of
+Lives in src/eval/ (moved from scripts/) alongside the rest of
 the post-hoc eval/analysis code, since it's a data-reshaping step in that
 pipeline rather than a one-off script. `scripts/eval_analysis.py new_evals`
 runs this reshape itself -- run that, or
 `python -m src.eval.checkpoint_metrics` from repo root.
 
 scripts/eval_analysis.py new_evals calls this module's main() itself right
-after it writes eval_metrics_merlin-eval-1.4.csv (2026-07-15 -- the two used
+after it writes eval_metrics_merlin-eval-1.4.csv (the two used
 to be separate manual steps), so in the normal case you don't need to run
 this on its own at all:
-    python scripts/eval_analysis.py new_evals     # writes both CSVs
+    python scripts/eval_analysis.py new_evals # writes both CSVs
     python scripts/eval_analysis.py create_plots --plots quick
     python scripts/eval_analysis.py create_plots --plots paper
 
@@ -53,20 +53,20 @@ FAMILY_INFO = {
     "8b-full-thrfull-icd2":  ("8b",  "thrfull-icd2", "full"),
     "8b-full-mimic":         ("8b",  "mimic",        "full"),
     "8b-full-mimic-icd2":    ("8b",  "mimic-icd2",   "full"),
-    # Added 2026-07-12: 8B ablation of thrfull-icd2 that DROPS below-threshold/
+    # 8B ablation of thrfull-icd2 that DROPS below-threshold/
     # nan/0 rows instead of mimic-fallback'ing them (drop_below_threshold=True
     # in build_instructions.py) -- a different dataset/treatment from
     # "thrfull-icd2" above, not a rename of it, so it gets its own dataset
     # label rather than sharing that key.
     "8b-full-thrfulldrop":   ("8b",  "thrfulldrop",  "full"),
-    # NOTE (2026-07-15): there is no 8B LoRA v1.4 data yet. A "8b-r128-
+    # NOTE: there is no 8B LoRA v1.4 data yet. A "8b-r128-
     # thrfulldrop" entry briefly lived here, but its numbers turned out to be
     # stale v1.3 data mislabeled under a v1.4-looking name (identical to
     # 8b-full-thrfulldrop at every epoch) -- removed. We are starting real 8B
     # LoRA (r128) SFT runs now; once those are evaluated, add their
     # short_name(s) here as ("8b", <dataset>, "lora") the same way the other
     # families above are wired in.
-    # Added 2026-07-11: 14B-lora-r128, 0.6B-full, 0.6B-lora-r128 -- all on the
+    # 14B-lora-r128, 0.6B-full, 0.6B-lora-r128 -- all on the
     # single canonical merlin_thrfull_icd2x dataset (same one the 32b/8b
     # families above call "thrfull-icd2"), varying model size/mode instead of
     # dataset. Note "0.6b-full" and "0.6b-r128" share the same (model_size,
@@ -77,12 +77,12 @@ FAMILY_INFO = {
     "14b-r128":  ("14b",  "thrfull-icd2", "lora"),
     "06b-r128":  ("0.6b", "thrfull-icd2", "lora"),
     "06b-full":  ("0.6b", "thrfull-icd2", "full"),
-    # Added 2026-07-13: full fine-tune runs for 14b and 32b on thrfull-icd2,
+    # full fine-tune runs for 14b and 32b on thrfull-icd2,
     # giving those two sizes a real full-vs-lora pair too (previously
     # lora-only).
     "14b-full-thrfull-icd2": ("14b", "thrfull-icd2", "full"),
     "32b-full-thrfull-icd2": ("32b", "thrfull-icd2", "full"),
-    # Added 2026-07-16: run_plan.yaml runs 8-11 (see
+    # run_plan.yaml runs 8-11 (see
     # eval_config.yaml) have now been evaluated -- 8B LoRA
     # (r128) finally exists (resolves the "no 8B LoRA v1.4 data yet" note
     # that used to sit here), plus three more 8B full-FT dataset ablations
@@ -90,9 +90,9 @@ FAMILY_INFO = {
     # above -- see data/results/instructions/merlin-v1.4/ for the underlying
     # dataset variants).
     #
-    # CORRECTION (2026-07-21): this same 2026-07-16 edit also re-added a
+    # Note: an earlier edit also re-added a
     # "8b-r128-thrfulldrop" entry (tagged "lora") -- this is the exact bug the
-    # 2026-07-15 note above already caught and removed once: there is no real
+    # note above already caught and removed once: there is no real
     # 8B LoRA thrfulldrop run. Its eval_metrics rows are byte-for-byte
     # identical to "8b-full-thrfulldrop" at every epoch (confirmed in
     # data/eval_metrics_merlin-eval-1.4.csv), i.e. it's the full-FT run's
@@ -111,7 +111,7 @@ FAMILY_INFO = {
 }
 
 # The held-out TEST-split sweep (originally driven by
-# the test-split config -- since cleaned up/superseded, same as
+# the test-split config, same as
 # the one-off configs noted on FAMILY_INFO above): the size x mode grid
 # (lora/full at 0.6B/8B/14B/32B), all trained on the single canonical
 # merlin_thrfull_icd2x dataset. Unlike FAMILY_INFO above, each of these
@@ -119,7 +119,7 @@ FAMILY_INFO = {
 # selected on dev by ICD F1 Macro -- so there's no per-family epoch sweep to
 # disambiguate, just a single short_name -> (model_size, mode) lookup. Job
 # names come out as "test-{short_name suffix}-e{epoch}" e.g. "test-8b-full-e3".
-# "test-8b-r128" (8B LoRA on test) added 2026-07-17 once that SFT run
+# "test-8b-r128" (8B LoRA on test) added: once that SFT run
 # finished dev-eval and was run on test -- completes the size x mode grid.
 TEST_FAMILY_INFO = {
     "test-06b-full": ("0.6b", "full"),
@@ -145,12 +145,12 @@ FAMILY_RE = re.compile(r"^(?P<family>.+)-e(?P<epoch>\d+)$")
 BASE_RE = re.compile(r"^(?P<size>\d+)b-base$")
 
 # job_name convention from eval_base_models_config_test.yaml (added
-# 2026-07-21): "test-{digits}b-base" -- a REAL test-split eval of the raw
+# "test-{digits}b-base" -- a REAL test-split eval of the raw
 # base models (test-32b-base / test-14b-base / test-8b-base / test-06b-base),
 # not the same number reused from BASE_RE's dev-split run. Until this run
 # existed, every test-split figure's "base" bar/column silently reused the
 # DEV-split base score (see plot_main_figure_test's docstring in
-# paper_plots.py) -- that was a documented stand-in, not a bug, but now that
+# the figure modules) -- that was a documented stand-in, not a bug, but now that
 # real test-split base numbers exist they should be preferred wherever a
 # test-split figure needs a base reference.
 TEST_BASE_RE = re.compile(r"^test-(?P<size>\d+)b-base$")
@@ -159,9 +159,9 @@ TEST_BASE_RE = re.compile(r"^test-(?P<size>\d+)b-base$")
 # "test-{model-slug}" -- one-off TEST-split spot-checks of external/competitor
 # models, not part of the Qwen3 size/mode grid (no fine-tuning, no epoch
 # sweep, `model_size` doesn't apply so figures that group by size skip them
-# via the usual `.dropna()` on that column). Added 2026-07-21: Baichuan-M2-32B
+# via the usual `.dropna()` on that column). Baichuan-M2-32B
 # and MEDITRON3-8B; MedGemma-27B-it and Llama-3.3-70B-Instruct queued next
-# (see the revision notes, "Competitor / base-model baseline
+# (see "competitor / base-model baseline
 # testing"). Explicit allowlist rather than a generic "test-*" catchall, so
 # an unrecognized test- collection still lands in the "Skipped" list instead
 # of silently misparsing.
@@ -173,11 +173,11 @@ EXTERNAL_TEST_MODELS = {
 }
 
 # Eval-time-only seed sweep (scripts/eval_error_bars_config_seed43[.yaml|
-# _8b.yaml] / _seed44[...], added 2026-07-23): re-evals the SAME seed-42-
+# _8b.yaml] / _seed44[...], added ): re-evals the SAME seed-42-
 # trained checkpoints/base models at a different Client_Job.seed (43 or 44)
 # -- NO retraining, just resampling the generator-verifier pipeline -- so the
 # main test-split figure (plot_main_figure_2x1 / plot_main_figure_test in
-# paper_plots.py) can show error bars. Distinct from the EARLIER
+# the figure modules) can show error bars. Distinct from the earlier
 # training-seed sweep (run_plan.yaml runs 14-15, robustness_plots.py), which
 # retrains SFT and only covers 8b-full-thrfull2icd -- collection names from
 # that sweep (e.g. "8b-full-thrfull-icd2-seed43-e3-seed43") don't start with
@@ -191,8 +191,8 @@ EXTERNAL_TEST_MODELS = {
 # job_name "test-06b-base-seed43"), and src/wandb/run.py separately appends
 # its OWN automatic "-seed{N}" suffix whenever Client_Job.seed != 42 -- so the
 # actual wandb collection name has a doubled suffix:
-#   full/lora checkpoint: "test-06b-full-seed43-e4-seed43"
-#   base model:            "test-06b-base-seed43-seed43"
+# full/lora checkpoint: "test-06b-full-seed43-e4-seed43"
+# base model: "test-06b-base-seed43-seed43"
 # (documented in the eval_error_bars_config_seed{43,44}[.yaml|_8b.yaml]
 # headers). The two seed numbers are always identical -- both trace back to
 # the same Client_Job.seed -- so either one can be used as `seed`. Greedy
@@ -293,7 +293,7 @@ def main(in_csv=None, out_dir=None):
             "is_external": is_external,
             # 42 for every ordinary run; 43/44 for the eval-time seed-
             # robustness reruns (EVAL_SEED_TEST_FAMILY_RE/EVAL_SEED_TEST_BASE_RE
-            # above) -- lets paper_plots.py average error bars across seed
+            # above) -- lets the figure modules average error bars across seed
             # replicates of the same (model_size, mode) without disturbing
             # every other figure, which pins seed==42 explicitly.
             "seed": seed,

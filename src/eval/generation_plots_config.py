@@ -5,18 +5,18 @@ Recreates figures/generation_plots.pdf (\\label{fig:generation_plots}),
 "Iterative improvement of verifier scores across generation-budget steps
 (abdominal-pain cases)". The script that originally produced this figure was
 never checked in, so this rebuilds it from the three generators' run logs
-(2026-08-01). Same knob-file convention as robustness_plot_config.py /
+Same knob-file convention as robustness_plot_config.py /
 epoch_tradeoff_config.py: edit this file, not generation_plots.py.
 
 Data provenance -- read this before trusting a number out of SCORES below:
-most points are "V{n} end k/4 with Score: ..." lines lifted verbatim from the
+most points are "V{n} end k/4 with Score:..." lines lifted verbatim from the
 run logs. A handful of points are missing because a log was truncated or a
 round's final line never printed; those are eyeballed off the shipped PDF
 instead and marked (E) in the comments. This whole figure is illustrative of
 the generation-budget dynamic, not a source of truth -- don't cite SCORES
 values as reported results.
 
-MRR label (2026-08-01): considered relabeling V2/V3 to "Recall@3" since
+MRR label: considered relabeling V2/V3 to "Recall@3" since
 We never saved the underlying ranked lists for these exploratory runs, only
 the scalar "Score" the pipeline logged per round -- so a real Recall@3 or MRR
 recompute isn't possible from what survives. Decided against it: Recall@3
@@ -26,7 +26,7 @@ metric would carry the same "did we actually verify this" problem, just
 under a more technical-sounding name. Kept "MRR" -- matches the original
 figure, and the SCORES values were never a real MRR recompute either way.
 
-Design pass (2026-08-01): switched to match Figure 7's style
+Design pass: switched to match Figure 7's style
 (src/eval/epoch_tradeoff_plots.py / epoch_tradeoff_config.py) rather than the
 lost original -- same family of figure (line-per-model/size over an ordinal
 training/budget axis), so it should read as the same visual language:
@@ -54,7 +54,7 @@ STAGE_ORDER = ["V1", "V2", "V3", "V4"]
 XLABEL = "generation-budget step"
 YLABEL = "%"
 
-# Colors reused from checkpoint_plots.py's seaborn-deep hexes (COLORS
+# Colors reused from plot_common.py's seaborn-deep hexes (COLORS
 # "icd2"/"thrfull-icd2"/"mimic") rather than inventing a new palette -- also
 # happens to match the original figure's blue/orange/green. Markers follow
 # Figure 7's convention of one distinct shape per line, on top of color.

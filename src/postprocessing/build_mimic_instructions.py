@@ -204,11 +204,11 @@ def build_mimic_instructions(
 
     Parameters
     ----------
-    combined_path : str
+    combined_path: str
         Path to combined.pq (output of merge_gen_data.combine_models).
-    output_path : str
+    output_path: str
         Destination path for the instruction parquet file.
-    duplicate_verifiers : tuple[int, ...]
+    duplicate_verifiers: tuple[int, ...]
         Verifier steps to emit twice per patient (e.g. (4,) for icd_2x-style
         oversampling of the ICD-prediction step).
     """

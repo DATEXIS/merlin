@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """One entry point for the whole post-hoc eval analysis pipeline
 (replaces evaluate_eval_results.py, checkpoint_metrics.py,
-checkpoint_plots.py, and paper_plots.py, 2026-07-16).
+and the figure modules).
 
 Configured via the `Analysis:` block of scripts/eval_config.yaml (project,
 output_dir, primary_metric, metrics, plots, filter, ...) -- the command line
@@ -10,24 +10,24 @@ driven by their config files rather than flags.
 
 Stages (positional, run in this fixed order regardless of how you list them):
 
-  wandb_check   List which eval_results collections on WandB are new vs. the
+  wandb_check List which eval_results collections on WandB are new vs. the
                 local metrics CSV -- no downloads, no evaluation. Use this to
                 see whether anything finished since the last run.
-  new_evals     Download + locally re-evaluate every NEW collection, append
+  new_evals Download + locally re-evaluate every NEW collection, append
                 the rows to the metrics CSV, then reshape it into the
                 checkpoint-metrics CSV (src/eval/checkpoint_metrics).
                 Resumable: already-evaluated collections are skipped
                 (--force redoes everything).
-  create_plots  Quick-look charts (src/eval/checkpoint_plots) +
-                publication figures (src/eval/paper_plots) from the
-                checkpoint-metrics CSV (Analysis.plots: quick|paper|both).
+  create_plots  Render every publication figure from the checkpoint-metrics
+                CSV (src/eval/{main_figure_plots_macro, ablation_plots,
+                epoch_tradeoff_plots, generation_plots, robustness_plots}).
   encoder_results
                 Fold the encoder-classifier baselines (precomputed prediction
                 parquets under the Encoder.results_dir config -- bypasses the
                 vLLM/wandb pipeline entirely) into Encoder.results_test_csv.
                 See src/eval/encoder_metrics.py. Independent of the other
                 stages; runs wherever it's listed.
-  clinibench    Recompute CliniBench's own encoder baselines from their
+  clinibench Recompute CliniBench's own encoder baselines from their
                 RELEASED per-admission predictions (config block `CliniBench`),
                 on our test admissions, under one stated protocol -- so the
                 paper's encoder comparison is ours end-to-end rather than a
@@ -44,18 +44,18 @@ Typical uses:
     python scripts/eval_analysis.py encoder_results
 
 Outputs land under Analysis.output_dir (default data/):
-    eval_metrics_{project}.csv          flat per-collection metrics
-    results/evaluation/                 reshaped CSV + best-epoch summary table
+    eval_metrics_{project}.csv flat per-collection metrics
+    results/evaluation/ reshaped CSV + best-epoch summary table
     (all figures -- quick-look and publication -- go to
     Analysis.paper_figures_dir instead, default figures/, not data/)
 
 All the logic lives in src/eval/ (eval_results, checkpoint_metrics,
-checkpoint_plots, paper_plots); this is just the CLI.
+and the figure modules); this is just the CLI.
 """
 import os
 
 # ── OpenMP / threading guards — MUST be set before numpy/torch/sklearn import ──
-# Prevents the macOS "OMP: Error #15 ... multiple copies of the OpenMP runtime"
+# Prevents the macOS "OMP: Error #15... multiple copies of the OpenMP runtime"
 # abort/segfault that occurs when torch and scikit-learn each load libomp.
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 os.environ.setdefault("OMP_NUM_THREADS", "1")
@@ -128,7 +128,7 @@ def main():
     if not out_root.is_absolute():
         out_root = REPO_ROOT / out_root
     metrics_csv = eval_results.default_metrics_csv(cfg["project"], out_root)
-    # Moved from out_root/"checkpoint_analysis" on 2026-07-24
+    # Moved from out_root/"checkpoint_analysis"
     # relocated the reshaped CSV + best-epoch table (and encoder_results/)
     # under data/results/ alongside the raw eval-artifact cache; that old
     # directory no longer exists.
@@ -171,16 +171,19 @@ def main():
             # it from an existing metrics CSV before giving up.
             from src.eval.checkpoint_metrics import main as reshape
             reshape(in_csv=metrics_csv, out_dir=analysis_dir)
-        if cfg["plots"] in ("quick", "both"):
-            from src.eval.checkpoint_plots import run as quick_plots
-            print("\n--- quick-look charts ---")
-            quick_plots(cfg["primary_metric"], cfg["metrics"],
-                        out_dir=analysis_dir, in_csv=checkpoint_csv, figures_root=paper_dir)
-        if cfg["plots"] in ("paper", "both"):
-            from src.eval.paper_plots import run as paper_plots
-            print("\n--- publication figures ---")
-            paper_plots(cfg["primary_metric"], cfg["metrics"],
-                        out_root=paper_dir, in_csv=checkpoint_csv)
+        print("\n--- publication figures ---")
+        from src.eval import (ablation_plots, epoch_tradeoff_plots, generation_plots,
+                              main_figure_plots_macro, robustness_plots)
+        for label, mod in [
+            ("main_icd_by_size_macro", main_figure_plots_macro),
+            ("dataset_ablation_8b_factorial", ablation_plots),
+            ("epoch_tradeoff", epoch_tradeoff_plots),
+            ("generation_plots", generation_plots),
+        ]:
+            print(f"  {label}")
+            mod.main()
+        print("  robustness_seed_variance")
+        robustness_plots.run_all()
 
     if "encoder_results" in args.stages:
         with open(args.config) as f:

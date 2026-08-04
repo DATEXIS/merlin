@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Fold the encoder-classifier baselines (BioClinical ModernBERT, PubMedBERT,
-S-Proto -- added under data/results/encoder_results/ 2026-07-22, moved there
-from data/checkpoint_analysis/encoder_results/ on 2026-07-24 along with the
-rest of that directory -- it no longer exists)
+S-Proto -- added under data/results/encoder_results/, moved there
+from data/checkpoint_analysis/encoder_results/ along with the
+rest of that directory)
 into data/results/evaluation/results_test.csv (also moved there from
-data/checkpoint_analysis/ on 2026-07-24 -- it's an evaluation-results table,
+data/checkpoint_analysis/ -- it's an evaluation-results table,
 not a checkpoint-analysis intermediate), alongside the LLM
 checkpoint/base/external rows produced by src/eval/checkpoint_metrics.py.
 
@@ -23,7 +23,7 @@ repo's own src/eval/classification_metrics.calculate_icd_metrics_cpu (one
 score per seed, averaged across the 3 seeds), for consistency with how every
 other row in results_test.csv was scored.
 
-NOTE (2026-07-22): this deliberately does NOT reuse
+NOTE: this deliberately does NOT reuse
 encoder_table_metrics.parquet's own Macro-F1 column. That column's Macro-F1
 does not reproduce from calculate_icd_metrics_cpu on the per-seed files --
 recomputing here gives a consistently ~37% higher Macro-F1 for all three
@@ -44,7 +44,7 @@ recomputed here anyway. AUROC stays in encoder_table_metrics.parquet / the
 paper's table_encoders.tex only.
 
 Run: python -m src.eval.encoder_metrics
-     python scripts/eval_analysis.py encoder_results   (via scripts/eval_analysis.py)
+     python scripts/eval_analysis.py encoder_results (via scripts/eval_analysis.py)
 """
 import re
 from pathlib import Path

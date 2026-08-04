@@ -48,7 +48,7 @@ from pathlib import Path
 
 # Default local state file: which checkpoint evals already succeeded (by
 # job_name). data/results/ is already gitignored wholesale, so this never
-# needs its own .gitignore entry.
+# needs its own.gitignore entry.
 STATE_FILE = "data/results/eval_checkpoints_state.json"
 
 from src.kubernetes.yaml_spawner import (
@@ -84,7 +84,7 @@ _K8S_NAME_BUDGET = 63 - _K8S_PREFIX_LEN
 # name. If our disambiguating hash were also at the end, it gets chopped right
 # back off -- every Pod from a long-named Job then looks identical in
 # `k9s`/`kubectl get pods`, distinguished only by k8s's own random tail (this
-# is what happened: job names ...-d7875e / ...-742f6e / ...-08f053 all render
+# is what happened: job names...-d7875e /...-742f6e /...-08f053 all render
 # as indistinguishable pods). Putting the hash right after "eval-" instead of
 # at the tail means it's very unlikely to be the part k8s truncates away.
 _EVAL_PREFIX = "eval-"
@@ -152,7 +152,7 @@ def eval_job_name(manifest: dict, ckpt: dict, short_name: str = None) -> str:
     -- see eval_config.yaml), use `{short_name}-e{epoch}` instead:
     no "eval-" prefix, no step. Safe when every eval in the config shares the same
     fixed params (so epoch alone disambiguates within a run) -- that's the case
-    for a whole config file's worth of v1.4 evals, per the design notes convention."""
+    for a whole config file's worth of v1.4 evals, per the documented convention."""
     if short_name:
         return _fit_k8s_name(sanitize(f"{short_name}-e{round(ckpt['epoch'])}"))
     run = sanitize(manifest["job_name"])

@@ -75,10 +75,10 @@ def resolve_cross_model_assignment(
     the identical choice for a given hadm_id).
 
     Returns (assignment, global_size):
-      assignment  : {(subject_id, hadm_id): chosen_cc}, only for ids kept
-      global_size : {cc: # ids present in every model for that cc} — the
+      assignment: {(subject_id, hadm_id): chosen_cc}, only for ids kept
+      global_size: {cc: # ids present in every model for that cc} — the
                     resource measure used for the low-resource tie-break
-      n_total_ids : total distinct (subject_id, hadm_id) seen anywhere,
+      n_total_ids: total distinct (subject_id, hadm_id) seen anywhere,
                     for reporting how many were dropped
     """
     per_model_idx = {d.name: _load_id_index(d) for d in model_dirs}
@@ -324,7 +324,7 @@ _VALID_SPLITS = {"train": "train", "dev": "dev", "val": "dev", "test": "test"}
 
 def combine_models(gen_data_dir: str, output_path: str) -> None:
     """
-    Concatenate all per-model .pq files into a single combined parquet.
+    Concatenate all per-model.pq files into a single combined parquet.
 
     Adds a 'gen_model' column with the model name and keeps only the
     columns defined in COMBINED_COLUMNS.

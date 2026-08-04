@@ -40,7 +40,7 @@ spec:
           image: {{ cfg.project.image }}
           imagePullPolicy: Always
           {% if cfg.training.fsdp_full_finetuning|default(false) %}
-          {#- Non-Unsloth full-FT path (the design notes): Unsloth is DDP-only
+          {#- Non-Unsloth full-FT path: Unsloth is DDP-only
               (full model replicated per GPU), so it can't fit a model whose
               full optimizer state doesn't fit on a single GPU (32B+). This
               path bypasses Unsloth (src/fine_tuning/training_fsdp.py, chosen

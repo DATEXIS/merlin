@@ -111,9 +111,9 @@ def calculate_disease_metrics(y_pred: list[list[str]], y_true: list[str], device
     # predictions" is precision@k, recall@k, and accuracy@k all at once when
     # there's a single relevant item per query. calculate_accuracy_at_k is
     # that same hit-or-miss fraction, just under an older name. V2 Accuracy@1
-    # is kept for backward compat with existing wandb history/paper tables;
-    # V2 Recall@1 is the identical number under the name we asked for
-    # (2026-07-24), added alongside @3/@5/@10 -- v2 prompts ask the model for
+    # is kept for backward compatibility with existing wandb history/paper tables;
+    # V2 Recall@1 is the identical number under the reported name
+    # Added alongside @3/@5/@10 -- v2 prompts ask the model for
     # a ranked top-10 (src/pipeline/verifier_args.py num_choices=10), so @10
     # isn't trivially 100%. Purpose: check whether V2's accuracy drop-off on
     # bigger models is a true miss or a near-miss the model gets right if you
@@ -188,7 +188,7 @@ def calculate_icd_metrics_cpu(y_pred, y_true):
     return {
         "ICD F1 Micro": round(f1_micro, ROUND_DIGITS),
         "ICD F1 Macro": round(f1_macro, ROUND_DIGITS),
-        # Added 2026-07-22 (were computed but dropped from the return value
+        # (were computed but dropped from the return value
         # before): same tp/fp/fn already computed above, just not previously
         # surfaced. Enables direct precision/recall comparison between
         # encoder classifiers and generative LLMs -- both are scored from

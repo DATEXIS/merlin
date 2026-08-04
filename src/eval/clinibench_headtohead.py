@@ -3,7 +3,7 @@
 recomputed end-to-end from CliniBench's *released per-admission predictions*
 rather than from the numbers printed in their paper (arXiv 2509.26136v2).
 
-Added 2026-08-02. Motivation: reviewers will ask why MERLIN's ICD macro-F1
+Motivation: a reader will ask why MERLIN's ICD macro-F1
 (20.9 at 32B) sits below the 26.0 CliniBench reports for a fine-tuned encoder.
 Answering that from published numbers is not possible -- the two are measured
 on different test sets, over different label vocabularies, at different output
@@ -37,13 +37,13 @@ THEIR PROTOCOL, RECOVERED FROM THE PAPER
 Table 2 cells are (i) macro-averaged over labels, (ii) computed on the top-20
 prediction list, and (iii) the *unweighted mean of the ICD-9 and ICD-10 runs*.
 `reproduce_table2()` implements exactly that and checks it against the printed
-values. Result of the 2026-08-02 audit (ours - published):
+values. Result of the audit (ours - published):
 
-    row                    Rec     Prec    MD Acc    F1
-    BiomedBERT untuned     0.00   +0.00    +0.00    +7.37
-    BiomedBERT tuned       0.00   +0.00    +0.00    -1.03
-    GatorTronS untuned    +4.91   +0.42    +0.70    +7.31
-    GatorTronS tuned       0.00   +0.00    -0.00    -0.62
+    row Rec Prec MD Acc F1
+    BiomedBERT untuned 0.00 +0.00 +0.00 +7.37
+    BiomedBERT tuned 0.00 +0.00 +0.00 -1.03
+    GatorTronS untuned +4.91 +0.42 +0.70 +7.31
+    GatorTronS tuned 0.00 +0.00 -0.00 -0.62
 
 Two things follow, both encoded as expectations in REPRODUCTION_EXPECTATIONS:
 
@@ -100,13 +100,13 @@ shuffle: MAP@20 reads 32.3 from v4_preds vs 40.3 from v4_json, and gold-primary
 `v4_json`, which preserves the order the V4 prompt asks for ("in order of
 likelihood"). Set-based metrics are unaffected either way.
 
-Run:  python scripts/eval_analysis.py clinibench
-      python -m src.eval.clinibench_headtohead        (uses the same config)
+Run: python scripts/eval_analysis.py clinibench
+      python -m src.eval.clinibench_headtohead (uses the same config)
 
 Config: the `CliniBench:` block of scripts/eval_config.yaml.
 Outputs (under CliniBench.output_dir):
-    clinibench_reproduction.csv   per-row published vs. recomputed + delta
-    clinibench_headtohead.csv     MERLIN vs. encoder configs on our test split
+    clinibench_reproduction.csv per-row published vs. recomputed + delta
+    clinibench_headtohead.csv MERLIN vs. encoder configs on our test split
 """
 from __future__ import annotations
 
@@ -134,7 +134,7 @@ PUBLISHED_TABLE2_HOSP = {
     ("GatorTronS", "tuned"): (28.61, 33.44, 22.06, 65.22, 25.96),
 }
 
-# Columns we expect to reproduce exactly, per row. See the 2026-08-02 audit in
+# Columns we expect to reproduce exactly, per row. See the audit in
 # the module docstring for why GatorTronS/untuned is excluded and why "f1" is
 # excluded everywhere.
 REPRODUCTION_EXPECTATIONS = {
@@ -395,7 +395,7 @@ def reproduce_table2(encoder_dir: Path, splits_dir: Path, dataset: str,
     if failures and strict:
         raise AssertionError(
             "CliniBench reproduction regressed -- these reproduced exactly on "
-            "2026-08-02, so a break means our metric code changed (or their "
+            "at the time of writing, so a break means our metric code changed (or their "
             "artifacts were re-exported):\n  " + "\n  ".join(failures))
     for f in failures:
         log.warning("reproduction mismatch: %s", f)

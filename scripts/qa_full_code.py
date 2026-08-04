@@ -1,11 +1,11 @@
 """Full-precision ICD code analysis -- same deterministic framework as
-qa_deterministic.py (no LLM judge), comparing codes at two granularities:
+qa_deterministic.py, comparing codes at two granularities:
 
   category  code[:3]   the level used everywhere else in the paper
   full      code       exact match, e.g. 'K5660'
 
 (An earlier version of this script also had a 'chapter' (2-char) level; it
-was cut (2026-07-27) to keep the comparison to the two granularities
+was cut to keep the comparison to the two granularities
 that matter: what the paper already reports (category) and the new thing
 (full code). Re-add via LEVELS below if it's needed again; the truncation
 machinery doesn't care how many levels there are.)
@@ -41,7 +41,6 @@ corrupting the comparison.
 
 Run:  python scripts/qa_full_code.py
       (also writes data/qa/full_code_by_granularity.csv and, if matplotlib
-      is available, the bar figure via src.eval.qa_full_code_plot)
 """
 from __future__ import annotations
 
@@ -231,7 +230,7 @@ def score_model(df: pd.DataFrame) -> dict:
 
 def to_long(tab: pd.DataFrame) -> pd.DataFrame:
     """Wide per-checkpoint table -> one row per (size, variant, granularity,
-    metric_type), the shape src/eval/qa_full_code_plot.py expects."""
+    metric_type), the shape the plotting code expects."""
     rows = []
     for idx, row in tab.iterrows():
         size, variant = idx.rsplit("_", 1)
@@ -282,13 +281,6 @@ def main():
     out_long = os.path.join(str(REPO_ROOT), DATA_ROOT, "qa", "full_code_by_granularity.csv")
     long_df.to_csv(out_long, index=False)
     print(f"-> {out_long}")
-
-    try:
-        from src.eval.qa_full_code_plot import plot as plot_full_code
-        plot_full_code()
-    except ImportError as e:
-        print(f"\n(skipping figure -- {e}; run `python -m src.eval.qa_full_code_plot` "
-              "separately once matplotlib/deps are available)")
 
 
 if __name__ == "__main__":

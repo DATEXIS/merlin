@@ -43,7 +43,7 @@ ARTIFACT_TYPE = "eval_results"
 CONFIG_JSON = REPO_ROOT / "config.json"
 METRICS_MARKER = "__METRICS__ "  # subprocess protocol
 
-# 2026-07-27: std (eval-time error-bar) seeds are done and 14b-full is stable
+# std (eval-time error-bar) seeds are done and 14b-full is stable
 # again -- restrict the pipeline to the seeds we actually want feeding the
 # metrics CSV: default seed 42 (no "-seed{N}" suffix at all) plus the std
 # seeds 43/44 (see EVAL_SEED_TEST_FAMILY_RE / EVAL_SEED_TEST_BASE_RE in
@@ -130,7 +130,7 @@ def resolve_artifact(api, entity: str, project: str, collection_name: str):
 
 
 def _cached_pq_path(download_dir: Path, collection_name: str) -> Path | None:
-    """Local .pq path for `collection_name` if already downloaded, else None.
+    """Local.pq path for `collection_name` if already downloaded, else None.
     Checked before touching the WandB API at all, so a fully-cached run makes
     zero network calls."""
     art_dir = download_dir / collection_name

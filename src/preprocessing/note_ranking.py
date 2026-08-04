@@ -88,13 +88,13 @@ def calculate_disease_cossim_rank(df):
 
 
 def categorize(row):
-    # | Category               | Condition                                            |
+    # | Category | Condition |
     # | ---------------------- | ---------------------------------------------------- |
-    # | 0                      | Exact match (0, 0)                                   |
-    # | 1                      | Near match  (0, 1), (1, 0), (1, 1)                   |
-    # | 2                      | Fuzzy match (involving rank 2)                       |
-    # | 3                      | Anything else                                        |
-    # | -1                     | Any rank is `-1` (not found in predictions)          |
+    # | 0 | Exact match (0, 0) |
+    # | 1 | Near match (0, 1), (1, 0), (1, 1) |
+    # | 2 | Fuzzy match (involving rank 2) |
+    # | 3 | Anything else |
+    # | -1 | Any rank is `-1` (not found in predictions) |
     icd_rank = row['disease_icd_rank']
     cossim_rank = row['disease_cossim_rank']
 

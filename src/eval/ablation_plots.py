@@ -8,7 +8,7 @@ dataset/epoch) and picks each variant's dev-selected best epoch from
 checkpoint_best_epochs.csv -- exactly the same selection rule as
 table_ablation, so figure and table can never disagree.
 
-Why this figure exists next to paper_plots.plot_dataset_analyses: that one
+Why this figure exists as its own module: a quick-look variant
 draws one bar per dataset variant in arbitrary order, which hides the fact
 that the eight variants are really a 2-factor design (trace quality filter x
 ICD-step oversampling). Laid out as a factorial, the ablation's actual claim
@@ -19,7 +19,7 @@ ablation_plot_config.py; edit that file, not this one.
 
 Note the `replace` variant's dev-selected best epoch is e1: epochs 2-4 of
 that run collapse to near-zero (a known training instability, see
-the revision notes). It is plotted as-is, consistent with
+the ablation design). It is plotted as-is, consistent with
 checkpoint_best_epochs.csv, and flagged in the paper caption.
 """
 from pathlib import Path
@@ -138,5 +138,8 @@ def plot(out_dir: Path = OUT_DIR):
     print(f"ablation: saved {cfg.OUT_STEM} to {out_dir}")
 
 
+main = plot  # standard entry point, used by scripts/eval_analysis.py
+
+
 if __name__ == "__main__":
-    plot()
+    main()

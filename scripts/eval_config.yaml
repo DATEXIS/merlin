@@ -74,7 +74,7 @@ epochs: []
 max_pending: 2
 
 # --- eval_base_models.py: untuned baselines ----------------------------------
-# GPU per model per 2026-07-11 allocation; entries override Hardware per model.
+# GPU per model; entries override Hardware per model.
 models:
   - job_name: 32b-base
     base_model: "Qwen/Qwen3-32B"
@@ -105,7 +105,7 @@ Analysis:
   # Metric that picks the single "best" checkpoint per group in every figure.
   primary_metric: "ICD F1 Macro"
   # Which metrics to plot, in order (see ALL_METRICS in
-  # src/eval/checkpoint_plots.py for the choices).
+  # src/eval/plot_common.py for the choices).
   metrics: ["ICD F1 Macro", "ICD F1 Micro", "V2 Recall@3", "V2 MRR"]
   plots: both                   # quick | paper | both
   filter: null                  # only collections whose name contains this substring
@@ -116,7 +116,7 @@ Analysis:
 # --- scripts/eval_analysis.py `encoder_results` stage: encoder baselines -----
 # Encoder classifiers (BioClinical ModernBERT, PubMedBERT, S-Proto) bypass the
 # whole vLLM/wandb pipeline above -- they're precomputed prediction parquets
-# dropped straight into `results_dir` (added 2026-07-22, see
+# dropped straight into `results_dir` (added: see
 # src/eval/encoder_metrics.py). This stage folds their ICD F1 Micro/Macro into
 # results_test_csv alongside the LLM checkpoint/base/external rows.
 Encoder:
@@ -127,7 +127,7 @@ Encoder:
 # --- eval_analysis.py: CliniBench head-to-head -------------------------------
 # Recomputes CliniBench's encoder baselines from their RELEASED per-admission
 # predictions (not their published numbers) on our own test admissions, so the
-# encoder comparison in the paper is ours end-to-end. Added 2026-08-02, see
+# encoder comparison in the paper is ours end-to-end. see
 # src/eval/clinibench_headtohead.py for the protocol and the reproduction audit.
 CliniBench:
   # Their prediction dumps live outside the repo (they're large and not ours).
@@ -141,7 +141,7 @@ CliniBench:
   icd_versions: [9, 10]    # reproduction only: their Table 2 averages both
   top_n: 20                # their fixed output budget
 
-  # Fail loudly if the three rows that reproduced exactly on 2026-08-02 stop
+  # Fail loudly if the three rows that reproduced exactly  stop
   # doing so -- that means our metric code changed, or they re-exported.
   strict_reproduction: true
 

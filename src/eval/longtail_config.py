@@ -7,7 +7,7 @@ code falls in the first stratum whose threshold it clears. The 100 / 10 cut
 is the usual many- / medium- / few-shot convention from the long-tail
 recognition literature, not tuned on our results -- worth keeping that way,
 since a threshold chosen to flatter the numbers would be the obvious thing
-for a reviewer to poke at.
+for a reader to poke at.
 """
 
 STRATA = [

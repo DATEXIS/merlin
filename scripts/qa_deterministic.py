@@ -1,5 +1,5 @@
 """Deterministic ICD error scoring -- every class that reduces to a set operation
-on gold vs. predicted 3-char categories. No LLM judge involved.
+on gold vs. predicted 3-char categories.
 
 Runs all 8 checkpoints ({06b,8b,14b,32b} x {base,full}) on the test split and
 prints per-class rates (% of cases) plus the base->full delta at each size.
@@ -8,19 +8,19 @@ Principal diagnosis = gold[0] (MIMIC seq_num order; seq_num=1 is principal --
 verified against discharge 'Primary Diagnosis' sections).
 
 Classes computed here:
-  micro recall / precision / F1        (model quality context)
-  missed_primary        gold[0] category not covered by prediction
-  missed_history        a gold Z80-Z99 category not covered
-  missed_medication     a gold Z79 category not covered
-  missed_chronic        a gold chronic-comorbidity category (Elixhauser) not covered
-  missed_any            any gold category not covered (pure omission; ~always true)
-  symptom_fp            predicts an R00-R99 symptom category absent from gold
-  extra_codes           predicts more categories than gold (over-prediction)
-  duplicate_subcodes    two predicted full codes share a 3-char category
-  hallucinated_fp       predicts a category absent from gold (any false positive)
-  recall/precision/f1_{history,medication,chronic}   see note below
+  micro recall / precision / F1 (model quality context)
+  missed_primary gold[0] category not covered by prediction
+  missed_history a gold Z80-Z99 category not covered
+  missed_medication a gold Z79 category not covered
+  missed_chronic a gold chronic-comorbidity category (Elixhauser) not covered
+  missed_any any gold category not covered (pure omission; ~always true)
+  symptom_fp predicts an R00-R99 symptom category absent from gold
+  extra_codes predicts more categories than gold (over-prediction)
+  duplicate_subcodes two predicted full codes share a 3-char category
+  hallucinated_fp predicts a category absent from gold (any false positive)
+  recall/precision/f1_{history,medication,chronic} see note below
 
-Note on direction (2026-07-27): the missed_* rates above are framed so
+Note on direction: the missed_* rates above are framed so
 LOWER is better, which sits awkwardly next to a table where every other
 column (Recall, Prec., F1, head/body/tail) has HIGHER is better -- a reader
 scanning the table has to remember which columns invert. For history/
@@ -35,7 +35,7 @@ that code family (does the model predict the *right* history code, not just
 *a* history code), which missed_X never measured at all.
 
 missed_primary has no equivalent F1: it's a single designated code per case
-(gold[0]) -- confirmed 2026-07-27: every one of the 2,184 test cases has
+(gold[0]) -- confirmed: every one of the 2,184 test cases has
 >=1 gold ICD code (min=1, so "primary" is always exactly 1 code, never 0 or
 ambiguous between several). Because it's a single code, "precision" restricted
 to it is trivially ~100% (any predicted code that happens to equal gold[0] is
@@ -54,7 +54,7 @@ metric to ask. hit@k counts a case as a hit if gold[0] appears among the
 first k *distinct* predicted categories (duplicates collapsed, first
 occurrence keeps its rank).
 
-Run:  python scripts/qa_deterministic.py
+Run: python scripts/qa_deterministic.py
 """
 from __future__ import annotations
 

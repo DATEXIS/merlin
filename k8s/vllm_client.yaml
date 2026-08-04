@@ -11,7 +11,7 @@ spec:
           image: registry.example.com/anon/vllm_client:latest
           command: ["python3", "/app/entrypoint.py",
                     '--server_name=vllm-server-gemma',
-#                    '--namespace=merlin',
+# '--namespace=merlin',
                     '--num_choices=30',
                     '--num_samples=63', # Will be used as tag, Currently up to 10 / 63 / 1411
                     '--concurrency=1',

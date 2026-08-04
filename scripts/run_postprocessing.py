@@ -4,28 +4,28 @@ Full postprocessing pipeline — run this after the generation pipeline is done.
 
 Steps
 -----
-1. Merge CC files      Per model, merge all cc_*.pq into one <model>.pq and
+1. Merge CC files Per model, merge all cc_*.pq into one <model>.pq and
                        deduplicate subject_ids across chief complaints within
                        that model (keep the sample from the smallest CC).
                        Also (re)writes data/preprocessed_mimic/subject_complaint_map.json
                        from that same cross-model assignment, so it's always
                        in sync with what actually got merged.
 
-2. Combine models      Concatenate all per-model files into combined.pq with
+2. Combine models Concatenate all per-model files into combined.pq with
                        a 'gen_model' column. Each subject_id appears ~3× (once
                        per model). Only the relevant columns are kept.
 
-3. Build instructions  Build the flat instruction dataset (one row per
+3. Build instructions Build the flat instruction dataset (one row per
                        patient × verifier step) and write a single parquet
                        ready for fine-tuning.
 
-4. MIMIC instructions  Build the MIMIC instruction dataset variants: one row
+4. MIMIC instructions Build the MIMIC instruction dataset variants: one row
                        per patient x verifier step (V1-V4), MIMIC-style direct
                        prompts (no reasoning-chain scaffolding), pure
                        ground-truth outputs, no Thinking column. Built from
                        combined.pq (same patients as MeRLIn).
 
-5. Test dataset        Build the downstream-eval test_dataset from combined.pq:
+5. Test dataset Build the downstream-eval test_dataset from combined.pq:
                        one row per patient, train split excluded. This is what
                        the dataset-upload step uploads as the
                        'test_dataset' artifact and what eval configs' client
@@ -76,7 +76,7 @@ MERLIN_MODELS = ["Qwen3-32B", "Llama-3.3-70B-Instruct", "medgemma-27b-it"]
 # The six instruction datasets to emit. Every MeRLIn variant sends nan/0-score
 # rows (and, where a threshold is set, below-threshold rows) to the mimic-style
 # no-reasoning fallback instead of dropping them.
-#   name              -> (thresholds, models, best_per_id, duplicate_verifiers)
+# name -> (thresholds, models, best_per_id, duplicate_verifiers)
 MERLIN_VARIANTS = {
     # 2. Only nan/0 rows lose their trace; everything else keeps reasoning.
     "merlin_replace":       dict(thresholds=None,                 models=MERLIN_MODELS, best_per_id=False),
@@ -109,9 +109,9 @@ MERLIN_VARIANTS = {
 # direct prompts -- see src/postprocessing/build_mimic_instructions.py). Kept
 # under separate names from the original mimic_instructions.pq (single-stage,
 # V4-only) so that dataset is never overwritten -- it's already uploaded/used
-# by ft-qwen3-8b-lora-r128-mimic-v1-3 (see the design notes: never overwrite a prior
+# by ft-qwen3-8b-lora-r128-mimic-v1-3 (never overwrite a prior
 # version's folder; old checkpoints' manifests may still reference it).
-#   name              -> (duplicate_verifiers,)
+# name -> (duplicate_verifiers,)
 MIMIC_VARIANTS = {
     # "Fixed" mimic: full V1-V4 (the old mimic_instructions was V4/ICD only).
     "mimic_fixed":          dict(duplicate_verifiers=()),

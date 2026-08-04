@@ -4,7 +4,7 @@
 # job_names prefixed "test-" so they don't collide with the dev-split base
 # evals already logged under 32b-base / 14b-base / 8b-base / 06b-base.
 #
-# GPU allocation per the 2026-07-21 plan:
+# GPU allocation:
 #   0.6b -> 1x a100   8b -> 1x h200   14b -> 1x b200   32b -> 2x b200
 #
 # Run: python scripts/eval_base_models.py --config scripts/eval_base_models_config_test.yaml

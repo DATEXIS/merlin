@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Single-panel cut of main_figure_plots.py: ICD macro-F1 only.
+"""Main results figure: ICD macro-F1 by model size, base vs. MERLIN.
 
     python -m src.eval.main_figure_plots_macro
 
@@ -8,7 +8,7 @@ This is the figure the paper's \\S1 actually includes
 bars per model size as the 3x1 headline figure, but restricted to the
 primary metric so it fits a single column.
 
-Panel title deliberately does NOT carry a "(long-tail)" qualifier (2026-08-03): macro-F1 is defined in the text, and the parenthetical
+Panel title deliberately does NOT carry a "(long-tail)" qualifier: macro-F1 is defined in the text, and the parenthetical
 pre-announces an interpretation the figure itself does not show. Frequency
 strata live in the head/body/tail figure instead.
 
@@ -22,7 +22,7 @@ import numpy as np
 import pandas as pd
 
 from src.eval import main_figure_config as cfg
-from src.eval.paper_plots import _agg_seeds_by_size, _bar_mean_err, _size_sort_key, ERROR_BAR_KW
+from src.eval.plot_common import _agg_seeds_by_size, _bar_mean_err, _size_sort_key, ERROR_BAR_KW
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 TEST_CSV = REPO_ROOT / "data" / "results" / "evaluation" / "checkpoint_metrics.csv"
@@ -91,5 +91,8 @@ def plot(out_dir: Path = OUT_DIR):
     print(f"main figure (macro only): saved {OUT_STEM} to {out_dir}")
 
 
+main = plot  # standard entry point, used by scripts/eval_analysis.py
+
+
 if __name__ == "__main__":
-    plot()
+    main()

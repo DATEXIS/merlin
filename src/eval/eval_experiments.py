@@ -99,6 +99,5 @@ def evaluate_experiment(results: pd.DataFrame) -> dict:
 
 # NOTE: the old data/sft_results-era helpers (get_metrics_df,
 # calculate_chief_complaint_mrr, get_robustness_metrics) were removed
-# 2026-07-16 -- that directory no longer exists and nothing imported them.
 # Recover from git history if a per-chief-complaint or multi-seed robustness
 # breakdown is needed for the paper.

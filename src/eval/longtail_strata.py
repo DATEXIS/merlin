@@ -23,8 +23,8 @@ excluded here, because they have no training frequency to bucket them by.
 
 Outputs
 -------
-data/results/evaluation/longtail_strata.csv   per size/mode/stratum
-tables/table_longtail_body.tex    LaTeX table body
+data/results/evaluation/longtail_strata.csv per size/mode/stratum
+tables/table_longtail_body.tex LaTeX table body
 """
 from collections import defaultdict
 from pathlib import Path
@@ -141,8 +141,8 @@ def run():
 
 
 def _latex(df: pd.DataFrame, freq: pd.Series) -> str:
-    """F1-only (Recall dropped 2026-07-27: it tracked F1 in every cell here
-    and added no separate signal -- see revision notes -- and this table is
+    """F1-only (Recall dropped: it tracked F1 in every cell here
+    and added no separate signal -- and this table is
     now combined with the long-tail histogram in the appendix, so column
     space is at a premium). #labels row kept: it's the one piece of context
     (how many distinct codes are actually in each stratum) the main-text

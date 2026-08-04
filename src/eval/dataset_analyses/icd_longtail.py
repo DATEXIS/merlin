@@ -4,7 +4,7 @@ count (y, log scale), shaded by which codes account for the top N% vs. the
 remaining long tail of samples. Reproduces the reference figure a colleague
 printed from the paper (merlin_icd_3digit_longtail.pdf).
 
-Source: a single-model eval .pq under data/results/evaluation/ (one row per
+Source: a single-model eval.pq under data/results/evaluation/ (one row per
 hadm_id -- one admission = one sample -- so no de-duplication is needed
 beyond picking one eval file: ICD_CODES is a property of the dataset, not of
 the model/checkpoint that happened to produce that particular eval run).
@@ -35,7 +35,7 @@ from matplotlib.patches import Patch
 REPO = Path(__file__).resolve().parents[3]  # src/eval/dataset_analyses/this_file.py -> repo root
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
-from paper.colors import BLUE, YELLOW, tint
+from src.eval.colors import BLUE, YELLOW, tint
 
 OUT_ROOT = REPO / "figures" / "dataset_analyses"
 DEFAULT_INPUT = REPO / (
@@ -81,7 +81,7 @@ def plot_longtail(counts: pd.Series, split_fraction: float = 0.8,
     colors = [majority_color if r <= cutoff_rank else tail_color for r in ranks]
 
     # Sized to match the ~3.5-3.8in-per-panel / ~9-10pt-label convention used
-    # by the other paper figures (main_figure_plots, ablation_plots, etc.) --
+    # by the other paper figures (ablation_plots, etc.) --
     # this figure now renders at roughly half a table* width in the appendix
     # (paired with table_longtail), not a full 8in-wide standalone figure, so
     # a canvas sized for the latter left its labels reading as too small.

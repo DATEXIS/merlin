@@ -5,9 +5,9 @@ One command fires the whole sweep; each run lands on its own GPUs and trains
 concurrently. Per-run fields override the shared `defaults`.
 
 Run:
-    python scripts/launch_all.py                       # launch all
-    python scripts/launch_all.py --only 32b 14b        # launch a subset (job_name substrings)
-    python scripts/launch_all.py --dry_run             # print YAML, don't apply
+    python scripts/launch_all.py # launch all
+    python scripts/launch_all.py --only 32b 14b # launch a subset (job_name substrings)
+    python scripts/launch_all.py --dry_run # print YAML, don't apply
 """
 
 import argparse

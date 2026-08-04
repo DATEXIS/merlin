@@ -7,17 +7,17 @@ hardcoded in the plotting script.
 
 The figure re-cuts the 8B full-FT dataset ablation as a 2x factorial rather
 than a flat bar-per-variant chart (which is what
-paper_plots.plot_dataset_analyses / the old ad-hoc 8b_ablation.py drew, and
+the earlier ad-hoc ablation script drew, and
 which made the actual finding invisible):
 
-    trace quality filter  x  ICD-step oversampling
+    trace quality filter x ICD-step oversampling
 
-    family              | no oversampling | ICD rows x2
+    family | no oversampling | ICD rows x2
     --------------------|-----------------|-------------
-    label-only          | mimic           | mimic-icd2
-    all traces          | replace         | icd2
-    half thresholds     | thrhalf         | --
-    verifier thresholds | thrfull         | thrfull-icd2
+    label-only | mimic | mimic-icd2
+    all traces | replace | icd2
+    half thresholds | thrhalf | --
+    verifier thresholds | thrfull | thrfull-icd2
 
 Reading down a column is the paper's headline ablation claim: keeping only
 traces that clear their verifier threshold monotonically improves
@@ -26,10 +26,10 @@ rare-diagnosis (macro) ICD F1, at BOTH oversampling settings. `thrfulldrop`
 the label-only fallback) is drawn as a hatched control inside the
 verifier-threshold family.
 
-Metric catalogue is reused from src/eval/checkpoint_plots.py's ALL_METRICS
+Metric catalogue is reused from src/eval/plot_common.py's ALL_METRICS
 (single source of truth for metric name -> axis label).
 """
-from src.eval.checkpoint_plots import ALL_METRICS, build_metrics, BASE_COLOR, LORA_COLOR, FULL_COLOR
+from src.eval.plot_common import ALL_METRICS, build_metrics, BASE_COLOR, LORA_COLOR, FULL_COLOR
 
 # --- what to plot ---------------------------------------------------------
 # ICD F1 Macro first: it is the paper's primary metric (rare/long-tail
@@ -43,7 +43,7 @@ METRICS = build_metrics(METRICS_TO_PLOT)  # [(name, ylabel), ...]
 # Panel titles override the raw metric names, so the figure speaks the
 # paper's clinical vocabulary (symptoms / diagnoses / ICD codes) instead of
 # the pipeline's internal V1..V4 stage names.
-# (2026-08-03) No "(long-tail)" / "(frequent diagnoses)" qualifiers:
+# No "(long-tail)" / "(frequent diagnoses)" qualifiers:
 # they pre-announce an interpretation the panels themselves don't show, and
 # the macro-vs-micro contrast is made in the caption. Titles now match the
 # headline figure (main_figure_plots_macro.py).
@@ -63,7 +63,7 @@ PANEL_YLABELS = {
 
 SIZE = "8b"      # only size with a real dataset ablation
 MODE = "full"    # full fine-tuning only -- a LoRA bar here would conflate
-                 # data construction with training mode (see revision notes)
+                 # data construction with training mode
 
 # --- the factorial layout -------------------------------------------------
 # (family label, dataset without ICD oversampling, dataset with ICD x2)
@@ -75,13 +75,13 @@ FAMILIES = [
 ]
 
 # Extra control drawn inside a family's slot as a hatched bar:
-#   dataset -> (family index, which column, short annotation)
+# dataset -> (family index, which column, short annotation)
 CONTROLS = {
     "thrfulldrop": (3, "plain", "drop"),
 }
 
 # --- colors ---------------------------------------------------------------
-# Reuse the paper's one base/lora/full palette (src/eval/checkpoint_plots.py)
+# Reuse the paper's one base/lora/full palette (src/eval/plot_common.py)
 # instead of this figure's own pastel blue/orange pair, so every bar chart in
 # the paper reads off the same three colors. PLAIN_COLOR (no ICD
 # oversampling) takes the LORA slot -- it's the secondary/non-headline
