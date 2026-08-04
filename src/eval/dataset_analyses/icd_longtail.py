@@ -8,7 +8,7 @@ Source: a single-model eval.pq under data/results/evaluation/ (one row per
 hadm_id -- one admission = one sample -- so no de-duplication is needed
 beyond picking one eval file: ICD_CODES is a property of the dataset, not of
 the model/checkpoint that happened to produce that particular eval run).
-Non-"mimic" eval filenames are the Merlin dataset.
+Non-"mimic" eval filenames are the MERLIN dataset.
 
 Note: the printed reference shows ~1200 unique 3-digit codes; the default
 input here (a single 917-admission dev-split eval) only has ~650. If the

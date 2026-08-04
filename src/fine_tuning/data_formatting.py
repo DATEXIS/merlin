@@ -1,4 +1,4 @@
-"""Data formatting for MeRLIn-DDx SFT.
+"""Data formatting for MERLIN-DDX SFT.
 
 We render each example to a single ``text`` column with a plain ChatML template
 (what Unsloth's SFTTrainer expects). Assistant-only loss is applied afterwards by
@@ -54,7 +54,7 @@ def to_text(batch, tokenizer):
     all) only when the whole dataset has no ``Thinking`` column (e.g. the
     MIMIC no-reasoning ablation: note -> ICD directly).
 
-    Per-row "mimic-style / trace dropped" fallback rows in the mixed MeRLIn
+    Per-row "mimic-style / trace dropped" fallback rows in the mixed MERLIN
     datasets (built by build_instructions.py) carry ``Thinking = ""``
     (empty string, not None) and render as an empty ``<think>\n\n</think>``
     block followed by the answer — Qwen3's native non-thinking convention.

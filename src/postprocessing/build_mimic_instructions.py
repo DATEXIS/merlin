@@ -192,7 +192,7 @@ def build_mimic_instructions(
 ) -> pd.DataFrame:
     """
     Build the full-stage MIMIC instruction dataset: one row per (patient x
-    verifier step), V1-V4, covering the SAME patients as MeRLIn -- but with
+    verifier step), V1-V4, covering the SAME patients as MERLIN -- but with
     MIMIC-style DIRECT prompts (EXTRACT/DIAGNOSE_MIMIC/RERANK_MIMIC/ICD_MIMIC)
     that skip the reasoning-chain scaffolding (no conditioning on a prior
     stage's prediction), and pure ground-truth outputs with no reasoning trace

@@ -23,7 +23,7 @@ Steps
                        per patient x verifier step (V1-V4), MIMIC-style direct
                        prompts (no reasoning-chain scaffolding), pure
                        ground-truth outputs, no Thinking column. Built from
-                       combined.pq (same patients as MeRLIn).
+                       combined.pq (same patients as MERLIN).
 
 5. Test dataset Build the downstream-eval test_dataset from combined.pq:
                        one row per patient, train split excluded. This is what
@@ -69,11 +69,11 @@ INSTR_DIR = "data/results/instructions"
 # Rebuilt from the cross-model cc assignment every time Step 1 runs.
 COMPLAINT_MAP_PATH = "data/preprocessed_mimic/subject_complaint_map.json"
 
-# Teacher model used for the single-model MeRLIn variants (Qwen won the ablation).
+# Teacher model used for the single-model MERLIN variants (Qwen won the ablation).
 # best-per-id uses all models and picks the highest-scoring one per (patient, step).
 MERLIN_MODELS = ["Qwen3-32B", "Llama-3.3-70B-Instruct", "medgemma-27b-it"]
 
-# The six instruction datasets to emit. Every MeRLIn variant sends nan/0-score
+# The six instruction datasets to emit. Every MERLIN variant sends nan/0-score
 # rows (and, where a threshold is set, below-threshold rows) to the mimic-style
 # no-reasoning fallback instead of dropping them.
 # name -> (thresholds, models, best_per_id, duplicate_verifiers)
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     combine_models(gen_data_dir=GEN_DATA_DIR, output_path=COMBINED_OUTPUT)
 
     print("=" * 60)
-    print("Step 3 — Build MeRLIn instruction datasets")
+    print("Step 3 — Build MERLIN instruction datasets")
     print("=" * 60)
     for name, cfg in MERLIN_VARIANTS.items():
         print(f"\n── {name}")

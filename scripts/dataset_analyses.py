@@ -24,7 +24,7 @@ if str(REPO_ROOT) not in sys.path:
 from src.eval.colors import BLUE, YELLOW, tint
 
 # --- ICD 3-digit long-tail -- edit these to tweak the figure -----------------
-# Single-model eval.pq (one row per hadm_id); non-"mimic" filename = Merlin.
+# Single-model eval.pq (one row per hadm_id); non-"mimic" filename = MERLIN.
 ICD_LONGTAIL = {
     "input": str(REPO_ROOT / "data/results/gen_data/Qwen3-32B.pq"),
     "digits": 3,

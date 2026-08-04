@@ -1,5 +1,6 @@
 import ast
 import json
+from pathlib import Path
 
 import pandas as pd
 
@@ -43,7 +44,9 @@ def filter_by_rank():
     exp_args = ExpArgs()
     annotated_df = pd.read_parquet("data/preprocessed_mimic/annotated_mimic_notes.pq")
 
-    # Filter Mimic for Notes we use in Merlin 1.0
+    # The seven most frequent chief complaints by admission count (paper Table 3).
+    # data/medical_schemes/ also carries a vertigo schema; it falls outside this
+    # top-seven cut and is not part of the dataset.
     chief_complaints = ['abdominal pain', 'back pain', 'chest pain', 'cough', 'diarrhea', 'dyspnea', 'headache']
     frequent_chief_complaints = {'abdominal pain', 'dyspnea'}
     with open('data/preprocessed_mimic/subject_complaint_map.json', 'r') as f:
@@ -77,9 +80,12 @@ def filter_by_rank():
         print(f"Rare Case Filtered to {len(filtered_notes)}")
 
         filtered_notes.to_parquet(f"data/preprocessed_mimic/{file_name}", index=False)
-        break
 
 
 if __name__ == "__main__":
-    # preprocessing()
+    # Stage 1 is the expensive one (loads and annotates the full MIMIC-IV note
+    # set); it is skipped when its output is already on disk. Delete
+    # annotated_mimic_notes.pq to force a rebuild.
+    if not Path("data/preprocessed_mimic/annotated_mimic_notes.pq").exists():
+        preprocessing()
     filter_by_rank()
