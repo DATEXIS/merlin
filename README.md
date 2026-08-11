@@ -225,6 +225,10 @@ table and figure. Without cluster access, the aggregate tables under
 
 ## 10. Licensing
 
+The code in this repository (`src/`, `scripts/`, `deployment/`, `k8s/`) is
+released under the **MIT License** (see `LICENSE`). This covers the pipeline,
+training, and evaluation code only — it does not extend to any data.
+
 MIMIC-IV is used under the **PhysioNet Credentialed Health Data License 1.5.0**.
 MERLIN-DDX is derived from it and will be released under the same terms,
 requiring the same CITI training and credentialing — which is why no
